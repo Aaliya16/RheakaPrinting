@@ -5,7 +5,7 @@
     <title>Product Details - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        :root { --margenta : #ff007f; }
+        :root { --mongoose : #baa987; }
         .details-container {
             display: flex;
             padding: 50px;
@@ -22,11 +22,11 @@
         .price-box {
             font-size: 24px;
             font-weight: bold;
-            color: var(--magenta);
+            color: var(--mongoose);
             margin: 20px 0;
             padding: 15px;
             background: #fff;
-            border: 2px dashed var(--magenta);
+            border: 2px dashed var(--mongoose);
             text-align: center;
         }
         select, input {
@@ -37,7 +37,7 @@
             border: 1px solid #ddd;
         }
         .btn-add {
-            background: var(--magenta);
+            background: var(--mongoose);
             color: white;
             border: none;
             width: 100%;
@@ -45,6 +45,9 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+        }
+        .btn-add:hover {
+            background: #a49374; /* darker mongoose */
         }
     </style>
 </head>
@@ -102,3 +105,4 @@
 
 </body>
 </html>
+

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Magenta colour */
+
         :root { --mongoose: #baa987; }
 
         .product-container {
@@ -49,28 +49,103 @@
 
 <div class="product-container">
     <div class="product-card">
-        <i class="fas fa-address-card fa-3x" style="color: #555;"></i>
+        <i class="fas fa-address-card fa-3x"></i>
         <h3>Business Card</h3>
-        <p>High quality name cards</p>
-        <p><strong>Starts from RM 10.00</strong></p>
+        <p>Premium name cards</p>
         <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-sticky-note fa-3x" style="color: #555;"></i>
+        <i class="fas fa-sticky-note fa-3x"></i>
         <h3>Stickers</h3>
-        <p>Custom shape cutting</p>
-        <p><strong>Starts from RM 5.00</strong></p>
+        <p>Custom shape & sizes</p>
         <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
     </div>
 
-        <div class="product-card">
-            <i class="fas fa-address-card fa-3x" style="color: #555;"></i>
-            <h3>T-shirt Printing</h3>
-            <p>High quality Tshirt</p>
-            <p><strong>Starts from RM 30.00</strong></p>
-            <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
-        </div>
+    <div class="product-card">
+        <i class="fas fa-tshirt fa-3x"></i>
+        <h3>T-Shirt Printing</h3>
+        <p>Custom design apparel</p>
+        <a href="product-details.jsp?id=3" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-scroll fa-3x"></i>
+        <h3>Banner</h3>
+        <p>Large format printing</p>
+        <a href="product-details.jsp?id=4" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-stamp fa-3x"></i>
+        <h3>Rubber Stamp</h3>
+        <p>Self-inking stamps</p>
+        <a href="product-details.jsp?id=5" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-id-badge fa-3x"></i>
+        <h3>Name Tag</h3>
+        <p>Engraved or printed</p>
+        <a href="product-details.jsp?id=6" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-flag fa-3x"></i>
+        <h3>Banner Bunting</h3>
+        <p>Events & promotion</p>
+        <a href="product-details.jsp?id=7" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-user-tie fa-3x"></i>
+        <h3>Corporate T-Shirt</h3>
+        <p>Formal staff uniform</p>
+        <a href="product-details.jsp?id=8" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-envelope-open-text fa-3x"></i>
+        <h3>Sampul Raya</h3>
+        <p>Exclusive festive packets</p>
+        <a href="product-details.jsp?id=9" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-book-open fa-3x"></i>
+        <h3>Brochure</h3>
+        <p>Informative marketing materials</p>
+        <a href="product-details.jsp?id=10" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-certificate fa-3x"></i>
+        <h3>Certificate Printing</h3>
+        <p>High grade paper finish</p>
+        <a href="product-details.jsp?id=11" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-award fa-3x"></i>
+        <h3>Plaque Sticker</h3>
+        <p>Metallic & clear stickers</p>
+        <a href="product-details.jsp?id=12" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-utensils fa-3x"></i>
+        <h3>Menu</h3>
+        <p>Restaurant menu books</p>
+        <a href="product-details.jsp?id=13" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-shirt fa-3x"></i>
+        <h3>Apron</h3>
+        <p>Custom kitchen wear</p>
+        <a href="product-details.jsp?id=14" class="btn-view">View Details</a>
+    </div>
+</div>
 </div>
 
 </body>
