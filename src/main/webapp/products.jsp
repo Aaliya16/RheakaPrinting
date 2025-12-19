@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Magenta colour */
-        :root { --magenta: #d81b60; }
+        :root { --mongoose: #baa987; }
 
         .product-container {
             display: grid;
@@ -27,10 +27,10 @@
 
         .product-card:hover { transform: translateY(-5px); }
 
-        .product-card h3 { color: var(--magenta); margin: 10px 0; }
+        .product-card h3 { color: var(--mongoose); margin: 10px 0; }
 
         .btn-view {
-            background: var(--magenta);
+            background: var(--mongoose);
             color: white;
             padding: 10px 20px;
             text-decoration: none;
@@ -63,6 +63,14 @@
         <p><strong>Starts from RM 5.00</strong></p>
         <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
     </div>
+
+        <div class="product-card">
+            <i class="fas fa-address-card fa-3x" style="color: #555;"></i>
+            <h3>T-shirt Printing</h3>
+            <p>High quality Tshirt</p>
+            <p><strong>Starts from RM 30.00</strong></p>
+            <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
+        </div>
 </div>
 
 </body>
