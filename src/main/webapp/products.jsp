@@ -63,6 +63,14 @@
         <p><strong>Starts from RM 5.00</strong></p>
         <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
     </div>
+
+        <div class="product-card">
+            <i class="fas fa-address-card fa-3x" style="color: #555;"></i>
+            <h3>T-shirt Printing</h3>
+            <p>High quality Tshirt</p>
+            <p><strong>Starts from RM 30.00</strong></p>
+            <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
+        </div>
 </div>
 
 </body>
