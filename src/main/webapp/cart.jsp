@@ -31,7 +31,7 @@
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Rheaka Design Services</title>
     <link rel="stylesheet" href="css/style.css">
@@ -55,26 +55,31 @@
 <!------- cart item details -------->
 <div class="small-container">
     <table>
+        <thead>
         <tr>
-            <th style="width: 50%;">Product</th>
-            <th style="width: 20%;">Quantity</th>
-            <th style="width: 20%;">Price</th>
-            <th style="width: 10%;">Total</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
         </tr>
+        </thead>
         <%
             if (cart_list != null && cartProduct != null && !cartProduct.isEmpty()) {
                 for (Cart c : cartProduct) {
         %>
+        <tbody>
         <tr>
             <td>
                 <div class="cart-info">
-                    <img src="images/<%= c.getImage() %>" alt="" width="80"> <div>
-                    <p><%= c.getName() %></p>
-                    <small>Price: RM <%= dcf.format(c.getPrice()) %></small>
-                    <br>
-                    <a href="remove-from-cart?id=<%= c.getId() %>">Remove</a>
+                    <img src="images/<%= c.getImage() %>" alt="" width="80">
+                    <div>
+                        <p><%= c.getName() %></p>
+                        <a href="remove-from-cart?id=<%= c.getId() %>">Remove</a>
+                    </div>
                 </div>
-                </div>
+            </td>
+            <td>
+                RM <%= dcf.format(c.getPrice()) %>
             </td>
             <td>
                 <form action="quantity-inc-dec" method="get" class="quantity-form">
@@ -87,7 +92,18 @@
                 </form>
             </td>
             <td>RM <%= dcf.format(c.getPrice() * c.getQuantity()) %></td>
+            <td>
+                <div class="total-price">
+                    <table>
+                        <tr>
+                            <td>Total</td>
+                            <td>RM <%= (request.getAttribute("total") != null) ? dcf.format(request.getAttribute("total")) : "0.00" %></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
         </tr>
+        </tbody>
         <%
             }
         } else {

@@ -4,7 +4,6 @@
 <head>
     <title>Rheaka Design Services</title>
     <link rel="stylesheet" href="css/style.css">
-<<<<<<< HEAD
     <style>
 
         .logo-img {
@@ -19,7 +18,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 5%;
-            background-color: #f8f9fa;
+            background-color: lightsteelblue;
         }
 
         .logo {
@@ -39,35 +38,29 @@
         }
 
         footer {
-            background-color: #333;
-            color: white;
+            background-color: lightsteelblue;
+            color: black;
             text-align: center;
             padding: 20px 0;
             margin-top: 50px;
         }
     </style>
-=======
->>>>>>> 7e8dc35d54ed3a8cf56ab47d9bc544d2eb640e12
 </head>
 <body>
 
 <header class="navbar">
-<<<<<<< HEAD
     <h1 class="logo">
         <img src="assets/img/logo_rheaka.png" alt="Logo" class="logo-img">
         Rheaka Design
     </h1>
-=======
-    <div class="logo-container">
-        <img src="images/logo.png" alt="Rheaka Logo"> <h1 class="logo">Rheaka Design</h1>
-    </div>
->>>>>>> 7e8dc35d54ed3a8cf56ab47d9bc544d2eb640e12
     <nav>
         <a href="index.jsp">Home</a>
         <a href="products.jsp">Services</a>
         <a href="#">Contact</a>
-<<<<<<< HEAD
-        <a href="#">Login</a>
+        <a href="cart.jsp">
+            <img src="images/cart.png" width="30px" height="30px" style="vertical-align: middle;">
+        </a>
+        <a href="#">Login/Signup</a>
     </nav>
 </header>
 
@@ -95,30 +88,5 @@
     <p>&copy; 2025 Rheaka Design Printing. All Rights Reserved.</p>
     <p>123 Arau, Perlis, Malaysia | 011-7078-7469</p>
 </footer>
-
-=======
-        <a href="cart.jsp">
-            <img src="images/cart.png" width="30px" height="30px" style="vertical-align: middle;">
-        </a>
-        <a href="#">Login/Signup</a>
-    </nav>
-</header>
-
-<section class="hero">
-    <h2>Professional Printing & Custom Design Services</h2>
-    <p>Upload your design, customize your order, and print with high quality.</p>
-    <a href="products.jsp" class="btn">Shop Now</a>
-</section>
-
-<section class="featured">
-    <h3>Featured Services</h3>
-    <div class="product-grid">
-        <div class="product-card">Business Cards</div>
-        <div class="product-card">Stickers</div>
-        <div class="product-card">Posters</div>
-    </div>
-</section>
-
->>>>>>> 7e8dc35d54ed3a8cf56ab47d9bc544d2eb640e12
 </body>
 </html>
