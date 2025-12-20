@@ -56,6 +56,7 @@
     <nav>
         <a href="index.jsp">Home</a>
         <a href="products.jsp">Services</a>
+        <a href="quote.jsp">Get A Quote</a>
         <a href="#">Contact</a>
         <a href="cart.jsp">
             <img src="images/cart.png" width="30px" height="30px" style="vertical-align: middle;">
