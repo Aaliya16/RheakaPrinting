@@ -8,13 +8,21 @@ public class Product {
     private String description;
     private String category;
     private int stock;
-    public Product(int id, String name, double price, int quantity, String description, String category, int stock) {}
+
+
+  public Product(int id, String name, double price, int quantity, String description, String category, int stock) {
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.quantity = quantity;
+    this.description = description;
+
+    this.category = category;
+    this.stock = stock;
+
 }
 
-public Product(int id, String name, double price, int quantity, String description, String category, int stock) {
-    n = name;
-    d= description;
-    p = price;
-    q = quantity;
+public String getName() { return name; }
+public double getPrice() { return price; }
 
 }

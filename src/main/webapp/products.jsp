@@ -2,150 +2,163 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Our Services - Rheaka Design</title>
+    <title>Our Services - Rheaka Printing</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --mongoose: #baa987;
+            --steelblue: #b0c4de; /* Warna latar belakang SteelBlue */
+            --deep-black: #000000; /* Warna hitam pekat untuk tulisan & ikon */
+        }
 
-        :root { --mongoose: #baa987; }
+        body {
+            background-color: var(--steelblue) !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
+        /* Bahagian atas website (Header) */
+        .header-section {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.9); /* Latar belakang putih lutsinar */
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-section h2 {
+            color: var(--deep-black) !important; /* Rheaka & Printing Services dalam HITAM */
+            font-size: 2.8rem;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        /* Container untuk semua kad produk */
         .product-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 0 40px 60px 40px;
+            max-width: 1300px;
+            margin: auto;
         }
 
+        /* Rekaan kad produk */
         .product-card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
         }
 
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
 
-        .product-card h3 { color: var(--mongoose); margin: 10px 0; }
+        /* Warna Simbol/Ikon ditukar kepada HITAM */
+        .product-card i {
+            color: var(--deep-black) !important;
+            margin-bottom: 20px;
+        }
 
+        .product-card h3 {
+            color: var(--mongoose); /* Kekalkan Mongoose untuk Nama Produk */
+            margin: 15px 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .product-card p {
+            color: #555;
+            font-size: 0.95rem;
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* Butang View Details */
         .btn-view {
             background: var(--mongoose);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 30px;
             text-decoration: none;
-            border-radius: 25px;
+            border-radius: 12px;
             display: inline-block;
-            margin-top: 10px;
+            font-weight: 600;
+            transition: 0.3s;
         }
+
+        .btn-view:hover { background: #a39375; }
     </style>
 </head>
 <body>
 
-<div style="text-align: center; padding: 20px;">
-    <h2>Our Printing Services</h2>
-    <p>Select a service to see dynamic pricing</p>
+<div class="header-section">
+    <h2>Rheaka Printing Services</h2>
+    <p style="color: #333; font-weight: 500;">Official Rheaka Inventory - Select a service for details</p>
 </div>
 
 <div class="product-container">
+
     <div class="product-card">
-        <i class="fas fa-address-card fa-3x"></i>
+        <i class="fas fa-box-open fa-4x"></i>
+        <h3>Acrylic Clear</h3>
+        <p>Premium 3mm laser-cut acrylic for high-impact displays.</p>
+        <a href="product-details.jsp?id=15" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-tshirt fa-4x"></i>
+        <h3>Apron Custom</h3>
+        <p>Denim, Cotton & 2-Tone professional kitchen wear.</p>
+        <a href="product-details.jsp?id=14" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-sign fa-4x"></i>
+        <h3>Industrial Signage</h3>
+        <p>Composite & High Impact boards for office or safety use.</p>
+        <a href="product-details.jsp?id=16" class="btn-view">View Details</a>
+    </div>
+
+    <div class="product-card">
+        <i class="fas fa-address-card fa-4x"></i>
         <h3>Business Card</h3>
-        <p>Premium name cards</p>
+        <p>Premium name cards with matte or glossy lamination.</p>
         <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-sticky-note fa-3x"></i>
-        <h3>Stickers</h3>
-        <p>Custom shape & sizes</p>
-        <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-tshirt fa-3x"></i>
-        <h3>T-Shirt Printing</h3>
-        <p>Custom design apparel</p>
+        <i class="fas fa-shirt fa-4x"></i>
+        <h3>Apparel Printing</h3>
+        <p>Sublimation, Sulam (Embroidery) & Silkscreen services.</p>
         <a href="product-details.jsp?id=3" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-scroll fa-3x"></i>
-        <h3>Banner</h3>
-        <p>Large format printing</p>
+        <i class="fas fa-scroll fa-4x"></i>
+        <h3>Banner & Bunting</h3>
+        <p>Roll-Up, X-Stand & Tripod stands for events.</p>
         <a href="product-details.jsp?id=4" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-stamp fa-3x"></i>
-        <h3>Rubber Stamp</h3>
-        <p>Self-inking stamps</p>
-        <a href="product-details.jsp?id=5" class="btn-view">View Details</a>
+        <i class="fas fa-flag fa-4x"></i>
+        <h3>Flags & Backdrop</h3>
+        <p>Beach Flags, Custom Bendera & Photo Backdrops.</p>
+        <a href="product-details.jsp?id=17" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-id-badge fa-3x"></i>
-        <h3>Name Tag</h3>
-        <p>Engraved or printed</p>
-        <a href="product-details.jsp?id=6" class="btn-view">View Details</a>
+        <i class="fas fa-sticky-note fa-4x"></i>
+        <h3>Stickers & Plaque</h3>
+        <p>Waterproof Mirrorcoat & metallic plaque stickers.</p>
+        <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
     </div>
 
-    <div class="product-card">
-        <i class="fas fa-flag fa-3x"></i>
-        <h3>Banner Bunting</h3>
-        <p>Events & promotion</p>
-        <a href="product-details.jsp?id=7" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-user-tie fa-3x"></i>
-        <h3>Corporate T-Shirt</h3>
-        <p>Formal staff uniform</p>
-        <a href="product-details.jsp?id=8" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-envelope-open-text fa-3x"></i>
-        <h3>Sampul Raya</h3>
-        <p>Exclusive festive packets</p>
-        <a href="product-details.jsp?id=9" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-book-open fa-3x"></i>
-        <h3>Brochure</h3>
-        <p>Informative marketing materials</p>
-        <a href="product-details.jsp?id=10" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-certificate fa-3x"></i>
-        <h3>Certificate Printing</h3>
-        <p>High grade paper finish</p>
-        <a href="product-details.jsp?id=11" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-award fa-3x"></i>
-        <h3>Plaque Sticker</h3>
-        <p>Metallic & clear stickers</p>
-        <a href="product-details.jsp?id=12" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-utensils fa-3x"></i>
-        <h3>Menu</h3>
-        <p>Restaurant menu books</p>
-        <a href="product-details.jsp?id=13" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-shirt fa-3x"></i>
-        <h3>Apron</h3>
-        <p>Custom kitchen wear</p>
-        <a href="product-details.jsp?id=14" class="btn-view">View Details</a>
-    </div>
-</div>
 </div>
 
 </body>
