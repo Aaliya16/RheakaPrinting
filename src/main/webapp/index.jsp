@@ -7,29 +7,45 @@
     <title>Rheaka Design Services</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-
-        .logo-img {
-            height: 50px;
-            width: auto;
-            vertical-align: middle;
-            margin-right: 10px;
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: antiquewhite;
         }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
+        .hero h2 {
+            font-size: 32px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .featured {
+            padding: 50px;
+            text-align: center;
             background-color: lightsteelblue;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .product-grid {
             display: flex;
-            align-items: center;
-            margin: 0;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
         }
 
+        .product-card {
+            padding: 30px;
+            border: 1px solid #dddddd;
+            width: 200px;
+            border-radius: 8px;
+            background: white;
+        }
         /* Hero image adjustment */
         .hero-banner {
             width: 100%;
@@ -38,34 +54,10 @@
             border-radius: 8px;
             display: block;
         }
-
-        footer {
-            background-color: lightsteelblue;
-            color: black;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 50px;
-        }
     </style>
 </head>
 <body>
-
-<header class="navbar">
-    <h1 class="logo">
-        <img src="assets/img/logo_rheaka.png" alt="Logo" class="logo-img">
-        Rheaka Design
-    </h1>
-    <nav>
-        <a href="index.jsp">Home</a>
-        <a href="products.jsp">Services</a>
-        <a href="quote.jsp">Get A Quote</a>
-        <a href="#">Contact</a>
-        <a href="cart.jsp">
-            <img src="images/cart.png" width="30px" height="30px" style="vertical-align: middle;">
-        </a>
-        <a href="#">Login/Signup</a>
-    </nav>
-</header>
+<%@ include file="header.jsp" %>
 
 <section class="hero" style="text-align: center; padding: 50px 20px;">
     <h2>Professional Printing & Custom Design Services</h2>
@@ -86,10 +78,6 @@
         <div class="product-card">Posters</div>
     </div>
 </section>
-
-<footer>
-    <p>&copy; 2025 Rheaka Design Printing. All Rights Reserved.</p>
-    <p>123 Arau, Perlis, Malaysia | 011-7078-7469</p>
-</footer>
+<%@ include file="footer.jsp" %>
 </body>
 </html>

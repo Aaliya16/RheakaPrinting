@@ -37,6 +37,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rheaka Design Services</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .small-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+        }
+
+        th {
+            text-align: center;
+            padding: 10px;
+            color: black;
+            border-bottom: 2px solid #baa987;
+            background: white;
+            font-weight: normal;
+            border-right: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* Centerkan Header Quantity & Price */
+        th:nth-child(2), td:nth-child(2),
+        th:nth-child(3), td:nth-child(3) {
+            text-align: center;
+        }
+
+        /* Header Total (Kanan sikit tapi tak rapat dinding) */
+        th:last-child, td:last-child {
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        td {
+            padding: 15px;
+            vertical-align: middle;
+            background: white;
+            color: black;
+        }
+
+        /* Centerkan Isi Quantity & Price */
+        td:nth-child(2), td:nth-child(3) {
+            text-align: center;
+        }
+
+        /* Isi Total (Kanan) */
+        td:last-child {
+            text-align: right;
+            padding-right: 20px;
+            font-weight: bold;
+        }
+
+        td input {
+            width: 40px;
+            height: 30px;
+            padding: 5px;
+        }
+
+        td img {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+            border-radius: 5px; /* Tambah bucu bulat sikit kat gambar */
+        }
+
+        /* --- CART INFO (GAMBAR & NAMA) --- */
+        .cart-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .cart-info p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .cart-info img {
+            width: 60px; /* Kecilkan sikit gambar */
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        /* Link Remove */
+        .cart-info a {
+            color: #ff523b;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        /* --- QUANTITY BUTTONS --- */
+        .quantity-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn a {
+            background: #eee;
+            color: #333;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .quantity-btn a:hover {
+            background: #ddd;
+        }
+
+        .quantity-btn input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        /* --- TOTAL PRICE SECTION (BAWAH) --- */
+        .total-price {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #baa987; /* Garis pemisah total */
+        }
+
+        .total-price table {
+            width: auto; /* Supaya tak makan penuh */
+            border: none;
+        }
+
+        .total-price td {
+            border: none; /* Buang garis dlm total */
+            padding: 5px 20px;
+            font-size: 18px;
+        }
+
+        /* --- MESEJ EMPTY CART --- */
+        .empty-cart-msg {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .empty-cart-msg a {
+            display: inline-block;
+            margin-top: 10px;
+            background: #baa987;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <%@ include file="header.jsp" %>
