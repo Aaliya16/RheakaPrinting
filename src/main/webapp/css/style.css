@@ -56,3 +56,179 @@ body {
     width: 200px;
     border-radius: 8px;
 }
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;  /* Dulu 15px, kita kurangkan jadi 10px (standard) */
+}
+
+.logo-container img {
+    width: 100px; /* 125px terlalu besar, standard logo navbar selalunya 50px-80px */
+    height: auto;
+}
+
+h1.logo {
+    margin: 0;      /* PENTING: Buang margin default supaya dia tak tolak logo */
+    font-size: 28px;
+    line-height: 1; /* Supaya tinggi tulisan tu 'ngam-ngam' */
+    color: #333;    /* Warna hitam/gelap sikit */
+}
+
+/* --- CART PAGE STYLES (Mongoose Theme) --- */
+:root {
+    --mongoose : #baa987;
+    --dark: #333;
+    --light: #f8f9fa;
+}
+
+.cart-container {
+    background-color: white; /* Kotak Putih */
+    width: 90%;                /* Lebar 90% dari skrin */
+    max-width: 1000px;         /* Tapi jangan lebih 1000px */
+    margin: 40px auto;         /* Duduk tengah-tengah (Auto) */
+    padding: 30px;             /* Ruang dalam kotak */
+    border-radius: 15px;       /* Bucu bulat */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Bayang lembut (Shadow) */
+    min-height: 400px;         /* Tinggi minima supaya tak nampak kempis */
+}
+
+/* --- Bahagian Kiri: List Barang --- */
+.cart-items {
+    flex: 2;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse; /* Hilangkan gap hodoh antara kotak */
+    margin-top: 20px;
+}
+
+.cart-table th {
+    text-align: left;
+    padding: 15px;
+    background-color: #baa987; /* Warna Mongoose (Coklat) */
+    color: white;
+    border-radius: 5px;
+}
+
+.cart-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee; /* Garis halus bawah setiap item */
+}
+
+
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-info img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* --- Butang Quantity (+ -) --- */
+.qty-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    width: max-content;
+    border-radius: 5px;
+}
+.qty-box a {
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--dark);
+    background: #eee;
+    font-weight: bold;
+}
+.qty-box input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-remove {
+    color: red;
+    font-size: 12px;
+    text-decoration: none;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/* --- Bahagian Kanan: Order Summary --- */
+.cart-summary {
+    flex: 1;
+    background: var(--light);
+    padding: 30px;
+    border-radius: 15px;
+    height: fit-content;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.total-box {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--mongoose);
+    margin: 20px 0;
+    padding: 15px;
+    background: #fff;
+    border: 2px dashed var(--mongoose);
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-checkout {
+    background: var(--mongoose);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+}
+.btn-checkout:hover { background: #a49374; }
+
+/* 4. Cantikkan mesej "Cart is Empty" */
+.empty-cart-msg {
+    text-align: center;
+    padding: 50px;
+    color: #666;
+}
+
+.empty-cart-msg h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.btn-shop {
+    display: inline-block;
+    background-color: #baa987;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btn-shop:hover {
+    background-color: #8f8061; /* Gelap sikit bila mouse over */
+}
