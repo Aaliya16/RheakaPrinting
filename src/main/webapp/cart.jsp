@@ -37,21 +37,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<%@ include file="header.jsp" %>
 
-<header class="navbar">
-    <div class="logo-container">
-        <img src="images/logo.png" alt="Rheaka Logo"> <h1 class="logo">Rheaka Design</h1>
-    </div>
-    <nav>
-        <a href="index.jsp">Home</a>
-        <a href="products.jsp">Services</a>
-        <a href="#">Contact</a>
-        <a href="cart.jsp">
-            <img src="images/cart.png" width="30px" height="30px" style="vertical-align: middle;">
-        </a>
-        <a href="#">Login/Signup</a>
-    </nav>
-</header>
 <!------- cart item details -------->
 <div class="small-container">
     <table>
@@ -92,26 +79,18 @@
                 </form>
             </td>
             <td>RM <%= dcf.format(c.getPrice() * c.getQuantity()) %></td>
-            <td>
-                <div class="total-price">
-                    <table>
-                        <tr>
-                            <td>Total</td>
-                            <td>RM <%= (request.getAttribute("total") != null) ? dcf.format(request.getAttribute("total")) : "0.00" %></td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
         </tr>
         </tbody>
         <%
             }
         } else {
         %>
-        <tr><td colspan="4" style="text-align:center; padding: 50px;">
-            <h3>Your cart is empty!</h3>
-            <a href="index.jsp" style="color:var(--mongoose)">Go Shop Now</a>
-        </td></tr>
+        <tr>
+            <td colspan="4" style="text-align:center; padding: 50px;">
+                <h3>Your cart is empty!</h3>
+                <a href="index.jsp" style="color:var(--mongoose)">Go Shop Now</a>
+            </td>
+        </tr>
         <% } %>
     </table>
     <div class="total-price">
@@ -123,5 +102,6 @@
         </table>
     </div>
 </div>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
