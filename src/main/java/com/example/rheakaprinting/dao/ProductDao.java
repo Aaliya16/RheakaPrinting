@@ -52,7 +52,6 @@ public class ProductDao {
                         Cart row = new Cart();
                         row.setId(rs.getInt("id"));
                         row.setName(rs.getString("name"));
-                        row.setCategory(rs.getString("category"));
                         row.setPrice(rs.getDouble("price") * item.getQuantity());
                         row.setQuantity(item.getQuantity());
                         book.add(row);
