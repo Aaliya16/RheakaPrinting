@@ -8,8 +8,8 @@
     <style>
         :root {
             --mongoose: #baa987;
-            --steelblue: #b0c4de; /* Warna latar belakang SteelBlue */
-            --deep-black: #000000; /* Warna hitam pekat untuk tulisan & ikon */
+            --steelblue: #b0c4de; /* SteelBlue Background */
+            --deep-black: #000000; /* Black font & icon */
         }
 
         body {
@@ -19,23 +19,21 @@
             padding: 0;
         }
 
-        /* Bahagian atas website (Header) */
         .header-section {
             text-align: center;
             padding: 50px 20px;
-            background: rgba(255, 255, 255, 0.9); /* Latar belakang putih lutsinar */
+            background: rgba(255, 255, 255, 0.9);
             margin-bottom: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .header-section h2 {
-            color: var(--deep-black) !important; /* Rheaka & Printing Services dalam HITAM */
+            color: var(--deep-black) !important;
             font-size: 2.8rem;
             margin: 0;
             font-weight: 800;
         }
 
-        /* Container untuk semua kad produk */
         .product-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -45,7 +43,6 @@
             margin: auto;
         }
 
-        /* Rekaan kad produk */
         .product-card {
             background: white;
             border-radius: 20px;
@@ -59,14 +56,13 @@
             transform: translateY(-10px);
         }
 
-        /* Warna Simbol/Ikon ditukar kepada HITAM */
         .product-card i {
             color: var(--deep-black) !important;
             margin-bottom: 20px;
         }
 
         .product-card h3 {
-            color: var(--mongoose); /* Kekalkan Mongoose untuk Nama Produk */
+            color: var(--mongoose);
             margin: 15px 0;
             font-size: 1.5rem;
             font-weight: 700;
@@ -79,7 +75,6 @@
             margin-bottom: 20px;
         }
 
-        /* Butang View Details */
         .btn-view {
             background: var(--mongoose);
             color: white;
