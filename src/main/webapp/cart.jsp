@@ -244,11 +244,15 @@
                     </div>
                 </form>
             </td>
+            <td>RM <%= dcf.format(c.getPrice())%></td>
             <td>RM <%= dcf.format(c.getPrice() * c.getQuantity()) %></td>
         </tr>
-        </tbody>
         <%
             }
+        %>
+        <tr class="total-row">
+            <td colspan="2"></td> <td>Total</td>        <td>RM <%= (request.getAttribute("total") != null) ? dcf.format(request.getAttribute("total")) : "0.00" %></td> </tr>
+        <%
         } else {
         %>
         <tr>
@@ -258,6 +262,7 @@
             </td>
         </tr>
         <% } %>
+        </tbody>
     </table>
     <div class="total-price">
         <table>

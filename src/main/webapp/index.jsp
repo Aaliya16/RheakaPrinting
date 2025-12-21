@@ -10,7 +10,7 @@
         .hero {
             text-align: center;
             padding: 80px 20px;
-            background: antiquewhite;
+            background: rgba(255, 255, 255, 0.9);;
         }
 
         .hero h2 {

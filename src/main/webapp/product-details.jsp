@@ -92,7 +92,7 @@
                         <img src="https://via.placeholder.com/350x250" alt="Product Image" style="border-radius: 10px;">
                     </div>
 
-                    <form action="cart.jsp" method="POST">
+                    <form action="add-to-cart" method="get">
                         <div class="row g-3">
                             <div class="col-12">
                                 <label class="label-black">Select Specific Type</label>
@@ -112,6 +112,7 @@
                                     <% } %>
                                 </select>
                             </div>
+                            <input type="hidden" name="id" value="<%= request.getParameter("id") %>">
                             <div class="options-panel">
                                 <h3>Customize Your Order</h3>
 
@@ -125,7 +126,7 @@
                                     </select>
                                 </div>
                                 <label>Size:</label>
-                                <select id="size">
+                                <select id="size" name="size" class="form-select">
                                     <option value="0">Standard (85mm x 55mm)</option>
                                     <option value="5">Large (+RM5)</option>
                                 </select>
@@ -140,7 +141,7 @@
                                     </select>
                                 </div>
                                 <label>Material:</label>
-                                <select id="material">
+                                <select id="material" name="material" class="form-select">
                                     <option value="0">Art Card 260gsm</option>
                                     <option value="10">Premium Linen (+RM10)</option>
                                 </select>

@@ -95,7 +95,7 @@
     </style>
 </head>
 <body>
-
+<%@ include file="header.jsp" %>
 <div class="header-section">
     <h2>Rheaka Printing Services</h2>
     <p style="color: #333; font-weight: 500;">Official Rheaka Inventory - Select a service for details</p>
@@ -160,6 +160,6 @@
     </div>
 
 </div>
-
+<%@ include file="footer.jsp" %>
 </body>
 </html>
