@@ -8,8 +8,8 @@
     <style>
         :root {
             --mongoose: #baa987;
-            --steelblue: #b0c4de; /* SteelBlue Background */
-            --deep-black: #000000; /* Black font & icon */
+            --steelblue: #b0c4de;
+            --deep-black: #000000;
         }
 
         body {
@@ -50,6 +50,9 @@
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-card:hover {
@@ -71,7 +74,7 @@
         .product-card p {
             color: #555;
             font-size: 0.95rem;
-            height: 40px;
+            min-height: 50px;
             margin-bottom: 20px;
         }
 
@@ -93,64 +96,64 @@
 <%@ include file="header.jsp" %>
 <div class="header-section">
     <h2>Rheaka Printing Services</h2>
-    <p style="color: #333; font-weight: 500;">Official Rheaka Inventory - Select a service for details</p>
+    <p style="color: #333; font-weight: 500;">Official December 2024 Inventory - Premium Printing Solutions</p>
 </div>
 
 <div class="product-container">
 
     <div class="product-card">
-        <i class="fas fa-box-open fa-4x"></i>
+        <i class="fas fa-gem fa-4x"></i>
         <h3>Acrylic Clear</h3>
-        <p>Premium 3mm laser-cut acrylic for high-impact displays.</p>
+        <p>Premium 3mm laser-cut acrylic and High Impact boards [cite: 2-3].</p>
         <a href="product-details.jsp?id=15" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-tshirt fa-4x"></i>
+        <i class="fas fa-utensils fa-4x"></i>
         <h3>Apron Custom</h3>
-        <p>Denim, Cotton & 2-Tone professional kitchen wear.</p>
+        <p>Denim, 1-Tone, and Premium 2-Button professional kitchen wear [cite: 6-13].</p>
         <a href="product-details.jsp?id=14" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-sign fa-4x"></i>
+        <i class="fas fa-industry fa-4x"></i>
         <h3>Industrial Signage</h3>
-        <p>Composite & High Impact boards for office or safety use.</p>
+        <p>Composite & High Impact boards with installation service [cite: 17-19].</p>
         <a href="product-details.jsp?id=16" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
         <i class="fas fa-address-card fa-4x"></i>
         <h3>Business Card</h3>
-        <p>Premium name cards with matte or glossy lamination.</p>
+        <p>Premium 1-side, 2-side, and Curve-cut name cards [cite: 21-23].</p>
         <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-shirt fa-4x"></i>
+        <i class="fas fa-tshirt fa-4x"></i>
         <h3>Apparel Printing</h3>
-        <p>Sublimation, Sulam (Embroidery) & Silkscreen services.</p>
+        <p>Quick Dry, Siro Cotton, Oversized T-Shirts & DTF Printing [cite: 39-44].</p>
         <a href="product-details.jsp?id=3" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
         <i class="fas fa-scroll fa-4x"></i>
         <h3>Banner & Bunting</h3>
-        <p>Roll-Up, X-Stand & Tripod stands for events.</p>
+        <p>High-quality event banners and roll-up buntings in all sizes [cite: 75-134].</p>
         <a href="product-details.jsp?id=4" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
         <i class="fas fa-flag fa-4x"></i>
         <h3>Flags & Backdrop</h3>
-        <p>Beach Flags, Custom Bendera & Photo Backdrops.</p>
+        <p>Beach Flags, Polymesh Bendera & Photo Backdrops [cite: 139-153].</p>
         <a href="product-details.jsp?id=17" class="btn-view">View Details</a>
     </div>
 
     <div class="product-card">
-        <i class="fas fa-sticky-note fa-4x"></i>
+        <i class="fas fa-award fa-4x"></i>
         <h3>Stickers & Plaque</h3>
-        <p>Waterproof Mirrorcoat & metallic plaque stickers.</p>
+        <p>Vinyl stickers, Trophiess, Medals, and Epoxy Nametags [cite: 156-168].</p>
         <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
     </div>
 
