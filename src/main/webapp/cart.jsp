@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: MSI MODERN 15
-  Date: 19/12/2025
-  Time: 1:25 am
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 <%@ page import="com.example.rheakaprinting.model.*" %>
@@ -15,16 +8,23 @@
 <%
     DecimalFormat dcf = new DecimalFormat("#.##");
     request.setAttribute("dcf", dcf);
-    /*User auth = (User) request.getSession().getAttribute("auth");
-    if (auth != null) {
-        request.setAttribute("person", auth);
-    }*/
+    double total = 0.0;
+
     ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
     List<Cart> cartProduct = null;
-    if (cart_list != null) {
-        ProductDao pDao = new ProductDao(DbConnection.getConnection());
-        cartProduct = pDao.getCartProducts(cart_list);
-        double total = pDao.getTotalCartPrice(cart_list);
+
+    if (cart_list != null && !cart_list.isEmpty()) {
+        try {
+            ProductDao pDao = new ProductDao(DbConnection.getConnection());
+            cartProduct = pDao.getCartProducts(cart_list);
+            total = pDao.getTotalCartPrice(cart_list);
+        } catch (Exception e) {
+            // If ProductDao fails, use cart_list directly
+            cartProduct = cart_list;
+            for (Cart c : cart_list) {
+                total += c.getPrice() * c.getQuantity();
+            }
+        }
         request.setAttribute("total", total);
         request.setAttribute("cart_list", cart_list);
     }
@@ -35,11 +35,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rheaka Design Services</title>
+    <title>Shopping Cart - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        :root {
+            --mongoose: #baa987;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+        }
+
         .small-container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 50px auto;
             padding: 20px;
             background: #fff;
@@ -48,89 +57,97 @@
             width: 90%;
         }
 
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-
         }
 
         th {
-            text-align: center;
-            padding: 10px;
-            color: black;
-            border-bottom: 2px solid #baa987;
-            background: white;
-            font-weight: normal;
-            border-right: 2px solid rgba(255,255,255,0.3);
+            text-align: left;
+            padding: 15px 10px;
+            color: #333;
+            border-bottom: 2px solid var(--mongoose);
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
-        /* Centerkan Header Quantity & Price */
-        th:nth-child(2), td:nth-child(2),
-        th:nth-child(3), td:nth-child(3) {
+        /* Center align Price, Quantity, and Subtotal headers */
+        th:nth-child(2),
+        th:nth-child(3),
+        th:nth-child(4) {
             text-align: center;
-        }
-
-        /* Header Total (Kanan sikit tapi tak rapat dinding) */
-        th:last-child, td:last-child {
-            text-align: right;
-            padding-right: 20px;
         }
 
         td {
-            padding: 15px;
+            padding: 20px 10px;
             vertical-align: middle;
-            background: white;
-            color: black;
+            border-bottom: 1px solid #eee;
         }
 
-        /* Centerkan Isi Quantity & Price */
-        td:nth-child(2), td:nth-child(3) {
+        /* Center align Price, Quantity, and Subtotal data */
+        td:nth-child(2),
+        td:nth-child(3),
+        td:nth-child(4) {
             text-align: center;
         }
 
-        /* Isi Total (Kanan) */
-        td:last-child {
-            text-align: right;
-            padding-right: 20px;
-            font-weight: bold;
-        }
-
         td input {
-            width: 40px;
+            width: 50px;
             height: 30px;
             padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-weight: 600;
+            background: #f8f9fa;
         }
 
-        td img {
-            width: 80px;
-            height: 80px;
-            margin-right: 10px;
-            border-radius: 5px; /* Tambah bucu bulat sikit kat gambar */
-        }
-
-        /* --- CART INFO (GAMBAR & NAMA) --- */
+        /* --- CART INFO (PRODUCT COLUMN) --- */
         .cart-info {
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
             gap: 15px;
+        }
+
+        .cart-info img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .cart-info div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .cart-info p {
             margin: 0;
-            font-weight: bold;
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
         }
 
-        .cart-info img {
-            width: 60px; /* Kecilkan sikit gambar */
-            height: 60px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-        /* Link Remove */
         .cart-info a {
             color: #ff523b;
-            font-size: 12px;
+            font-size: 13px;
             text-decoration: none;
+            font-weight: 500;
+        }
+
+        .cart-info a:hover {
+            text-decoration: underline;
         }
 
         /* --- QUANTITY BUTTONS --- */
@@ -138,67 +155,148 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 5px;
         }
 
         .quantity-btn a {
-            background: #eee;
-            color: #333;
-            width: 25px;
-            height: 25px;
-            line-height: 25px;
+            background: var(--mongoose);
+            color: white;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
             text-align: center;
             text-decoration: none;
             font-weight: bold;
-            border-radius: 3px;
+            border-radius: 5px;
             display: inline-block;
+            transition: background 0.3s;
         }
 
         .quantity-btn a:hover {
-            background: #ddd;
+            background: #a49374;
         }
 
         .quantity-btn input {
-            width: 40px;
+            width: 50px;
             text-align: center;
-            border: none;
-            font-weight: bold;
-            margin: 0 5px;
+            border: 1px solid #ddd;
+            font-weight: 600;
+            margin: 0;
+            background: #f8f9fa;
         }
 
-        /* --- TOTAL PRICE SECTION (BAWAH) --- */
+        /* Price column styling */
+        .price-cell {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Subtotal column styling */
+        .subtotal-cell {
+            font-weight: bold;
+            color: var(--mongoose);
+            font-size: 18px;
+        }
+
+        /* --- TOTAL PRICE SECTION --- */
         .total-price {
             display: flex;
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: 30px;
             padding-top: 20px;
-            border-top: 2px solid #baa987; /* Garis pemisah total */
+            border-top: 2px solid var(--mongoose);
         }
 
         .total-price table {
-            width: auto; /* Supaya tak makan penuh */
+            width: auto;
             border: none;
         }
 
         .total-price td {
-            border: none; /* Buang garis dlm total */
-            padding: 5px 20px;
-            font-size: 18px;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
         }
 
-        /* --- MESEJ EMPTY CART --- */
+        .total-price td:first-child {
+            color: #333;
+        }
+
+        .total-price td:last-child {
+            color: var(--mongoose);
+            font-size: 24px;
+        }
+
+        /* --- CART ACTIONS --- */
+        .cart-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .continue-shopping {
+            color: var(--mongoose);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .continue-shopping:hover {
+            text-decoration: underline;
+        }
+
+        .checkout-btn {
+            background: var(--mongoose);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #a49374;
+        }
+
+        /* --- EMPTY CART MESSAGE --- */
         .empty-cart-msg {
             text-align: center;
-            padding: 50px;
+            padding: 80px 20px;
+        }
+
+        .empty-cart-msg h3 {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .empty-cart-msg p {
+            color: #999;
+            margin-bottom: 30px;
         }
 
         .empty-cart-msg a {
             display: inline-block;
-            margin-top: 10px;
-            background: #baa987;
+            background: var(--mongoose);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 30px;
             text-decoration: none;
             border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .empty-cart-msg a:hover {
+            background: #a49374;
         }
     </style>
 </head>
@@ -207,72 +305,84 @@
 
 <!------- cart item details -------->
 <div class="small-container">
+    <h2>Shopping Cart</h2>
+
+    <%
+        if (cart_list != null && cartProduct != null && !cartProduct.isEmpty()) {
+    %>
+
     <table>
         <thead>
         <tr>
             <th>Product</th>
-            <th>Quantity</th>
             <th>Price</th>
-            <th>Total</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
         </tr>
         </thead>
-        <%
-            if (cart_list != null && cartProduct != null && !cartProduct.isEmpty()) {
-                for (Cart c : cartProduct) {
-        %>
         <tbody>
+        <%
+            for (Cart c : cartProduct) {
+                double itemSubtotal = c.getPrice() * c.getQuantity();
+        %>
         <tr>
             <td>
                 <div class="cart-info">
-                    <img src="images/<%= c.getImage() %>" alt="" width="80">
+                    <img src="images/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
+                         alt="<%= c.getName() != null ? c.getName() : "Product" %>">
                     <div>
-                        <p><%= c.getName() %></p>
+                        <p><%= c.getName() != null ? c.getName() : "Product #" + c.getId() %></p>
                         <a href="remove-from-cart?id=<%= c.getId() %>">Remove</a>
                     </div>
                 </div>
             </td>
-            <td>
+            <td class="price-cell">
                 RM <%= dcf.format(c.getPrice()) %>
             </td>
             <td>
-                <form action="quantity-inc-dec" method="get" class="quantity-form">
-                    <input type="hidden" name="id" value="<%= c.getId() %>">
-                    <div class="quantity-btn">
-                        <a href="quantity-inc-dec?action=dec&id=<%= c.getId() %>">-</a>
-                        <input type="text" name="quantity" value="<%= c.getQuantity() %>" readonly>
-                        <a href="quantity-inc-dec?action=inc&id=<%= c.getId() %>">+</a>
-                    </div>
-                </form>
+                <div class="quantity-btn">
+                    <a href="quantity-inc-dec?action=dec&id=<%= c.getId() %>">−</a>
+                    <input type="text" value="<%= c.getQuantity() %>" readonly>
+                    <a href="quantity-inc-dec?action=inc&id=<%= c.getId() %>">+</a>
+                </div>
             </td>
-            <td>RM <%= dcf.format(c.getPrice())%></td>
-            <td>RM <%= dcf.format(c.getPrice() * c.getQuantity()) %></td>
+            <td class="subtotal-cell">
+                RM <%= dcf.format(itemSubtotal) %>
+            </td>
         </tr>
         <%
             }
         %>
-        <tr class="total-row">
-            <td colspan="2"></td> <td>Total</td>        <td>RM <%= (request.getAttribute("total") != null) ? dcf.format(request.getAttribute("total")) : "0.00" %></td> </tr>
-        <%
-        } else {
-        %>
-        <tr>
-            <td colspan="4" style="text-align:center; padding: 50px;">
-                <h3>Your cart is empty!</h3>
-                <a href="index.jsp" style="color:var(--mongoose)">Go Shop Now</a>
-            </td>
-        </tr>
-        <% } %>
         </tbody>
     </table>
+
     <div class="total-price">
         <table>
             <tr>
-                <td>Total</td>
-                <td>RM <%= (request.getAttribute("total") != null) ? dcf.format(request.getAttribute("total")) : "0.00" %></td>
+                <td>Total:</td>
+                <td>RM <%= dcf.format(total) %></td>
             </tr>
         </table>
     </div>
+
+    <div class="cart-actions">
+        <a href="index.jsp" class="continue-shopping">← Continue Shopping</a>
+        <a href="checkout.jsp" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+
+    <%
+    } else {
+    %>
+
+    <div class="empty-cart-msg">
+        <h3>Your cart is empty!</h3>
+        <p>Browse our products and add items to your cart.</p>
+        <a href="products.jsp">Start Shopping</a>
+    </div>
+
+    <% } %>
 </div>
+
 <%@ include file="footer.jsp" %>
 </body>
 </html>
