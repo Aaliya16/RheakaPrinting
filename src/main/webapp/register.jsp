@@ -11,6 +11,7 @@
     <title>Register - Rheaka Printing</title>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 <h2>Create a New Account</h2>
 
 <%-- Show an error message if the registration fails --%>
@@ -35,5 +36,6 @@
 </form>
 
 <p>Already have an account? <a href="login.jsp">Login here</a></p>
+<%@ include file="footer.jsp" %>
 </body>
 </html>

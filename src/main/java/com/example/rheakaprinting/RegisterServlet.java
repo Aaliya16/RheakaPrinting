@@ -1,6 +1,7 @@
 
 package com.example.rheakaprinting;
 
+import com.example.rheakaprinting.dao.UserDAO;
 import com.example.rheakaprinting.model.User;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

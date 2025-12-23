@@ -19,6 +19,6 @@
         <a href="cart.jsp">
             <img src="images/cart.png" width="30px" height="30px" style="vertical-align: middle;">
         </a>
-        <a href="#">Login/Signup</a>
+        <a href="login.jsp">Login/Signup</a>
     </div>
 </nav>

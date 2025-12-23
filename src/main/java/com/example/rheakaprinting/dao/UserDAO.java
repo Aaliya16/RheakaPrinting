@@ -1,4 +1,4 @@
-package com.example.rheakaprinting;
+package com.example.rheakaprinting.dao;
 
 import com.example.rheakaprinting.model.User;
 
