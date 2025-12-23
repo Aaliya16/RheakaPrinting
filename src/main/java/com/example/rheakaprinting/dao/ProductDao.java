@@ -16,9 +16,9 @@ public class ProductDao {
     }
 
     public List<Product> getAllProducts() {
-        List<Product> book = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         try {
-            query = "select * from products"; // Make sure your DB table name matches this!
+            query = "SELECT * FROM products";
             pst = this.con.prepareStatement(query);
             rs = pst.executeQuery();
 
@@ -30,59 +30,95 @@ public class ProductDao {
                 row.setPrice(rs.getDouble("price"));
                 row.setImage(rs.getString("image"));
 
-                book.add(row);
+                products.add(row);
             }
         } catch (SQLException e) {
+            System.err.println("Error in getAllProducts: " + e.getMessage());
             e.printStackTrace();
         }
-        return book;
+        return products;
     }
 
-    // You will need this for the Cart page later
+    /**
+     * Get cart products with details from database
+     * ✅ FIXED: Tidak multiply price dengan quantity di sini
+     */
     public List<Cart> getCartProducts(ArrayList<Cart> cartList) {
-        List<Cart> book = new ArrayList<>();
+        List<Cart> cartProducts = new ArrayList<>();
         try {
-            if (cartList.size() > 0) {
+            if (cartList != null && cartList.size() > 0) {
                 for (Cart item : cartList) {
-                    query = "select * from products where id=?";
+                    query = "SELECT * FROM products WHERE id=?";
                     pst = this.con.prepareStatement(query);
                     pst.setInt(1, item.getId());
                     rs = pst.executeQuery();
-                    while (rs.next()) {
+
+                    if (rs.next()) {
                         Cart row = new Cart();
                         row.setId(rs.getInt("id"));
                         row.setName(rs.getString("name"));
-                        row.setPrice(rs.getDouble("price") * item.getQuantity());
+                        row.setImage(rs.getString("image"));
+
+                        // ✅ PENTING: Guna price dari item (yang dah customize),
+                        // BUKAN dari database (base price sahaja)
+                        row.setPrice(item.getPrice()); // Unit price dari cart
                         row.setQuantity(item.getQuantity());
-                        book.add(row);
+
+                        cartProducts.add(row);
                     }
                 }
             }
         } catch (SQLException e) {
+            System.err.println("Error in getCartProducts: " + e.getMessage());
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
-        return book;
+        return cartProducts;
     }
 
+    /**
+     * Calculate total cart price
+     * ✅ FIXED: Tidak multiply price dengan quantity di database query
+     */
     public double getTotalCartPrice(ArrayList<Cart> cartList) {
         double sum = 0;
         try {
-            if (cartList.size() > 0) {
+            if (cartList != null && cartList.size() > 0) {
                 for (Cart item : cartList) {
-                    query = "select price from products where id=?";
-                    pst = this.con.prepareStatement(query);
-                    pst.setInt(1, item.getId());
-                    rs = pst.executeQuery();
-                    while (rs.next()) {
-                        sum += rs.getDouble("price") * item.getQuantity();
-                    }
+                    // ✅ Guna price dari cart item terus
+                    // (dah include addons & customization)
+                    sum += item.getPrice() * item.getQuantity();
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            System.err.println("Error in getTotalCartPrice: " + e.getMessage());
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return sum;
+    }
+
+    /**
+     * Get single product by ID
+     */
+    public Product getProductById(int id) {
+        Product product = null;
+        try {
+            query = "SELECT * FROM products WHERE id=?";
+            pst = this.con.prepareStatement(query);
+            pst.setInt(1, id);
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setCategory(rs.getString("category"));
+                product.setPrice(rs.getDouble("price"));
+                product.setImage(rs.getString("image"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error in getProductById: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return product;
     }
 }

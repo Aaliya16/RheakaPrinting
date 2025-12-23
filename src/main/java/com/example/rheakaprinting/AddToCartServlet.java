@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 @WebServlet(name = "AddToCartServlet", value = "/add-to-cart")
-@MultipartConfig // Add this for file upload support
+@MultipartConfig
 public class AddToCartServlet extends HttpServlet {
 
     @Override
@@ -24,70 +24,92 @@ public class AddToCartServlet extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
 
-            // 1. GET DATA FROM FORM - Match dengan nama field dalam form
+            // GET DATA FROM FORM - MATCH dengan nama field dalam JSP
             String idParam = request.getParameter("id");
             String quantityParam = request.getParameter("quantity");
-            String priceParam = request.getParameter("final_unit_price"); // BETULKAN INI!
+            String priceParam = request.getParameter("price"); // ✅ BETUL SEKARANG!
 
-            // Validation - pastikan semua parameter ada
-            if (idParam == null || quantityParam == null || priceParam == null ||
-                    priceParam.isEmpty() || priceParam.equals("0.00")) {
-                out.println("<h3>Error: Missing required fields or price not calculated</h3>");
-                out.println("<p>ID: " + idParam + "</p>");
-                out.println("<p>Quantity: " + quantityParam + "</p>");
-                out.println("<p>Price: " + priceParam + "</p>");
+            // Debug - print untuk tengok apa yang diterima
+            System.out.println("=== ADD TO CART DEBUG ===");
+            System.out.println("ID: " + idParam);
+            System.out.println("Quantity: " + quantityParam);
+            System.out.println("Price: " + priceParam);
+
+            // Validation
+            if (idParam == null || idParam.isEmpty()) {
+                out.println("<h3>Error: Product ID is missing</h3>");
+                out.println("<a href='index.jsp'>Go Back</a>");
+                return;
+            }
+
+            if (quantityParam == null || quantityParam.isEmpty()) {
+                out.println("<h3>Error: Quantity is missing</h3>");
                 out.println("<a href='product-details.jsp?id=" + idParam + "'>Go Back</a>");
                 return;
             }
 
+            if (priceParam == null || priceParam.isEmpty() || priceParam.equals("0.00")) {
+                out.println("<h3>Error: Price not calculated</h3>");
+                out.println("<p>Please select product options first</p>");
+                out.println("<a href='product-details.jsp?id=" + idParam + "'>Go Back</a>");
+                return;
+            }
+
+            // Parse values
             int id = Integer.parseInt(idParam);
             int quantity = Integer.parseInt(quantityParam);
-            double unitPrice = Double.parseDouble(priceParam);
+            double totalPrice = Double.parseDouble(priceParam);
 
-            // Optional: Get customization details
+            // Calculate unit price (sebab form hantar total)
+            double unitPrice = totalPrice / quantity;
+
+            System.out.println("Calculated Unit Price: " + unitPrice);
+            System.out.println("Total: " + totalPrice);
+
+            // Get customization details (optional)
             String variationName = request.getParameter("variation_name");
             String addonName = request.getParameter("addon_name");
 
-            // 2. CREATE CART OBJECT
+            System.out.println("Variation: " + variationName);
+            System.out.println("Addon: " + addonName);
+
+            // CREATE CART OBJECT
             Cart cm = new Cart();
             cm.setId(id);
             cm.setQuantity(quantity);
-            cm.setPrice(unitPrice); // Unit price, bukan total
+            cm.setPrice(unitPrice); // ✅ Simpan unit price, bukan total
 
-            // If your Cart model supports these fields:
-            // cm.setVariation(variationName);
-            // cm.setAddon(addonName);
-
-            // 3. GET OR CREATE SESSION CART
+            // GET OR CREATE SESSION CART
             HttpSession session = request.getSession();
             ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
 
             if (cart_list == null) {
-                // First item in cart
                 cart_list = new ArrayList<>();
                 cart_list.add(cm);
                 session.setAttribute("cart-list", cart_list);
+                System.out.println("✅ New cart created with 1 item");
             } else {
-                // Check if item already exists in cart
                 boolean exist = false;
 
                 for (Cart c : cart_list) {
                     if (c.getId() == id) {
                         exist = true;
-                        // Update quantity if item already exists
                         c.setQuantity(c.getQuantity() + quantity);
+                        System.out.println("✅ Updated existing item quantity to: " + c.getQuantity());
                         break;
                     }
                 }
 
                 if (!exist) {
-                    // Add new item to cart
                     cart_list.add(cm);
+                    System.out.println("✅ Added new item to cart");
                 }
             }
 
             // Update session
             session.setAttribute("cart-list", cart_list);
+            System.out.println("✅ Cart size: " + cart_list.size());
+            System.out.println("=========================");
 
             // Redirect to cart page
             response.sendRedirect("cart.jsp");
@@ -106,7 +128,6 @@ public class AddToCartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Redirect GET requests to products page
         response.sendRedirect("products.jsp");
     }
 }
