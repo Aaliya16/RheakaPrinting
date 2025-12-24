@@ -21,5 +21,11 @@
     </optgroup>
 </select>
 
+<label class="label-black">Design Options (Add-On)</label>
+<select class="form-select" id="addon_service">
+    <option value="0.00">No Design Fee (Already have design)</option>
+    <option value="30.00">Design Bendera &ndash; RM 15.00</option>
+</select>
+
 <input type="hidden" class="addon_service" value="0">
 <input type="hidden" class="size_addon" value="0">

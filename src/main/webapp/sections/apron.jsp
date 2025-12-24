@@ -35,6 +35,12 @@
     </select>
 </div>
 
+<label class="label-black">Design Options (Add-On)</label>
+<select class="form-select" id="addon_service">
+    <option value="0.00">No Design Fee (Already have design)</option>
+    <option value="30.00">Design Apron &ndash; RM 30.00</option>
+</select>
+
 <label class="label-black">Add-On Services</label>
 <select class="form-select" id="addon_service">
     <option value="0.00">None</option>
