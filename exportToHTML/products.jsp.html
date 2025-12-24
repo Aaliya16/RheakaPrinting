@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>products.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d; font-weight: bold;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #bcbec4;}
+.s5 { color: #d5b778;}
+.s6 { color: #bababa;}
+.s7 { color: #6aab73;}
+.s8 { color: #7a7e85;}
+.s9 { color: #56a8f5;}
+.s10 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+products.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%@ </span><span class="s1">page </span><span class="s2">contentType</span><span class="s0">=&quot;</span><span class="s3">text/html;charset=UTF-8</span><span class="s0">&quot; </span><span class="s2">language</span><span class="s0">=&quot;</span><span class="s3">java</span><span class="s0">&quot; %&gt;</span>
+<span class="s5">&lt;!DOCTYPE </span><span class="s6">html</span><span class="s5">&gt;</span>
+<span class="s5">&lt;html&gt;</span>
+<span class="s5">&lt;head&gt;</span>
+    <span class="s5">&lt;title&gt;</span><span class="s4">Our Services - Rheaka Design</span><span class="s5">&lt;/title&gt;</span>
+    <span class="s5">&lt;link </span><span class="s6">rel</span><span class="s7">=&quot;stylesheet&quot; </span><span class="s6">href</span><span class="s7">=&quot;css/style.css&quot;</span><span class="s5">&gt;</span>
+    <span class="s5">&lt;link </span><span class="s6">rel</span><span class="s7">=&quot;stylesheet&quot; </span><span class="s6">href</span><span class="s7">=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css&quot;</span><span class="s5">&gt;</span>
+    <span class="s5">&lt;style&gt;</span>
+        <span class="s8">/* Mongoose colour */</span>
+        <span class="s4">:</span><span class="s5">root </span><span class="s4">{ </span><span class="s6">--mongoose</span><span class="s4">: </span><span class="s9">#baa987</span><span class="s4">; }</span>
+
+        <span class="s4">.</span><span class="s5">product-container </span><span class="s4">{</span>
+            <span class="s6">display</span><span class="s4">: </span><span class="s7">grid</span><span class="s4">;</span>
+            <span class="s6">grid-template-columns</span><span class="s4">: </span><span class="s5">repeat</span><span class="s4">(</span><span class="s7">auto-fill</span><span class="s4">, </span><span class="s5">minmax</span><span class="s4">(</span><span class="s10">250</span><span class="s7">px</span><span class="s4">, </span><span class="s10">1</span><span class="s7">fr</span><span class="s4">));</span>
+            <span class="s6">gap</span><span class="s4">: </span><span class="s10">20</span><span class="s7">px</span><span class="s4">;</span>
+            <span class="s6">padding</span><span class="s4">: </span><span class="s10">40</span><span class="s7">px</span><span class="s4">;</span>
+        <span class="s4">}</span>
+
+        <span class="s4">.</span><span class="s5">product-card </span><span class="s4">{</span>
+            <span class="s6">background</span><span class="s4">: </span><span class="s7">white</span><span class="s4">;</span>
+            <span class="s6">border-radius</span><span class="s4">: </span><span class="s10">15</span><span class="s7">px</span><span class="s4">;</span>
+            <span class="s6">padding</span><span class="s4">: </span><span class="s10">20</span><span class="s7">px</span><span class="s4">;</span>
+            <span class="s6">text-align</span><span class="s4">: </span><span class="s7">center</span><span class="s4">;</span>
+            <span class="s6">box-shadow</span><span class="s4">: </span><span class="s10">0 4</span><span class="s7">px </span><span class="s10">15</span><span class="s7">px </span><span class="s5">rgba</span><span class="s4">(</span><span class="s10">0</span><span class="s4">,</span><span class="s10">0</span><span class="s4">,</span><span class="s10">0</span><span class="s4">,</span><span class="s10">0.1</span><span class="s4">);</span>
+            <span class="s6">transition</span><span class="s4">: </span><span class="s7">transform </span><span class="s10">0.3</span><span class="s7">s</span><span class="s4">;</span>
+        <span class="s4">}</span>
+
+        <span class="s4">.</span><span class="s5">product-card</span><span class="s4">:</span><span class="s5">hover </span><span class="s4">{ </span><span class="s6">transform</span><span class="s4">: </span><span class="s5">translateY</span><span class="s4">(-</span><span class="s10">5</span><span class="s7">px</span><span class="s4">); }</span>
+
+        <span class="s4">.</span><span class="s5">product-card h3 </span><span class="s4">{ </span><span class="s6">color</span><span class="s4">: </span><span class="s5">var</span><span class="s4">(</span><span class="s5">--mongoose</span><span class="s4">); </span><span class="s6">margin</span><span class="s4">: </span><span class="s10">10</span><span class="s7">px </span><span class="s10">0</span><span class="s4">; }</span>
+
+        <span class="s4">.</span><span class="s5">btn-view </span><span class="s4">{</span>
+            <span class="s6">background</span><span class="s4">: </span><span class="s5">var</span><span class="s4">(</span><span class="s5">--mongoose</span><span class="s4">);</span>
+            <span class="s6">color</span><span class="s4">: </span><span class="s7">white</span><span class="s4">;</span>
+            <span class="s6">padding</span><span class="s4">: </span><span class="s10">10</span><span class="s7">px </span><span class="s10">20</span><span class="s7">px</span><span class="s4">;</span>
+            <span class="s6">text-decoration</span><span class="s4">: </span><span class="s7">none</span><span class="s4">;</span>
+            <span class="s6">border-radius</span><span class="s4">: </span><span class="s10">25</span><span class="s7">px</span><span class="s4">;</span>
+            <span class="s6">display</span><span class="s4">: </span><span class="s7">inline-block</span><span class="s4">;</span>
+            <span class="s6">margin-top</span><span class="s4">: </span><span class="s10">10</span><span class="s7">px</span><span class="s4">;</span>
+        <span class="s4">}</span>
+    <span class="s5">&lt;/style&gt;</span>
+<span class="s5">&lt;/head&gt;</span>
+<span class="s5">&lt;body&gt;</span>
+
+<span class="s5">&lt;div </span><span class="s6">style</span><span class="s7">=&quot;</span><span class="s6">text-align</span><span class="s4">: </span><span class="s7">center</span><span class="s4">; </span><span class="s6">padding</span><span class="s4">: </span><span class="s10">20</span><span class="s7">px</span><span class="s4">;</span><span class="s7">&quot;</span><span class="s5">&gt;</span>
+    <span class="s5">&lt;h2&gt;</span><span class="s4">Our Printing Services</span><span class="s5">&lt;/h2&gt;</span>
+    <span class="s5">&lt;p&gt;</span><span class="s4">Select a service to see dynamic pricing</span><span class="s5">&lt;/p&gt;</span>
+<span class="s5">&lt;/div&gt;</span>
+
+<span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;product-container&quot;</span><span class="s5">&gt;</span>
+    <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;product-card&quot;</span><span class="s5">&gt;</span>
+        <span class="s5">&lt;i </span><span class="s6">class</span><span class="s7">=&quot;fas fa-address-card fa-3x&quot; </span><span class="s6">style</span><span class="s7">=&quot;</span><span class="s6">color</span><span class="s4">: </span><span class="s9">#555</span><span class="s4">;</span><span class="s7">&quot;</span><span class="s5">&gt;&lt;/i&gt;</span>
+        <span class="s5">&lt;h3&gt;</span><span class="s4">Business Card</span><span class="s5">&lt;/h3&gt;</span>
+        <span class="s5">&lt;p&gt;</span><span class="s4">High quality name cards</span><span class="s5">&lt;/p&gt;</span>
+        <span class="s5">&lt;p&gt;&lt;strong&gt;</span><span class="s4">Starts from RM 10.00</span><span class="s5">&lt;/strong&gt;&lt;/p&gt;</span>
+        <span class="s5">&lt;a </span><span class="s6">href</span><span class="s7">=&quot;product-details.jsp?id=1&quot; </span><span class="s6">class</span><span class="s7">=&quot;btn-view&quot;</span><span class="s5">&gt;</span><span class="s4">View Details</span><span class="s5">&lt;/a&gt;</span>
+    <span class="s5">&lt;/div&gt;</span>
+
+    <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;product-card&quot;</span><span class="s5">&gt;</span>
+        <span class="s5">&lt;i </span><span class="s6">class</span><span class="s7">=&quot;fas fa-sticky-note fa-3x&quot; </span><span class="s6">style</span><span class="s7">=&quot;</span><span class="s6">color</span><span class="s4">: </span><span class="s9">#555</span><span class="s4">;</span><span class="s7">&quot;</span><span class="s5">&gt;&lt;/i&gt;</span>
+        <span class="s5">&lt;h3&gt;</span><span class="s4">Stickers</span><span class="s5">&lt;/h3&gt;</span>
+        <span class="s5">&lt;p&gt;</span><span class="s4">Custom shape cutting</span><span class="s5">&lt;/p&gt;</span>
+        <span class="s5">&lt;p&gt;&lt;strong&gt;</span><span class="s4">Starts from RM 5.00</span><span class="s5">&lt;/strong&gt;&lt;/p&gt;</span>
+        <span class="s5">&lt;a </span><span class="s6">href</span><span class="s7">=&quot;product-details.jsp?id=2&quot; </span><span class="s6">class</span><span class="s7">=&quot;btn-view&quot;</span><span class="s5">&gt;</span><span class="s4">View Details</span><span class="s5">&lt;/a&gt;</span>
+    <span class="s5">&lt;/div&gt;</span>
+<span class="s5">&lt;/div&gt;</span>
+
+<span class="s5">&lt;/body&gt;</span>
+<span class="s5">&lt;/html&gt;</span></pre>
+</body>
+</html>

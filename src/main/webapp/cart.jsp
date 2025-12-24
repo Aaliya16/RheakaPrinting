@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root { --mongoose: #baa987; }
-        body { background-color: #f5f5f5; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+        body { background-color: lightsteelblue; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
 
         .small-container {
             max-width: 1200px; margin: 50px auto; padding: 20px;
@@ -197,9 +197,9 @@
     </style>
 </head>
 <body>
-
+<%@ include file="header.jsp" %>
 <div class="small-container">
-    <h2>🛒 Shopping Cart</h2>
+    <h2>Shopping Cart</h2>
 
     <%
         // ✅ CHECK: Ada item dalam cart?
@@ -223,10 +223,8 @@
         <tr>
             <td>
                 <div class="cart-info">
-                    <%-- ✅ DEFAULT IMAGE --%>
-                    <img src="<%= c.getImage() != null ? "assets/img/" + c.getImage() : "assets/img/product_single_10.jpg" %>"
-                         alt="Product"
-                         onerror="this.src='assets/img/product_single_10.jpg'">
+                    <img src="images/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
+                         alt="<%= c.getName() != null ? c.getName() : "Product" %>">
                     <div>
                         <p><%= c.getName() != null && !c.getName().isEmpty() ? c.getName() : "Product #" + c.getId() %></p>
                         <small>Product ID: <%= c.getId() %></small>
@@ -273,13 +271,13 @@
     %>
 
     <div class="empty-cart-msg">
-        <h3>Your cart is empty! 🛍️</h3>
+        <h3>Your cart is empty!</h3>
         <p>Browse our products and add items to your cart.</p>
         <a href="products.jsp">Start Shopping</a>
     </div>
 
     <% } %>
 </div>
-
+<%@ include file="footer.jsp" %>
 </body>
 </html>>
