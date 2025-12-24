@@ -96,7 +96,7 @@
 <%@ include file="header.jsp" %>
 <div class="header-section">
     <h2>Rheaka Printing Services</h2>
-    <p style="color: #333; font-weight: 500;">Official December 2024 Inventory - Premium Printing Solutions</p>
+    <p style="color: #333; font-weight: 500;">Official Inventory - Premium Printing Solutions</p>
 </div>
 
 <div class="product-container">
