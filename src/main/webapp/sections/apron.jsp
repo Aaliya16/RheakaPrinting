@@ -29,6 +29,10 @@
     <select class="form-select apron-color" id="colors_premium" style="display:none;">
         <option>Black</option><option>Brown</option><option>Khaki</option>
     </select>
+
+    <select class="form-select apron-color" id="colors_none" style="display:none;">
+        <option value="none">None</option>
+    </select>
 </div>
 
 <label class="label-black">Add-On Services</label>
@@ -43,16 +47,26 @@
 
 <script>
     function toggleApronColors() {
+        // Get the text of the selected option
         const type = document.getElementById('base_item').options[document.getElementById('base_item').selectedIndex].text;
         const allColors = document.querySelectorAll('.apron-color');
 
-        // Hide all color dropdowns first
+        // Hide all color dropdowns by default
         allColors.forEach(el => el.style.display = 'none');
 
-        // Show the correct dropdown based on selection
-        if (type.includes("1 Tone")) document.getElementById('colors_1tone').style.display = 'block';
-        else if (type.includes("2 Tone")) document.getElementById('colors_2tone').style.display = 'block';
-        else if (type.includes("Apron Standard")) document.getElementById('colors_rm8').style.display = 'block';
-        else if (type.includes("Premium 2 Button")) document.getElementById('colors_premium').style.display = 'block';
+        // Logic to display the specific color dropdown based on product selection
+        if (type.includes("1 Tone")) {
+            document.getElementById('colors_1tone').style.display = 'block';
+        } else if (type.includes("2 Tone")) {
+            document.getElementById('colors_2tone').style.display = 'block';
+        } else if (type.includes("Apron Standard")) {
+            document.getElementById('colors_rm8').style.display = 'block';
+        } else if (type.includes("Premium 2 Button")) {
+            document.getElementById('colors_premium').style.display = 'block';
+        }
+        // Show "None" if Apron Denim or any Apron Oren is selected
+        else if (type.includes("Denim") || type.includes("Apron Oren")) {
+            document.getElementById('colors_none').style.display = 'block';
+        }
     }
 </script>
