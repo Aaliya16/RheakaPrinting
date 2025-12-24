@@ -1,108 +1,101 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String id = request.getParameter("id");
+    String pName = "Printing Service";
+    String pDesc = "High-quality custom printing solutions.";
+
+    // Product mapping for title and description
+    if (id != null) {
+        switch (id) {
+            case "1": pName = "Acrylic Clear"; pDesc = "Premium 3mm laser-cut acrylic."; break;
+            case "2": pName = "Apron Custom"; pDesc = "Professional kitchen wear."; break;
+            case "3": pName = "Industrial Signage"; pDesc = "Composite and safety boards."; break;
+            case "4": pName = "Business Card"; pDesc = "Premium name cards."; break;
+            case "5": pName = "Apparel Printing"; pDesc = "Custom T-Shirts (XS - 7XL)."; break;
+            case "6": pName = "Banner & Bunting"; pDesc = "Large format event printing."; break;
+            case "7": pName = "Flags & Backdrop"; pDesc = "Custom flags and backdrops."; break;
+            case "8": pName = "Stickers & Plaque"; pDesc = "Vinyl stickers and trophies."; break;
+        }
+    }
+%>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Product Details - Rheaka Design</title>
+    <title>Rheaka Design - <%= pName %></title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        :root { --mongoose : #baa987; }
-        .details-container {
-            display: flex;
-            padding: 50px;
-            gap: 50px;
-            justify-content: center;
-        }
-        .options-panel {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            width: 400px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .price-box {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--mongoose);
-            margin: 20px 0;
-            padding: 15px;
-            background: #fff;
-            border: 2px dashed var(--mongoose);
-            text-align: center;
-        }
-        select, input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .btn-add {
-            background: var(--mongoose);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-add:hover {
-            background: #a49374; /* darker mongoose */
-        }
+        :root { --mongoose: #baa987; --steelblue: #b0c4de; }
+        body { background-color: var(--steelblue) !important; font-family: 'Segoe UI', sans-serif; }
+        .card { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: none; }
+        .label-black { color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; margin-top: 15px; display: block; }
+        .price-box { font-size: 26px; font-weight: bold; color: var(--mongoose); margin: 20px 0; padding: 15px; background: #fff; border: 2px dashed var(--mongoose); text-align: center; border-radius: 10px; }
+        .btn-add { background: var(--mongoose); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
+
 <body>
-
-<div class="details-container">
-    <div>
-        <h2>Custom Business Card</h2>
-        <p>High-quality printing with various finishing options.</p>
-        <img src="https://via.placeholder.com/350x250" alt="Product Image" style="border-radius: 10px;">
-    </div>
-
-    <div class="options-panel">
-        <h3>Customize Your Order</h3>
-
-        <label>Size:</label>
-        <select id="size">
-            <option value="0">Standard (85mm x 55mm)</option>
-            <option value="5">Large (+RM5)</option>
-        </select>
-
-        <label>Material:</label>
-        <select id="material">
-            <option value="0">Art Card 260gsm</option>
-            <option value="10">Premium Linen (+RM10)</option>
-        </select>
-
-        <label>Quantity:</label>
-        <input type="number" id="qty" value="100" min="100" step="100">
-
-        <div class="price-box">
-            Total Price: RM <span id="totalPrice">10.00</span>
+<%@ include file="header.jsp" %>
+<section class="container py-5">
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card p-2">
+                <img src="assets/img/product_single_10.jpg" class="img-fluid rounded" alt="Product Image">
+            </div>
         </div>
 
-        <button class="btn-add">Add to Cart</button>
+        <div class="col-lg-7">
+            <div class="card p-4">
+                <h1 class="h2 text-dark"><%= pName %></h1>
+                <p class="text-muted"><%= pDesc %></p>
+                <hr>
+
+                <form action="add-to-cart" method="post" id="addToCartForm">
+                    <input type="hidden" name="id" value="<%= id %>">
+                    <input type="hidden" name="variation_name" id="hiddenVariationName" value="">
+                    <input type="hidden" name="addon_name" id="hiddenAddonName" value="">
+                    <input type="hidden" name="price" id="hiddenPrice" value="0.00">
+
+                    <div class="options-panel">
+
+                        <%
+                            String sectionFile = "default_options.jsp";
+                            if ("1".equals(id)) sectionFile = "acrylic.jsp";
+                            else if ("2".equals(id)) sectionFile = "apron.jsp";
+                            else if ("3".equals(id)) sectionFile = "signage.jsp";
+                            else if ("4".equals(id)) sectionFile = "business_card.jsp";
+                            else if ("5".equals(id)) sectionFile = "apparel.jsp";
+                            else if ("6".equals(id)) sectionFile = "banner.jsp";
+                            else if ("7".equals(id)) sectionFile = "flags.jsp";
+                            else if ("8".equals(id)) sectionFile = "stickers.jsp";
+                        %>
+                        <jsp:include page="<%= \"sections/\" + sectionFile %>" />
+
+                        <hr>
+
+                        <label class="label-black">Upload Design (Optional)</label>
+                        <input type="file" class="form-control" id="design_file">
+
+                        <div class="mt-3">
+                            <label class="label-black">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" id="quantity" value="1" min="1">
+                        </div>
+
+                        <div class="price-box">
+                            Total: RM <span id="totalPrice">0.00</span>
+                        </div>
+
+                        <button type="submit" class="btn-add">Add to Cart</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 
-<script>
-
-    function updatePrice() {
-        let base = 10.00;
-        let size = parseFloat(document.getElementById('size').value);
-        let material = parseFloat(document.getElementById('material').value);
-        let qty = parseInt(document.getElementById('qty').value) / 100;
-
-        let finalPrice = (base + size + material) * qty;
-        document.getElementById('totalPrice').innerText = finalPrice.toFixed(2);
-    }
-
-    document.getElementById('size').addEventListener('change', updatePrice);
-    document.getElementById('material').addEventListener('change', updatePrice);
-    document.getElementById('qty').addEventListener('input', updatePrice);
-</script>
+<script src="js/priceCalculator.js"></script>
+<%@ include file="footer.jsp" %>
 
 </body>
 </html>
-
