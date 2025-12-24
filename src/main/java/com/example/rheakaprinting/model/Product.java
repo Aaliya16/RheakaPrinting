@@ -20,7 +20,7 @@ public class Product {
         this.price = price;
         this.image = image;
         this.quantity = quantity;
-        this.category = category;
+        this.description = description;
         this.stock = stock;
     }
 
@@ -63,4 +63,16 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public int getQuantity() { return quantity; }
+
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public String getDescription() {return description; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public int getStock() { return stock; }
+
+    public void setStock(int stock) { this.stock = stock; }
 }

@@ -1,43 +1,51 @@
 package com.example.rheakaprinting.dao;
 
+import com.example.rheakaprinting.model.DbConnection;
+import com.example.rheakaprinting.model.Product;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductAdminDao {
-    private String url = "jdbc:mysql://localhost:3306/rheakaprinting";
-    private String user = "root";
-    private String pass = "";
 
-    public void addProduct(String name, String cat, double price) {
-        String sql = "INSERT INTO products (name, category, price) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+    public void addProduct(Product p) {
+        String sql = "INSERT INTO products (name, category, price, image, quantity, description, stock) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, name);
-            stmt.setString(2, cat);
-            stmt.setDouble(3, price);
+            stmt.setString(1, p.getName());
+            stmt.setString(2, p.getCategory());
+            stmt.setDouble(3, p.getPrice());
+            stmt.setString(4, p.getImage());
+            stmt.setInt(5, p.getQuantity());
+            stmt.setString(6, p.getDescription());
+            stmt.setInt(7, p.getStock());
             stmt.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public void updateOrderStatus(int orderId, String status) {
-        String sql = "UPDATE orders SET status = ? WHERE id = ?";
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, status);
-            stmt.setInt(2, orderId);
-            stmt.executeUpdate();
+    public List<Product> getAllProducts() {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM products";
+        try (Connection conn = DbConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                list.add(new Product(
+                        rs.getInt("id"), rs.getString("name"), rs.getString("category"),
+                        rs.getDouble("price"), rs.getString("image"), rs.getInt("quantity"),
+                        rs.getString("description"), rs.getInt("stock")
+                ));
+            }
         } catch (SQLException e) { e.printStackTrace(); }
+        return list;
     }
 
-    public void deleteProduct(int productId) {
+    public void deleteProduct(int id) {
         String sql = "DELETE FROM products WHERE id = ?";
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, productId);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 }

@@ -1,29 +1,46 @@
 package com.example.rheakaprinting.controller;
 
 import com.example.rheakaprinting.dao.ProductAdminDao;
+import com.example.rheakaprinting.model.Product; // Necessary to use the Product object
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/manageProduct")
 public class ProductServlet extends HttpServlet {
     private ProductAdminDao dao = new ProductAdminDao();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String action = request.getParameter("action");
 
         if ("add".equals(action)) {
-            String name = request.getParameter("productName");
-            String cat = request.getParameter("category");
-            double price = Double.parseDouble(request.getParameter("price"));
-            dao.addProduct(name, cat, price);
+            Product p = new Product();
+            p.setName(request.getParameter("productName"));
+            p.setCategory(request.getParameter("category"));
+            p.setPrice(Double.parseDouble(request.getParameter("price")));
+            p.setImage(request.getParameter("image"));
+            p.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+            p.setDescription(request.getParameter("description"));
+            p.setStock(Integer.parseInt(request.getParameter("stock")));
+
+            dao.addProduct(p);
         }
         response.sendRedirect("admin_dashboard.jsp");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        dao.deleteProduct(id);
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException { // Added ServletException for consistency
+        String idParam = request.getParameter("id");
+        if (idParam != null) {
+            int id = Integer.parseInt(idParam);
+            dao.deleteProduct(id);
+        }
         response.sendRedirect("admin_dashboard.jsp");
     }
 }
