@@ -1,51 +1,62 @@
 /**
- * Rheaka Design - Universal Price Calculation Engine
+ * Rheaka Design - Universal Price Calculation Engine (Final Updated Version)
+ * Handles Sublimation Setup, Silkscreen Screen Fees, and Ready-made Logo printing.
  */
 
 function updatePrice() {
-
-    const baseEl = document.getElementById('base_item');
-
-    const addonEl =
-        document.getElementById('addon_service') ||
-        document.querySelector('.addon_service');
-
-    const sizeAddonEl =
-        document.getElementById('size_addon') ||
-        document.querySelector('.size_addon');
-
+    // Primary selectors
+    const methodEl = document.getElementById('printing_method');
     const qtyInput = document.getElementById('quantity');
+    const sizeAddonEl = document.getElementById('size_addon');
 
-    const basePrice = baseEl ? parseFloat(baseEl.value) || 0 : 0;
-    const addonPrice = addonEl ? parseFloat(addonEl.value) || 0 : 0;
-    const sizeUpgradePrice = sizeAddonEl ? parseFloat(sizeAddonEl.value) || 0 : 0;
-    const quantity = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
+    let unitPrice = 0;
+    let setupFee = 0; // Fixed fee that doesn't multiply by quantity
 
-    // Variation name
-    if (baseEl) {
-        let variationName = baseEl.options[baseEl.selectedIndex].text;
+    if (methodEl) {
+        const method = methodEl.value;
 
-        const activeSubStyle =
-            document.querySelector('.form-select[style*="display: block"]:not(#base_item)');
+        // 1. SUBLIMATION FLOW
+        if (method === 'sublimation') {
+            const fabric = document.getElementById('sub_fabric');
+            const shirt = document.getElementById('sub_base_item');
+            const subAddon = document.getElementById('sub_addon');
 
-        if (activeSubStyle && activeSubStyle.options.length > 0) {
-            variationName += " (" +
-                activeSubStyle.options[activeSubStyle.selectedIndex].text + ")";
+            // Sublimation adds Fabric Premium + Base Shirt Price + Addon
+            unitPrice = (parseFloat(fabric?.value) || 0) +
+                (parseFloat(shirt?.value) || 0) +
+                (parseFloat(subAddon?.value) || 0);
+
+            // 2. SILKSCREEN FLOW
+        } else if (method === 'silkscreen') {
+            const shirt = document.getElementById('base_item');
+            const silkAddon = document.getElementById('addon_silkscreen');
+            const screenSetup = document.getElementById('silkscreen_setup');
+
+            unitPrice = (parseFloat(shirt?.value) || 0) + (parseFloat(silkAddon?.value) || 0);
+            // Setup fee added only ONCE at the end
+            setupFee = parseFloat(screenSetup?.value) || 0;
+
+            // 3. LOGO PRINTING (DTF) FLOW
+        } else if (method === 'logo') {
+            const shirt = document.getElementById('base_item');
+            const logoAddon = document.getElementById('addon_logo');
+            unitPrice = (parseFloat(shirt?.value) || 0) + (parseFloat(logoAddon?.value) || 0);
+
+            // 4. DEFAULT FLOW (For Acrylic, Cards, etc.)
+        } else {
+            const baseEl = document.getElementById('base_item');
+            const addonEl = document.getElementById('addon_service');
+            unitPrice = (parseFloat(baseEl?.value) || 0) + (parseFloat(addonEl?.value) || 0);
         }
-
-        document.getElementById('hiddenVariationName').value = variationName;
     }
 
-    if (addonEl) {
-        document.getElementById('hiddenAddonName').value =
-            addonEl.options
-                ? addonEl.options[addonEl.selectedIndex].text
-                : "None";
-    }
+    const sizeUpgrade = parseFloat(sizeAddonEl?.value) || 0;
+    const quantity = parseInt(qtyInput?.value) || 1;
 
-    const unitPrice = basePrice + addonPrice + sizeUpgradePrice;
-    const total = unitPrice * quantity;
+    // FORMULA: ((Unit Price + Size Upgrade) * Quantity) + Fixed Setup Fee
+    const total = ((unitPrice + sizeUpgrade) * quantity) + setupFee;
 
+    // Update UI Elements
     const priceText = document.getElementById('totalPrice');
     const hiddenPriceInput = document.getElementById('hiddenPrice');
 
@@ -53,47 +64,18 @@ function updatePrice() {
     if (hiddenPriceInput) hiddenPriceInput.value = total.toFixed(2);
 }
 
-function toggleApronColors() {
-    const baseEl = document.getElementById('base_item');
-    if (!baseEl) return;
-
-    const typeText = baseEl.options[baseEl.selectedIndex].text;
-    const allColorDropdowns = document.querySelectorAll('.apron-color');
-
-    allColorDropdowns.forEach(el => el.style.display = 'none');
-
-    if (typeText.includes("1 Tone")) document.getElementById('colors_1tone').style.display = 'block';
-    else if (typeText.includes("2 Tone")) document.getElementById('colors_2tone').style.display = 'block';
-    else if (typeText.includes("Standard")) document.getElementById('colors_rm8').style.display = 'block';
-    else if (typeText.includes("Premium")) document.getElementById('colors_premium').style.display = 'block';
-}
-
-function toggleApparelStyles() {
-    const baseEl = document.getElementById('base_item');
-    if (!baseEl) return;
-
-    const selectedType = baseEl.options[baseEl.selectedIndex].text;
-    const allStyles = document.querySelectorAll('.apparel-style');
-
-    allStyles.forEach(el => el.style.display = 'none');
-
-    if (selectedType.includes("Quick Dry")) document.getElementById('style_quickdry').style.display = 'block';
-    else if (selectedType.includes("Siro")) document.getElementById('style_siro').style.display = 'block';
-    else if (selectedType.includes("Oversized")) document.getElementById('style_oversized').style.display = 'block';
-}
-
+// Global Event Listeners for Live Updates
 document.addEventListener('change', function(e) {
     if (e.target.matches('select, input')) {
-        if (e.target.id === 'base_item') {
-            toggleApronColors();
-            toggleApparelStyles();
+        // Automatically run toggleApparelFlow if on the Apparel page
+        if (typeof toggleApparelFlow === "function") {
+            toggleApparelFlow();
         }
         updatePrice();
     }
 });
 
+// Run once when page is ready
 window.addEventListener('DOMContentLoaded', () => {
-    toggleApronColors();
-    toggleApparelStyles();
     updatePrice();
 });
