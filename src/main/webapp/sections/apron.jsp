@@ -1,12 +1,12 @@
 <label class="label-black">Product Type</label>
 <select class="form-select" id="base_item" onchange="toggleApronColors()">
-    <option value="16.00">Apron 1 Tone - RM 16.00</option>
-    <option value="17.00">Apron 2 Tone - RM 17.00</option>
-    <option value="8.00">Apron Standard - RM 8.00</option>
-    <option value="25.00">Apron Denim - RM 25.00</option>
-    <option value="29.00">Apron Oren AP04 - RM 29.00</option>
-    <option value="30.00">Apron Oren AP05 - RM 30.00</option>
-    <option value="30.00">Apron Premium 2 Button - RM 30.00</option>
+    <option value="16.00">Apron 1 Tone &ndash; RM 16.00</option>
+    <option value="17.00">Apron 2 Tone &ndash; RM 17.00</option>
+    <option value="8.00">Apron Standard &ndash; RM 8.00</option>
+    <option value="25.00">Apron Denim &ndash; RM 25.00</option>
+    <option value="29.00">Apron Oren AP04 &ndash; RM 29.00</option>
+    <option value="30.00">Apron Oren AP05 &ndash; RM 30.00</option>
+    <option value="30.00">Apron Premium 2 Button &ndash; RM 30.00</option>
 </select>
 
 <div id="color_section">
@@ -34,9 +34,9 @@
 <label class="label-black">Add-On Services</label>
 <select class="form-select" id="addon_service">
     <option value="0.00">None</option>
-    <option value="14.00">DTF A3 – RM 14.00</option>
-    <option value="7.00">DTF A4 – RM 7.00</option>
-    <option value="5.00">DTF A5 – RM 5.00</option>
+    <option value="14.00">DTF A3 &ndash; RM 14.00</option>
+    <option value="7.00">DTF A4 &ndash; RM 7.00</option>
+    <option value="5.00">DTF A5 &ndash; RM 5.00</option>
 </select>
 
 <input type="hidden" class="size_addon" value="0">
