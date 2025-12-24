@@ -101,60 +101,68 @@
 
 <div class="product-container">
 
+    <!-- 1. Acrylic Clear -->
     <div class="product-card">
         <i class="fas fa-gem fa-4x"></i>
         <h3>Acrylic Clear</h3>
-        <p>Premium 3mm laser-cut acrylic and High Impact boards [cite: 2-3].</p>
-        <a href="product-details.jsp?id=15" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-utensils fa-4x"></i>
-        <h3>Apron Custom</h3>
-        <p>Denim, 1-Tone, and Premium 2-Button professional kitchen wear [cite: 6-13].</p>
-        <a href="product-details.jsp?id=14" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-industry fa-4x"></i>
-        <h3>Industrial Signage</h3>
-        <p>Composite & High Impact boards with installation service [cite: 17-19].</p>
-        <a href="product-details.jsp?id=16" class="btn-view">View Details</a>
-    </div>
-
-    <div class="product-card">
-        <i class="fas fa-address-card fa-4x"></i>
-        <h3>Business Card</h3>
-        <p>Premium 1-side, 2-side, and Curve-cut name cards [cite: 21-23].</p>
+        <p>Premium 3mm laser-cut acrylic and high-impact boards.</p>
         <a href="product-details.jsp?id=1" class="btn-view">View Details</a>
     </div>
 
+    <!-- 2. Apron Custom -->
     <div class="product-card">
-        <i class="fas fa-tshirt fa-4x"></i>
-        <h3>Apparel Printing</h3>
-        <p>Quick Dry, Siro Cotton, Oversized T-Shirts & DTF Printing [cite: 39-44].</p>
+        <i class="fas fa-utensils fa-4x"></i>
+        <h3>Apron Custom</h3>
+        <p>Professional kitchen wear with customization options.</p>
+        <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
+    </div>
+
+    <!-- 3. Industrial Signage -->
+    <div class="product-card">
+        <i class="fas fa-industry fa-4x"></i>
+        <h3>Industrial Signage</h3>
+        <p>Composite and high-impact boards with installation service.</p>
         <a href="product-details.jsp?id=3" class="btn-view">View Details</a>
     </div>
 
+    <!-- 4. Business Card -->
     <div class="product-card">
-        <i class="fas fa-scroll fa-4x"></i>
-        <h3>Banner & Bunting</h3>
-        <p>High-quality event banners and roll-up buntings in all sizes [cite: 75-134].</p>
+        <i class="fas fa-address-card fa-4x"></i>
+        <h3>Business Card</h3>
+        <p>Premium matte or glossy laminated name cards.</p>
         <a href="product-details.jsp?id=4" class="btn-view">View Details</a>
     </div>
 
+    <!-- 5. Apparel Printing -->
+    <div class="product-card">
+        <i class="fas fa-tshirt fa-4x"></i>
+        <h3>Apparel Printing</h3>
+        <p>Custom T-Shirts from XS to 7XL with optional add-ons.</p>
+        <a href="product-details.jsp?id=5" class="btn-view">View Details</a>
+    </div>
+
+    <!-- 6. Banner & Bunting -->
+    <div class="product-card">
+        <i class="fas fa-scroll fa-4x"></i>
+        <h3>Banner & Bunting</h3>
+        <p>High-quality event banners and roll-up buntings in all sizes.</p>
+        <a href="product-details.jsp?id=6" class="btn-view">View Details</a>
+    </div>
+
+    <!-- 7. Flags & Backdrop -->
     <div class="product-card">
         <i class="fas fa-flag fa-4x"></i>
         <h3>Flags & Backdrop</h3>
-        <p>Beach Flags, Polymesh Bendera & Photo Backdrops [cite: 139-153].</p>
-        <a href="product-details.jsp?id=17" class="btn-view">View Details</a>
+        <p>Beach flags, custom flags and photo backdrops.</p>
+        <a href="product-details.jsp?id=7" class="btn-view">View Details</a>
     </div>
 
+    <!-- 8. Stickers & Plaque -->
     <div class="product-card">
         <i class="fas fa-award fa-4x"></i>
         <h3>Stickers & Plaque</h3>
         <p>Vinyl stickers, Trophiess, Medals, and Epoxy Nametags [cite: 156-168].</p>
-        <a href="product-details.jsp?id=2" class="btn-view">View Details</a>
+        <a href="product-details.jsp?id=8" class="btn-view">View Details</a>
     </div>
 
 </div>
