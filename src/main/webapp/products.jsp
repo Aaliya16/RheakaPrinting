@@ -96,7 +96,7 @@
 <%@ include file="header.jsp" %>
 <div class="header-section">
     <h2>Rheaka Printing Services</h2>
-    <p style="color: #333; font-weight: 500;">Official December 2024 Inventory - Premium Printing Solutions</p>
+    <p style="color: #333; font-weight: 500;">Official Inventory - Premium Printing Solutions</p>
 </div>
 
 <div class="product-container">
@@ -161,7 +161,7 @@
     <div class="product-card">
         <i class="fas fa-award fa-4x"></i>
         <h3>Stickers & Plaque</h3>
-        <p>Vinyl stickers, Trophiess, Medals, and Epoxy Nametags [cite: 156-168].</p>
+        <p>Vinyl stickers, Trophies and Medals</p>
         <a href="product-details.jsp?id=8" class="btn-view">View Details</a>
     </div>
 

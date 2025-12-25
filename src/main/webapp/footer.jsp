@@ -9,7 +9,7 @@
 <footer class="rheaka-footer">
     <div class="container">
         <p>&copy; 2025 <strong>Rheaka Design Printing</strong>. All Rights Reserved.</p>
-        <p>123 Arau, Perlis, Malaysia &nbsp;|&nbsp; <a href="tel:+601170787469">011-7078-7469</a></p>
+        <p>Tapak Pauh Lama, 02600 Arau Perlis&nbsp;|&nbsp; <a href="tel:+601170787469">011-7078-7469</a></p>
 
         <p style="margin-top: 10px; font-size: 12px; color: black;">
             Follow us on:

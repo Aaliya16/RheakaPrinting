@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.rheakaprinting.model.*" %>
+<%@ page import="com.example.rheakaprinting.model.*" %>
 <%
     // Job 2: Security Check
     String role = (String) session.getAttribute("userRole");

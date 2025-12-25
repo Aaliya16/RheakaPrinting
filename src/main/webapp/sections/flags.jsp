@@ -7,12 +7,24 @@
     </optgroup>
     <optgroup label="Backdrops">
         <option value="264.00">Backdrop 11' x 8' &ndash; RM 264.00</option>
+        <option value="288.00">Backdrop 12' x 8' &ndash; RM 288.00</option>
+        <option value="450.00">Backdrop 13' x 9' &ndash; RM 450.00</option>
+        <option value="392.00">Backdrop 14' x 8' &ndash; RM 392.00</option>
+        <option value="270.00">Backdrop 15' x 6' &ndash; RM 270.00</option>
+        <option value="615.00">Backdrop 17' x 12' &ndash; RM 615.00</option>
+        <option value="456.00">Backdrop 19' x 8' &ndash; RM 456.00</option>
         <option value="750.00">Backdrop 25' x 10' &ndash; RM 750.00</option>
     </optgroup>
     <optgroup label="Beach Flags">
         <option value="290.00">Beach Flag 3.4 Meter Full Set &ndash; RM 290.00</option>
         <option value="150.00">Beach Flag Only &ndash; RM 150.00</option>
     </optgroup>
+</select>
+
+<label class="label-black">Design Options (Add-On)</label>
+<select class="form-select" id="addon_service">
+    <option value="0.00">No Design Fee (Already have design)</option>
+    <option value="30.00">Design Bendera &ndash; RM 15.00</option>
 </select>
 
 <input type="hidden" class="addon_service" value="0">
