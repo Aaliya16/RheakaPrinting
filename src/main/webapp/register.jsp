@@ -6,36 +6,125 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Register - Rheaka Printing</title>
+    <title>Sign Up - Rheaka Design</title>
+    <style>
+        body {
+            background-color: #fdfaf5; /* Cream background matching login.jsp */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .signup-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .welcome-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .signup-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 350px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .input-wrapper {
+            position: relative;
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 5px 10px;
+            outline: none;
+        }
+        .signup-btn {
+            background: linear-gradient(to right, #44cc00, #22aa00); /* Green gradient matching login.jsp */
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .signup-btn:hover {
+            opacity: 0.9;
+        }
+        .footer-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        .footer-links a {
+            color: #0055ff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-<%@ include file="header.jsp" %>
-<h2>Create a New Account</h2>
+<div class="signup-container">
+    <h1 class="welcome-text">Create Account</h1>
 
-<%-- Show an error message if the registration fails --%>
-<% if(request.getParameter("msg") != null && request.getParameter("msg").equals("failed")) { %>
-<p style="color:red;">Registration failed. Please try again.</p>
-<% } %>
+    <div class="signup-card">
+        <form action="RegisterServlet" method="post">
+            <div class="form-group">
+                <label>Username</label>
+                <div class="input-wrapper">
+                    <span>👤</span>
+                    <input type="text" name="fullName" placeholder="Full Name" required>
+                </div>
+            </div>
 
-<form action="RegisterServlet" method="POST">
-    <label>Full Name:</label><br>
-    <input type="text" name="fullName" required><br><br>
+            <div class="form-group">
+                <label>Email</label>
+                <div class="input-wrapper">
+                    <span>✉️</span>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                </div>
+            </div>
 
-    <label>Email Address:</label><br>
-    <input type="email" name="email" required><br><br>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-wrapper">
+                    <span>🔒</span>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+            </div>
 
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
+            <button type="submit" class="signup-btn">Sign Up</button>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
-
-    <button type="submit">Register Account</button>
-</form>
-
-<p>Already have an account? <a href="login.jsp">Login here</a></p>
-<%@ include file="footer.jsp" %>
+            <div class="footer-links">
+                <p>Already have an account? <a href="login.jsp">Sign In</a></p>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
