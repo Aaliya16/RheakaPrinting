@@ -161,7 +161,7 @@
     <div class="product-card">
         <i class="fas fa-award fa-4x"></i>
         <h3>Stickers & Plaque</h3>
-        <p>Vinyl stickers, Trophiess, Medals, and Epoxy Nametags</p>
+        <p>Vinyl stickers, Trophies and Medals</p>
         <a href="product-details.jsp?id=8" class="btn-view">View Details</a>
     </div>
 

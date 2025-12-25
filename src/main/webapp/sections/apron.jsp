@@ -22,8 +22,8 @@
     </select>
 
     <select class="form-select apron-color" id="colors_rm8" style="display:none;">
-        <option>Coffee</option><option>Hijau Muda</option><option>Hitam</option>
-        <option>Maroon</option><option>Merah</option><option>Pink</option>
+        <option>Coffee</option><option>Light Green</option><option>Black</option>
+        <option>Maroon</option><option>Red</option><option>Pink</option>
     </select>
 
     <select class="form-select apron-color" id="colors_premium" style="display:none;">

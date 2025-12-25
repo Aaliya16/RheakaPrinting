@@ -1,73 +1,87 @@
 /**
- * Rheaka Design - Universal Price Calculation Engine (Final Updated Version)
- * Handles Sublimation Setup, Silkscreen Screen Fees, and Ready-made Logo printing.
+ * Rheaka Design - Universal Price Calculation Engine
+ * Updated to handle Apparel (Sublimation, Silkscreen, Logo), Nametag Add-ons,
+ * and all other 7 standard products.
  */
 
 function updatePrice() {
-    // Primary selectors
+    // 1. Primary Selectors - These exist on almost every product page
     const methodEl = document.getElementById('printing_method');
-    const qtyInput = document.getElementById('quantity');
+    const baseEl = document.getElementById('base_item'); // Main item for non-apparel products
     const sizeAddonEl = document.getElementById('size_addon');
+    const nametagEl = document.getElementById('nametag_addon'); // Addressed the missing selector
+    const qtyInput = document.getElementById('quantity');
 
     let unitPrice = 0;
-    let setupFee = 0; // Fixed fee that doesn't multiply by quantity
+    let setupFee = 0; // One-time fee (not multiplied by quantity)
 
-    if (methodEl) {
+    // 2. Logic for Apparel Specific Methods
+    if (methodEl && methodEl.value !== "") {
         const method = methodEl.value;
 
-        // 1. SUBLIMATION FLOW
+        // --- SUBLIMATION FLOW ---
         if (method === 'sublimation') {
             const fabric = document.getElementById('sub_fabric');
             const shirt = document.getElementById('sub_base_item');
             const subAddon = document.getElementById('sub_addon');
 
-            // Sublimation adds Fabric Premium + Base Shirt Price + Addon
+            // Sublimation cost = Fabric Premium + Shirt Type + Pattern Addon
             unitPrice = (parseFloat(fabric?.value) || 0) +
                 (parseFloat(shirt?.value) || 0) +
                 (parseFloat(subAddon?.value) || 0);
 
-            // 2. SILKSCREEN FLOW
+            // --- SILKSCREEN FLOW ---
         } else if (method === 'silkscreen') {
-            const shirt = document.getElementById('base_item');
             const silkAddon = document.getElementById('addon_silkscreen');
             const screenSetup = document.getElementById('silkscreen_setup');
 
-            unitPrice = (parseFloat(shirt?.value) || 0) + (parseFloat(silkAddon?.value) || 0);
-            // Setup fee added only ONCE at the end
+            // Silkscreen unit cost = Shirt + Printing Charge per piece
+            unitPrice = (parseFloat(baseEl?.value) || 0) + (parseFloat(silkAddon?.value) || 0);
+
+            // Screen setup fee is paid only ONCE
             setupFee = parseFloat(screenSetup?.value) || 0;
 
-            // 3. LOGO PRINTING (DTF) FLOW
+            // --- LOGO PRINTING (DTF) FLOW ---
         } else if (method === 'logo') {
-            const shirt = document.getElementById('base_item');
             const logoAddon = document.getElementById('addon_logo');
-            unitPrice = (parseFloat(shirt?.value) || 0) + (parseFloat(logoAddon?.value) || 0);
 
-            // 4. DEFAULT FLOW (For Acrylic, Cards, etc.)
-        } else {
-            const baseEl = document.getElementById('base_item');
-            const addonEl = document.getElementById('addon_service');
-            unitPrice = (parseFloat(baseEl?.value) || 0) + (parseFloat(addonEl?.value) || 0);
+            // Logo printing unit cost = Shirt + Logo Charge per piece
+            unitPrice = (parseFloat(baseEl?.value) || 0) + (parseFloat(logoAddon?.value) || 0);
         }
     }
+    // 3. Default Flow for the other 7 products (Acrylic, Banners, Cards, etc.)
+    else {
+        const addonEl = document.getElementById('addon_service');
+        unitPrice = (parseFloat(baseEl?.value) || 0) + (parseFloat(addonEl?.value) || 0);
+    }
 
+    // 4. Global Add-ons
     const sizeUpgrade = parseFloat(sizeAddonEl?.value) || 0;
+    const nametagPrice = parseFloat(nametagEl?.value) || 0; // Now safely defined
     const quantity = parseInt(qtyInput?.value) || 1;
 
-    // FORMULA: ((Unit Price + Size Upgrade) * Quantity) + Fixed Setup Fee
-    const total = ((unitPrice + sizeUpgrade) * quantity) + setupFee;
+    // 5. Final Calculation Formula
+    // Total = ((Base Item + Size + Nametag) * Qty) + Fixed Setup Fee
+    const total = ((unitPrice + sizeUpgrade + nametagPrice) * quantity) + setupFee;
 
-    // Update UI Elements
+    // 6. Update UI Elements
     const priceText = document.getElementById('totalPrice');
     const hiddenPriceInput = document.getElementById('hiddenPrice');
 
-    if (priceText) priceText.innerText = total.toFixed(2);
-    if (hiddenPriceInput) hiddenPriceInput.value = total.toFixed(2);
+    if (priceText) {
+        priceText.innerText = total.toFixed(2);
+    }
+    if (hiddenPriceInput) {
+        hiddenPriceInput.value = total.toFixed(2);
+    }
 }
 
-// Global Event Listeners for Live Updates
+/**
+ * Event Listeners for Live Updates
+ */
 document.addEventListener('change', function(e) {
     if (e.target.matches('select, input')) {
-        // Automatically run toggleApparelFlow if on the Apparel page
+        // Toggle specific apparel visibility logic if the function exists
         if (typeof toggleApparelFlow === "function") {
             toggleApparelFlow();
         }
@@ -75,7 +89,7 @@ document.addEventListener('change', function(e) {
     }
 });
 
-// Run once when page is ready
+// Run once when the page is fully loaded
 window.addEventListener('DOMContentLoaded', () => {
     updatePrice();
 });
