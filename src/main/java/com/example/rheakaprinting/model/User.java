@@ -7,6 +7,7 @@ public class User {
     private String email;
     private String fullName;
     private String role;
+    private String name;
 
     public User() {}
 
@@ -18,6 +19,8 @@ public class User {
         this.role = role;
     }
 
+    public String getName() { return name; }
+    public void setName(String name){ this.name = name; }
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 

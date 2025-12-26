@@ -13,15 +13,15 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get data from your register.jsp form fields
         String email = request.getParameter("email");
-        String fullName = request.getParameter("fullName");
+        String name = request.getParameter("name");
         String password = request.getParameter("password");
 
         try {
             Connection con = DbConnection.getConnection();
-            String query = "INSERT INTO users (email, fullName, password, role) VALUES (?, ?, ?, 'customer')";
+            String query = "INSERT INTO users (email, name, password, role) VALUES (?, ?, ?, 'customer')";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, email);
-            pst.setString(2, fullName);
+            pst.setString(2, name);
             pst.setString(3, password);
 
             int result = pst.executeUpdate();

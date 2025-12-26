@@ -1,17 +1,14 @@
 package com.example.rheakaprinting.dao;
 
 import com.example.rheakaprinting.model.User;
-
+import com.example.rheakaprinting.model.DbConnection;
 import java.sql.*;
 
 public class UserDAO {
-    private String url = "jdbc:mysql://localhost:3306/ecommerce_db";
-    private String user = "root";
-    private String pass = "PASSWORD_ANDA"; // Masukkan password MySQL anda
 
     public boolean registerUser(User newUser) {
         String sql = "INSERT INTO Users (username, password, email, full_name, role) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = DbConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, newUser.getUsername());
@@ -29,9 +26,9 @@ public class UserDAO {
 
     public User authenticate(String username, String password) {
         String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
+        try {
+            Connection conn = DbConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
@@ -40,7 +37,7 @@ public class UserDAO {
                 User user = new User();
                 user.setUserId(rs.getInt("user_id"));
                 user.setUsername(rs.getString("username"));
-                user.setFullName(rs.getString("full_name"));
+                user.setFullName(rs.getString("name"));
                 user.setRole(rs.getString("role"));
                 return user;
             }
