@@ -24,6 +24,12 @@ public class RegisterServlet extends HttpServlet {
             pst.setString(2, name);
             pst.setString(3, password);
 
+            // Debugging - check what we received
+            System.out.println("=== REGISTRATION ATTEMPT ===");
+            System.out.println("Email: " + email);
+            System.out.println("Full Name: " + name);
+            System.out.println("Password: " + (password != null ? "***" : "NULL"));
+
             int result = pst.executeUpdate();
             if (result > 0) {
                 // Registration success, go to login

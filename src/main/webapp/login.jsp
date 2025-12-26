@@ -100,7 +100,7 @@
                 <label>Email</label>
                 <div class="input-wrapper">
                     <span>👤</span>
-                    <input type="text" name="username" placeholder="Email" required>
+                    <input type="text" name="email" placeholder="Email" required>
                 </div>
             </div>
 

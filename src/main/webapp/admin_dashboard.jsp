@@ -1,12 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.rheakaprinting.model.*" %>
 <%
+    // ✅ FIXED: Get attributes directly without intermediate variables first
+    System.out.println("=== Admin Dashboard Access Attempt ===");
+    System.out.println("Session ID: " + session.getId());
+    System.out.println("Session isNew: " + session.isNew());
     // Job 2: Security Check
+    User currentUser = (User) session.getAttribute("currentUser");
     String role = (String) session.getAttribute("userRole");
-    if (role == null || !role.equals("ADMIN")) {
-        response.sendRedirect("login.jsp");
+    // If role is null but user exists, try getting role from User object
+    if (role == null && currentUser != null) {
+        role = currentUser.getRole();
+        System.out.println("Role was null, got from User object: " + role);
+        // Set it in session for next time
+        session.setAttribute("userRole", role);
+    }
+
+    // Security Check
+    if (currentUser == null || role == null || !role.equalsIgnoreCase("admin")) {
+        System.out.println("❌ Access DENIED - Redirecting to login");
+        System.out.println("Reason: currentUser=" + (currentUser != null) + ", role=" + role);
+        response.sendRedirect("login.jsp?error=unauthorized");
         return;
     }
+
+    System.out.println("✅ Access GRANTED - Admin user: " + currentUser.getName());
 %>
 <html>
 <head>

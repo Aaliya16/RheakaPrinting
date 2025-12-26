@@ -6,44 +6,62 @@ import java.sql.*;
 
 public class UserDAO {
 
+    // --- METHOD REGISTER ---
     public boolean registerUser(User newUser) {
-        String sql = "INSERT INTO Users (username, password, email, full_name, role) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        // Pastikan nama column (name, email, password, role) SAMA dengan database awak
+        String sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
 
-            ps.setString(1, newUser.getUsername());
-            ps.setString(2, newUser.getPassword()); // Sebaiknya di-hash untuk Security
+        try {
+            // 1. Guna DbConnection (JANGAN guna DriverManager manual)
+            Connection conn = DbConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            // 2. Masukkan data
+            ps.setString(2, newUser.getName());
             ps.setString(3, newUser.getEmail());
-            ps.setString(4, newUser.getFullName());
-            ps.setString(5, newUser.getRole());
+            ps.setString(4, newUser.getPassword());
+            ps.setString(5, "customer"); // Default role user biasa
 
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
+            // 3. Execute
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public User authenticate(String username, String password) {
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
+    // --- METHOD LOGIN (AUTHENTICATE) ---
+    public User authenticate(String email, String password) {
+        User user = null;
+
+        // Login guna email & password
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+
         try {
+            // 1. Guna DbConnection
             Connection conn = DbConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, username);
+
+            ps.setString(1, email);
             ps.setString(2, password);
+
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setUsername(rs.getString("username"));
-                user.setFullName(rs.getString("name"));
+                user = new User();
+                // Pastikan nama column dalam kurungan "" SAMA dengan database
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
                 user.setRole(rs.getString("role"));
-                return user;
+
+                // Debugging - check what role is retrieved
+                System.out.println("User authenticated: " + user.getName() + ", Role: " + user.getRole());
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return user;
     }
 }

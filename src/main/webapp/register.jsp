@@ -93,12 +93,33 @@
     <h1 class="welcome-text">Create Account</h1>
 
     <div class="signup-card">
+        <%
+            String error = request.getParameter("error");
+            if (error != null) {
+                if (error.equals("1")) {
+        %>
+        <div class="error-message">❌ Registration failed. Please try again.</div>
+        <%
+        } else if (error.equals("server")) {
+        %>
+        <div class="error-message">❌ Server error. Please contact support.</div>
+        <%
+                }
+            }
+
+            String success = request.getParameter("success");
+            if (success != null && success.equals("1")) {
+        %>
+        <div class="success-message">✓ Registration successful! Please login.</div>
+        <%
+            }
+        %>
         <form action="RegisterServlet" method="post">
             <div class="form-group">
                 <label>Username</label>
                 <div class="input-wrapper">
                     <span>👤</span>
-                    <input type="text" name="fullName" placeholder="Full Name" required>
+                    <input type="text" name="name" placeholder="Full Name" required>
                 </div>
             </div>
 
