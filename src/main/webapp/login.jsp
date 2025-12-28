@@ -116,7 +116,7 @@
 
             <div class="footer-links">
                 <a href="register.jsp">Don't have an account?</a>
-                <a href="#">Forgot password?</a>
+                <a href="forgotpassword.jsp">Forgot password?</a>
             </div>
         </form>
     </div>
