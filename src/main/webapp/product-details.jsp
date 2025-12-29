@@ -1,20 +1,56 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    // Get product ID from URL parameter (e.g., product-details.jsp?id=1)
     String id = request.getParameter("id");
+
+    // Default values if no ID is found
     String pName = "Printing Service";
     String pDesc = "High-quality custom printing solutions.";
+    String pImage = "product_single_10.jpg";
 
-    // Product mapping for title and description
+    // Product Mapping: Assign Title, Description, and Image based on ID
     if (id != null) {
         switch (id) {
-            case "1": pName = "Acrylic Clear"; pDesc = "Premium 3mm laser-cut acrylic."; break;
-            case "2": pName = "Apron Custom"; pDesc = "Professional kitchen wear."; break;
-            case "3": pName = "Industrial Signage"; pDesc = "Composite and safety boards."; break;
-            case "4": pName = "Business Card"; pDesc = "Premium name cards."; break;
-            case "5": pName = "Apparel Printing"; pDesc = "Custom T-Shirts (XS - 7XL)."; break;
-            case "6": pName = "Banner & Bunting"; pDesc = "Large format event printing."; break;
-            case "7": pName = "Flags & Backdrop"; pDesc = "Custom flags and backdrops."; break;
-            case "8": pName = "Stickers & Plaque"; pDesc = "Vinyl stickers and trophies."; break;
+            case "1":
+                pName = "Acrylic Clear";
+                pDesc = "Premium 3mm laser-cut acrylic.";
+                pImage = "Arcylic-03-768x768.jpg"; // Filename matches your specific assets folder
+                break;
+            case "2":
+                pName = "Apron Custom";
+                pDesc = "Professional kitchen wear.";
+                pImage = "apron.jpg";
+                break;
+            case "3":
+                pName = "Industrial Signage";
+                pDesc = "Composite and safety boards.";
+                pImage = "page-industry-signs-construction.jpg";
+                break;
+            case "4":
+                pName = "Business Card";
+                pDesc = "Premium name cards.";
+                pImage = "business_cards.jpg";
+                break;
+            case "5":
+                pName = "Apparel Printing";
+                pDesc = "Custom T-Shirts (XS - 7XL).";
+                pImage = "Tshirt.jpg";
+                break;
+            case "6":
+                pName = "Banner & Bunting";
+                pDesc = "Large format event printing.";
+                pImage = "Banner.jpg";
+                break;
+            case "7":
+                pName = "Flags & Backdrop";
+                pDesc = "Custom flags and backdrops.";
+                pImage = "Beach_Flags.jpg";
+                break;
+            case "8":
+                pName = "Stickers & Plaque";
+                pDesc = "Vinyl stickers and trophies.";
+                pImage = "Custom-Sheet-Stickers.jpg";
+                break;
         }
     }
 %>
@@ -26,22 +62,72 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* Color Variables for Consistency */
         :root { --mongoose: #baa987; --steelblue: #b0c4de; }
-        body { background-color: var(--steelblue) !important; font-family: 'Segoe UI', sans-serif; }
-        .card { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: none; }
-        .label-black { color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; margin-top: 15px; display: block; }
-        .price-box { font-size: 26px; font-weight: bold; color: var(--mongoose); margin: 20px 0; padding: 15px; background: #fff; border: 2px dashed var(--mongoose); text-align: center; border-radius: 10px; }
-        .btn-add { background: var(--mongoose); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        body {
+            background-color: var(--steelblue) !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Card and UI Styling */
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: none;
+        }
+
+        .label-black {
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            display: block;
+        }
+
+        /* Price display box */
+        .price-box {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--mongoose);
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border: 2px dashed var(--mongoose);
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .btn-add {
+            background: var(--mongoose);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover { background: #a39375; }
+
+        .product-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
     </style>
 </head>
 
 <body>
 <%@ include file="header.jsp" %>
+
 <section class="container py-5">
     <div class="row">
         <div class="col-lg-5">
-            <div class="card p-2">
-                <img src="assets/img/product_single_10.jpg" class="img-fluid rounded" alt="Product Image">
+            <div class="card p-3 text-center">
+                <img src="assets/img/<%= pImage %>" class="product-img" alt="<%= pName %>">
             </div>
         </div>
 
@@ -58,8 +144,8 @@
                     <input type="hidden" name="price" id="hiddenPrice" value="0.00">
 
                     <div class="options-panel">
-
                         <%
+                            // Logic to determine which dynamic option file to load based on Product ID
                             String sectionFile = "default_options.jsp";
                             if ("1".equals(id)) sectionFile = "acrylic.jsp";
                             else if ("2".equals(id)) sectionFile = "apron.jsp";
@@ -95,7 +181,7 @@
 </section>
 
 <script src="js/priceCalculator.js"></script>
-<%@ include file="footer.jsp" %>
 
+<%@ include file="footer.jsp" %>
 </body>
 </html>

@@ -100,7 +100,7 @@
                 <label>Email</label>
                 <div class="input-wrapper">
                     <span>👤</span>
-                    <input type="text" name="username" placeholder="Email" required>
+                    <input type="text" name="email" placeholder="Email" required>
                 </div>
             </div>
 
@@ -116,7 +116,7 @@
 
             <div class="footer-links">
                 <a href="register.jsp">Don't have an account?</a>
-                <a href="#">Forgot password?</a>
+                <a href="forgotpassword.jsp">Forgot password?</a>
             </div>
         </form>
     </div>
