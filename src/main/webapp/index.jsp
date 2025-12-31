@@ -63,7 +63,7 @@
     <h2>Professional Printing & Custom Design Services</h2>
     <p>Upload your design, customize your order, and print with high quality.</p>
 
-    <img src="assets/img/homepage.jpg" alt="Printing Banner" class="hero-banner">
+    <img src="assets/img/HOMEPAGE_RHEAKA.jpg" alt="Printing Banner" class="hero-banner">
 
     <div style="margin-top: 20px;">
         <a href="products.jsp" class="btn">Shop Now</a>
