@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body {
-            background-color: #fdfaf5; /* Cream background from your image */
+            background-color: #B0C4DEFF;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
         }

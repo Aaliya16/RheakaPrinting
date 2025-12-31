@@ -12,18 +12,21 @@
     <title>Sign Up - Rheaka Design</title>
     <style>
         body {
-            background-color: #fdfaf5; /* Cream background matching login.jsp */
+            background-color: #B0C4DEFF;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            flex-direction: column; /* This stacks Header, Content, and Footer vertically */
+            min-height: 100vh;
         }
+
         .signup-container {
+            flex: 1; /* This pushes the footer to the bottom of the page */
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 40px 0; /* Ensures space between header and card */
         }
         .welcome-text {
             font-size: 32px;
@@ -89,6 +92,7 @@
     </style>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 <div class="signup-container">
     <h1 class="welcome-text">Create Account</h1>
 
@@ -147,5 +151,6 @@
         </form>
     </div>
 </div>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
