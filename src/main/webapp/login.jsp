@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: MSI MODERN 15
-  Date: 4/12/2025
-  Time: 1:04 pm
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -13,7 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body {
-            background-color: #fdfaf5; /* Cream background from your image */
+            background-color: #B0C4DEFF;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
         }
