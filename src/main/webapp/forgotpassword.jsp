@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdfaf5; /* Matches the light background in your screenshot */
+            background-color: #B0C4DEFF;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -27,7 +27,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 100px 20px;
         }
         .card {
             background: white;
@@ -100,6 +100,7 @@
     </style>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 
 <div class="container">
     <div class="card">
@@ -118,5 +119,7 @@
         </form>
     </div>
 </div>
+<%@ include file="footer.jsp" %>
+
 </body>
 </html>
