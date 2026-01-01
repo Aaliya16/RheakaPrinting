@@ -158,6 +158,7 @@
         <% if (userLoggedIn == null) { %>
         <a href="login.jsp">Login/Signup</a>
         <% } else { %>
+        <a href="orders.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>
