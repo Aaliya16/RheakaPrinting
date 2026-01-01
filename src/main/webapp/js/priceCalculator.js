@@ -93,3 +93,39 @@ document.addEventListener('change', function(e) {
 window.addEventListener('DOMContentLoaded', () => {
     updatePrice();
 });
+
+document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+
+    // 1. Cari kotak status tadi
+    var statusInput = document.getElementById("loginStatus");
+
+    // Safety check: Kalau kotak tu tak wujud, stop terus (supaya kita tahu)
+    if (!statusInput) {
+        console.error("❌ ERROR: Input hidden 'loginStatus' tak jumpa!");
+        alert("System Error: Login status check failed.");
+        e.preventDefault(); // Halang submit kalau system error
+        return false;
+    }
+
+    // 2. Check Status
+    var isLoggedIn = (statusInput.value === "true");
+
+    if (!isLoggedIn) {
+        e.preventDefault(); // HALANG SUBMIT
+
+        // Warning Sahaja (Tanpa Redirect)
+        alert("⚠️ MAAF! Sila LOGIN dahulu untuk membuat pembelian.");
+
+        return false; // Kekal di page ini
+    }
+
+    // 3. Validation Harga & Quantity
+    let priceCheck = document.getElementById('hiddenPrice').value;
+    let quantity = document.getElementById('quantity').value;
+
+    if (!priceCheck || priceCheck === '0.00' || !quantity || quantity < 1) {
+        e.preventDefault();
+        alert('Sila pilih option produk & kuantiti yang betul!');
+        return false;
+    }
+});

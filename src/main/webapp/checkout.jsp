@@ -194,6 +194,11 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
+
+            .back-link {
+                text-align: center;
+                margin-top: 30px;
+            }
         }
     </style>
 </head>
@@ -323,6 +328,9 @@
     </div>
 
     <% } %>
+    <div class="back-link">
+        <a href="cart.jsp">← Back to Cart</a>
+    </div>
 </div>
 
 <%@ include file="footer.jsp" %>
