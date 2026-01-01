@@ -117,39 +117,10 @@ public class ContactServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Optional: Send email notification to admin
-     * Requires JavaMail API
-     */
     private void sendEmailNotification(String name, String email, String subject, String message) {
         // TODO: Implement email sending using JavaMail
         System.out.println("📧 Email notification would be sent here");
 
-        // Example implementation structure:
-        /*
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("your-email@gmail.com", "your-password");
-            }
-        });
-
-        try {
-            Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("noreply@rheaka.com"));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("admin@rheaka.com"));
-            msg.setSubject("New Contact Form: " + subject);
-            msg.setText("Name: " + name + "\nEmail: " + email + "\n\nMessage:\n" + message);
-            Transport.send(msg);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-        */
     }
 
     @Override
