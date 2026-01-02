@@ -43,13 +43,13 @@
     }
 
     /* Navigation Links Container (Desktop) */
-    .nav-links {
+    .navbar .nav-links {
         display: flex;
         align-items: center;
         gap: 35px;
     }
 
-    .nav-links a {
+    .navbar .nav-links a {
         text-decoration: none;
         color: #333;
         font-weight: 500;
@@ -58,12 +58,12 @@
         position: relative;
     }
 
-    .nav-links a:hover {
+    .navbar .nav-links a:hover {
         color: #000;
     }
 
     /* Underline on hover */
-    .nav-links a::after {
+    .navbar .nav-links a::after {
         content: '';
         position: absolute;
         width: 0;
@@ -74,54 +74,54 @@
         transition: width 0.3s ease;
     }
 
-    .nav-links a:hover::after {
+    .navbar .nav-links a:hover::after {
         width: 100%;
     }
 
     /* Cart Icon - No more inline style needed */
-    .cart-link {
+    .navbar .cart-link {
         display: inline-flex;
         align-items: center;
     }
 
-    .cart-icon {
+    .navbar .cart-icon {
         width: 24px;
         height: 24px;
         vertical-align: middle;
         transition: transform 0.3s ease;
     }
 
-    .cart-link:hover .cart-icon {
+    .navbar .cart-link:hover .cart-icon {
         transform: scale(1.1);
     }
 
     /* Login/Signup Link Styling */
-    .login-link {
+    .navbar .login-link {
         font-weight: bold;
         color: #333;
     }
 
-    .login-link:hover {
+    .navbar .login-link:hover {
         color: #000;
     }
 
     /* My Orders Link Styling */
-    .order-link {
+    .navbar .order-link {
         color: #333;
         font-weight: 500;
     }
 
-    .order-link:hover {
+    .navbar .order-link:hover {
         color: #000;
     }
 
     /* Logout Button Special Styling */
-    .logout-link {
+    .navbar .logout-link {
         color: #ff4d4d;
         font-weight: bold;
     }
 
-    .logout-link:hover {
+    .navbar .logout-link:hover {
         color: #cc0000;
     }
 
