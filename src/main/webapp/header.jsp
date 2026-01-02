@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    // Kekalkan logic Java untuk check session
     Object userLoggedIn = session.getAttribute("currentUser");
 %>
 
@@ -41,15 +42,14 @@
         width: auto;
     }
 
-    /* Navigation Links Container */
-    .navbar > div {
+    /* Navigation Links Container (Desktop) */
+    .nav-links {
         display: flex;
         align-items: center;
         gap: 35px;
     }
 
-    /* Navigation Links */
-    .navbar a {
+    .nav-links a {
         text-decoration: none;
         color: #333;
         font-weight: 500;
@@ -58,12 +58,12 @@
         position: relative;
     }
 
-    .navbar a:hover {
+    .nav-links a:hover {
         color: #000;
     }
 
-    /* Underline animation on hover */
-    .navbar a::after {
+    /* Garis bawah bila hover */
+    .nav-links a::after {
         content: '';
         position: absolute;
         width: 0;
@@ -74,16 +74,16 @@
         transition: width 0.3s ease;
     }
 
-    .navbar a:hover::after {
+    .nav-links a:hover::after {
         width: 100%;
     }
 
     /* Cart Icon */
-    .navbar a img {
+    .nav-links a img {
         transition: transform 0.3s ease;
     }
 
-    .navbar a:hover img {
+    .nav-links a:hover img {
         transform: scale(1.1);
     }
 
@@ -92,74 +92,115 @@
         color: #ff4d4d !important;
         font-weight: bold !important;
     }
-
     .logout-link:hover {
         color: #cc0000 !important;
     }
 
-    /* Responsive Design */
+    /* HAMBURGER MENU (Default Hidden on Desktop) */
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+    }
+
+    .hamburger div {
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        transition: all 0.3s ease;
+    }
+
+    /* RESPONSIVE: TABLET & MOBILE */
     @media (max-width: 992px) {
         .navbar {
             padding: 15px 30px;
         }
-
-        .navbar > div {
+        .nav-links {
             gap: 20px;
-        }
-
-        .navbar a {
-            font-size: 14px;
         }
     }
 
     @media (max-width: 768px) {
         .navbar {
-            flex-direction: column;
             padding: 15px 20px;
-            gap: 15px;
-        }
-
-        .navbar > div {
+            /* Pastikan logo dan hamburger duduk sebaris */
+            flex-direction: row;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
         }
 
-        .logo {
-            font-size: 20px;
+        /* Tunjuk Hamburger di Mobile */
+        .hamburger {
+            display: flex;
         }
 
-        .logo-img {
-            height: 40px;
+        /* Sembunyikan Menu secara default di Mobile */
+        .nav-links {
+            display: none; /* Hilang */
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+
+        /* Class ini akan ditambah oleh JavaScript bila user klik hamburger */
+        .nav-links.active {
+            display: flex; /* Muncul */
+        }
+
+        /* Animasi Hamburger jadi 'X' bila aktif */
+        .hamburger.active .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .bar2 {
+            opacity: 0;
+        }
+        .hamburger.active .bar3 {
+            transform: rotate(45deg) translate(-5px, -6px);
         }
     }
 </style>
 
 <nav class="navbar">
-    <!-- Logo Section -->
-    <h1 class="logo">
+    <a href="index.jsp" class="logo">
         <img src="assets/img/logo_rheaka.png" alt="Logo" class="logo-img">
         Rheaka Design
-    </h1>
+    </a>
 
-    <!-- Navigation Links -->
-    <div>
+    <div class="hamburger" id="hamburger-btn">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+
+    <div class="nav-links" id="nav-menu">
         <a href="index.jsp">Home</a>
         <a href="products.jsp">Services</a>
         <a href="quote.jsp">Get A Quote</a>
-        <a href="contact.jsp">Contact</a>
+        <a href="contact.jsp">Contact Us</a>
 
-        <!-- Cart Icon -->
         <a href="cart.jsp">
-            <img src="images/cart.png" width="30px" height="30px" alt="Cart" style="vertical-align: middle;">
+            <img src="images/cart.png" width="24px" height="24px" alt="Cart" style="vertical-align: middle;">
         </a>
 
-        <!-- Login/Logout Logic -->
         <% if (userLoggedIn == null) { %>
-        <a href="login.jsp">Login/Signup</a>
+        <a href="login.jsp" style="font-weight: bold;">Login/Signup</a>
         <% } else { %>
         <a href="orders.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>
 </nav>
+
+<script>
+    const hamburger = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+        // Toggle class 'active' pada menu dan butang
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+</script>

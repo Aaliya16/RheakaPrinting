@@ -2,26 +2,36 @@ package com.example.rheakaprinting.model;
 
 public class Order extends Product {
     private int orderId;
-    private int uId; // User ID
+    private int uId;
     private int quantity;
     private String date;
-    private String status; // Pending, Shipped, Delivered
-
+    private String status;
+    private String shippingAddress;
     public Order() {
     }
 
-    public Order(int orderId, int uId, int quantity, String date, String status) {
+    public Order(int orderId, int uId, int quantity, String date, String status, String shippingAddress) {
         this.orderId = orderId;
         this.uId = uId;
         this.quantity = quantity;
         this.date = date;
         this.status = status;
+        this.shippingAddress = shippingAddress;
     }
 
-    public Order(int uId, int quantity, String date) {
+    public Order(int uId, int quantity, String date, String shippingAddress) {
         this.uId = uId;
         this.quantity = quantity;
         this.date = date;
+        this.shippingAddress = shippingAddress;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
     public int getOrderId() {
@@ -72,6 +82,7 @@ public class Order extends Product {
                 ", quantity=" + quantity +
                 ", date='" + date + '\'' +
                 ", status='" + status + '\'' +
+                ", shippingAddress='" + shippingAddress + '\'' + // <-- Tambah baris ini
                 '}';
     }
 }
