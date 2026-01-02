@@ -43,13 +43,13 @@
     }
 
     /* Navigation Links Container (Desktop) */
-    .navbar .nav-links {
+    .nav-links {
         display: flex;
         align-items: center;
         gap: 35px;
     }
 
-    .navbar .nav-links a {
+    .nav-links a {
         text-decoration: none;
         color: #333;
         font-weight: 500;
@@ -58,12 +58,12 @@
         position: relative;
     }
 
-    .navbar .nav-links a:hover {
+    .nav-links a:hover {
         color: #000;
     }
 
     /* Underline on hover */
-    .navbar .nav-links a::after {
+    .nav-links a::after {
         content: '';
         position: absolute;
         width: 0;
@@ -74,54 +74,54 @@
         transition: width 0.3s ease;
     }
 
-    .navbar .nav-links a:hover::after {
+    .nav-links a:hover::after {
         width: 100%;
     }
 
-    /* Cart Icon - No more inline style needed */
-    .navbar .cart-link {
+    /* Cart Icon - FIXED: No inline styles */
+    .cart-link {
         display: inline-flex;
         align-items: center;
     }
 
-    .navbar .cart-icon {
+    .cart-icon {
         width: 24px;
         height: 24px;
         vertical-align: middle;
         transition: transform 0.3s ease;
     }
 
-    .navbar .cart-link:hover .cart-icon {
+    .cart-link:hover .cart-icon {
         transform: scale(1.1);
     }
 
-    /* Login/Signup Link Styling */
-    .navbar .login-link {
+    /* Login/Signup Link - FIXED: No inline styles */
+    .login-link {
         font-weight: bold;
         color: #333;
     }
 
-    .navbar .login-link:hover {
+    .login-link:hover {
         color: #000;
     }
 
-    /* My Orders Link Styling */
-    .navbar .order-link {
+    /* My Orders Link */
+    .order-link {
         color: #333;
         font-weight: 500;
     }
 
-    .navbar .order-link:hover {
+    .order-link:hover {
         color: #000;
     }
 
     /* Logout Button Special Styling */
-    .navbar .logout-link {
+    .logout-link {
         color: #ff4d4d;
         font-weight: bold;
     }
 
-    .navbar .logout-link:hover {
+    .logout-link:hover {
         color: #cc0000;
     }
 
@@ -153,7 +153,7 @@
     @media (max-width: 768px) {
         .navbar {
             padding: 15px 20px;
-            /* Keep logo and hamburger in the same row */
+            /* Keep logo and hamburger in same row */
             flex-direction: row;
             flex-wrap: wrap;
         }
@@ -174,7 +174,7 @@
             border-top: 1px solid #eee;
         }
 
-        /* This class will be added by JavaScript when user clicks hamburger */
+        /* This class added by JavaScript when user clicks hamburger */
         .nav-links.active {
             display: flex; /* Visible */
         }
