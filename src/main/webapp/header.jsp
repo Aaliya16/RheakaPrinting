@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Kekalkan logic Java untuk check session
+    // Maintain Java logic to check session
     Object userLoggedIn = session.getAttribute("currentUser");
 %>
 
@@ -62,7 +62,7 @@
         color: #000;
     }
 
-    /* Garis bawah bila hover */
+    /* Underline on hover */
     .nav-links a::after {
         content: '';
         position: absolute;
@@ -78,22 +78,51 @@
         width: 100%;
     }
 
-    /* Cart Icon */
-    .nav-links a img {
+    /* Cart Icon - FIXED: No inline styles */
+    .cart-link {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .cart-icon {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
         transition: transform 0.3s ease;
     }
 
-    .nav-links a:hover img {
+    .cart-link:hover .cart-icon {
         transform: scale(1.1);
+    }
+
+    /* Login/Signup Link - FIXED: No inline styles */
+    .login-link {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .login-link:hover {
+        color: #000;
+    }
+
+    /* My Orders Link */
+    .order-link {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .order-link:hover {
+        color: #000;
     }
 
     /* Logout Button Special Styling */
     .logout-link {
-        color: #ff4d4d !important;
-        font-weight: bold !important;
+        color: #ff4d4d;
+        font-weight: bold;
     }
+
     .logout-link:hover {
-        color: #cc0000 !important;
+        color: #cc0000;
     }
 
     /* HAMBURGER MENU (Default Hidden on Desktop) */
@@ -124,19 +153,19 @@
     @media (max-width: 768px) {
         .navbar {
             padding: 15px 20px;
-            /* Pastikan logo dan hamburger duduk sebaris */
+            /* Keep logo and hamburger in same row */
             flex-direction: row;
             flex-wrap: wrap;
         }
 
-        /* Tunjuk Hamburger di Mobile */
+        /* Show Hamburger on Mobile */
         .hamburger {
             display: flex;
         }
 
-        /* Sembunyikan Menu secara default di Mobile */
+        /* Hide Menu by default on Mobile */
         .nav-links {
-            display: none; /* Hilang */
+            display: none; /* Hidden */
             width: 100%;
             flex-direction: column;
             align-items: center;
@@ -145,12 +174,12 @@
             border-top: 1px solid #eee;
         }
 
-        /* Class ini akan ditambah oleh JavaScript bila user klik hamburger */
+        /* This class added by JavaScript when user clicks hamburger */
         .nav-links.active {
-            display: flex; /* Muncul */
+            display: flex; /* Visible */
         }
 
-        /* Animasi Hamburger jadi 'X' bila aktif */
+        /* Animate Hamburger into 'X' when active */
         .hamburger.active .bar1 {
             transform: rotate(-45deg) translate(-5px, 6px);
         }
@@ -181,12 +210,14 @@
         <a href="quote.jsp">Get A Quote</a>
         <a href="contact.jsp">Contact Us</a>
 
-        <a href="cart.jsp">
-            <img src="images/cart.png" width="24px" height="24px" alt="Cart" style="vertical-align: middle;">
+        <!-- FIXED: Cart with class, no inline style -->
+        <a href="cart.jsp" class="cart-link">
+            <img src="images/cart.png" alt="Cart" class="cart-icon">
         </a>
 
         <% if (userLoggedIn == null) { %>
-        <a href="login.jsp" style="font-weight: bold;">Login/Signup</a>
+        <!-- FIXED: Login with class, no inline style -->
+        <a href="login.jsp" class="login-link">Login/Signup</a>
         <% } else { %>
         <a href="orders.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
@@ -199,7 +230,7 @@
     const navMenu = document.getElementById('nav-menu');
 
     hamburger.addEventListener('click', () => {
-        // Toggle class 'active' pada menu dan butang
+        // Toggle 'active' class on menu and button
         navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
     });
