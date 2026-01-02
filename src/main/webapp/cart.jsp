@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root { --mongoose: #baa987; }
-        body { background-color: lightsteelblue; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+        body { background-color: #b0c4de !important; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
 
         .small-container {
             max-width: 1200px; margin: 50px auto; padding: 20px;
