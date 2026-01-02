@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    // Maintain Java logic to check session
+    // Kekalkan logic Java untuk check session
     Object userLoggedIn = session.getAttribute("currentUser");
 %>
 
@@ -62,7 +62,7 @@
         color: #000;
     }
 
-    /* Underline on hover */
+    /* Garis bawah bila hover */
     .nav-links a::after {
         content: '';
         position: absolute;
@@ -78,51 +78,22 @@
         width: 100%;
     }
 
-    /* Cart Icon - FIXED: No inline styles */
-    .cart-link {
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .cart-icon {
-        width: 24px;
-        height: 24px;
-        vertical-align: middle;
+    /* Cart Icon */
+    .nav-links a img {
         transition: transform 0.3s ease;
     }
 
-    .cart-link:hover .cart-icon {
+    .nav-links a:hover img {
         transform: scale(1.1);
-    }
-
-    /* Login/Signup Link - FIXED: No inline styles */
-    .login-link {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .login-link:hover {
-        color: #000;
-    }
-
-    /* My Orders Link */
-    .order-link {
-        color: #333;
-        font-weight: 500;
-    }
-
-    .order-link:hover {
-        color: #000;
     }
 
     /* Logout Button Special Styling */
     .logout-link {
-        color: #ff4d4d;
-        font-weight: bold;
+        color: #ff4d4d !important;
+        font-weight: bold !important;
     }
-
     .logout-link:hover {
-        color: #cc0000;
+        color: #cc0000 !important;
     }
 
     /* HAMBURGER MENU (Default Hidden on Desktop) */
@@ -153,19 +124,19 @@
     @media (max-width: 768px) {
         .navbar {
             padding: 15px 20px;
-            /* Keep logo and hamburger in same row */
+            /* Pastikan logo dan hamburger duduk sebaris */
             flex-direction: row;
             flex-wrap: wrap;
         }
 
-        /* Show Hamburger on Mobile */
+        /* Tunjuk Hamburger di Mobile */
         .hamburger {
             display: flex;
         }
 
-        /* Hide Menu by default on Mobile */
+        /* Sembunyikan Menu secara default di Mobile */
         .nav-links {
-            display: none; /* Hidden */
+            display: none; /* Hilang */
             width: 100%;
             flex-direction: column;
             align-items: center;
@@ -174,12 +145,12 @@
             border-top: 1px solid #eee;
         }
 
-        /* This class added by JavaScript when user clicks hamburger */
+        /* Class ini akan ditambah oleh JavaScript bila user klik hamburger */
         .nav-links.active {
-            display: flex; /* Visible */
+            display: flex; /* Muncul */
         }
 
-        /* Animate Hamburger into 'X' when active */
+        /* Animasi Hamburger jadi 'X' bila aktif */
         .hamburger.active .bar1 {
             transform: rotate(-45deg) translate(-5px, 6px);
         }
@@ -210,12 +181,12 @@
         <a href="quote.jsp">Get A Quote</a>
         <a href="contact.jsp">Contact Us</a>
 
-        <a href="cart.jsp" class="cart-link">
-            <img src="images/cart.png" alt="Cart" class="cart-icon">
+        <a href="cart.jsp">
+            <img src="images/cart.png" width="24px" height="24px" alt="Cart" style="vertical-align: middle;">
         </a>
 
         <% if (userLoggedIn == null) { %>
-        <a href="login.jsp" class="login-link">Login/Signup</a>
+        <a href="login.jsp" style="font-weight: bold;">Login/Signup</a>
         <% } else { %>
         <a href="orders.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
@@ -228,7 +199,7 @@
     const navMenu = document.getElementById('nav-menu');
 
     hamburger.addEventListener('click', () => {
-        // Toggle 'active' class on menu and button
+        // Toggle class 'active' pada menu dan butang
         navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
     });
