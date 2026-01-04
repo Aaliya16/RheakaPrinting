@@ -57,9 +57,10 @@
         }
 
         .contact-grid {
-            display: flex;             /* Tukar grid kepada flex */
-            justify-content: center;   /* Letak content di tengah */
+            display: flex;
+            justify-content: center;
             margin-bottom: 40px;
+            padding: 0 15px;
         }
 
         @media (max-width: 768px) {
@@ -193,6 +194,15 @@
 
         .btn-submit:active {
             transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .contact-form-card {
+                padding: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
         }
 
     </style>

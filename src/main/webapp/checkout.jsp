@@ -328,9 +328,6 @@
     </div>
 
     <% } %>
-    <div class="back-link">
-        <a href="cart.jsp">← Back to Cart</a>
-    </div>
 </div>
 
 <%@ include file="footer.jsp" %>

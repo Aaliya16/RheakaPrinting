@@ -223,7 +223,7 @@
         <tr>
             <td>
                 <div class="cart-info">
-                    <img src="images/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
+                    <img src="assets/img/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
                          alt="<%= c.getName() != null ? c.getName() : "Product" %>">
                     <div>
                         <p><%= c.getName() != null && !c.getName().isEmpty() ? c.getName() : "Product #" + c.getId() %></p>

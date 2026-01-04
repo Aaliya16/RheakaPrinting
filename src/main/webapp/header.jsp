@@ -212,14 +212,14 @@
 
         <!-- FIXED: Cart with class, no inline style -->
         <a href="cart.jsp" class="cart-link">
-            <img src="images/cart.png" alt="Cart" class="cart-icon">
+            <img src="assets/img/cart.png" alt="Cart" class="cart-icon">
         </a>
 
         <% if (userLoggedIn == null) { %>
         <!-- FIXED: Login with class, no inline style -->
         <a href="login.jsp" class="login-link">Login/Signup</a>
         <% } else { %>
-        <a href="orders.jsp" class="order-link">My Orders</a>
+        <a href="myorder.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>

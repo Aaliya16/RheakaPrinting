@@ -16,11 +16,11 @@ public class UserDAO {
             Connection conn = DbConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            // 2. Masukkan data
-            ps.setString(2, newUser.getName());
-            ps.setString(3, newUser.getEmail());
-            ps.setString(4, newUser.getPassword());
-            ps.setString(5, "customer"); // Default role user biasa
+            // 1. Masukkan data ikut urutan tanda soal (?) dalam SQL
+            ps.setString(1, newUser.getName());      // ? Pertama (name)
+            ps.setString(2, newUser.getEmail());     // ? Kedua (email)
+            ps.setString(3, newUser.getPassword());  // ? Ketiga (password)
+            ps.setString(4, "customer");             // ? Keempat (role)
 
             // 3. Execute
             int rowsAffected = ps.executeUpdate();
