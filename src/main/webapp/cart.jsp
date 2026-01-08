@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root { --mongoose: #baa987; }
-        body { background-color: lightsteelblue; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+        body { background-color: #b0c4de !important; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
 
         .small-container {
             max-width: 1200px; margin: 50px auto; padding: 20px;
@@ -223,7 +223,7 @@
         <tr>
             <td>
                 <div class="cart-info">
-                    <img src="images/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
+                    <img src="assets/img/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
                          alt="<%= c.getName() != null ? c.getName() : "Product" %>">
                     <div>
                         <p><%= c.getName() != null && !c.getName().isEmpty() ? c.getName() : "Product #" + c.getId() %></p>
@@ -277,6 +277,7 @@
     </div>
 
     <% } %>
+
 </div>
 <%@ include file="footer.jsp" %>
 </body>

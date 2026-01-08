@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    // Maintain Java logic to check session
     Object userLoggedIn = session.getAttribute("currentUser");
 %>
 
@@ -41,15 +42,14 @@
         width: auto;
     }
 
-    /* Navigation Links Container */
-    .navbar > div {
+    /* Navigation Links Container (Desktop) */
+    .nav-links {
         display: flex;
         align-items: center;
         gap: 35px;
     }
 
-    /* Navigation Links */
-    .navbar a {
+    .nav-links a {
         text-decoration: none;
         color: #333;
         font-weight: 500;
@@ -58,12 +58,12 @@
         position: relative;
     }
 
-    .navbar a:hover {
+    .nav-links a:hover {
         color: #000;
     }
 
-    /* Underline animation on hover */
-    .navbar a::after {
+    /* Underline on hover */
+    .nav-links a::after {
         content: '';
         position: absolute;
         width: 0;
@@ -74,91 +74,164 @@
         transition: width 0.3s ease;
     }
 
-    .navbar a:hover::after {
+    .nav-links a:hover::after {
         width: 100%;
     }
 
-    /* Cart Icon */
-    .navbar a img {
+    /* Cart Icon - FIXED: No inline styles */
+    .cart-link {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .cart-icon {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
         transition: transform 0.3s ease;
     }
 
-    .navbar a:hover img {
+    .cart-link:hover .cart-icon {
         transform: scale(1.1);
+    }
+
+    /* Login/Signup Link - FIXED: No inline styles */
+    .login-link {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .login-link:hover {
+        color: #000;
+    }
+
+    /* My Orders Link */
+    .order-link {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .order-link:hover {
+        color: #000;
     }
 
     /* Logout Button Special Styling */
     .logout-link {
-        color: #ff4d4d !important;
-        font-weight: bold !important;
+        color: #ff4d4d;
+        font-weight: bold;
     }
 
     .logout-link:hover {
-        color: #cc0000 !important;
+        color: #cc0000;
     }
 
-    /* Responsive Design */
+    /* HAMBURGER MENU (Default Hidden on Desktop) */
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+    }
+
+    .hamburger div {
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        transition: all 0.3s ease;
+    }
+
+    /* RESPONSIVE: TABLET & MOBILE */
     @media (max-width: 992px) {
         .navbar {
             padding: 15px 30px;
         }
-
-        .navbar > div {
+        .nav-links {
             gap: 20px;
-        }
-
-        .navbar a {
-            font-size: 14px;
         }
     }
 
     @media (max-width: 768px) {
         .navbar {
-            flex-direction: column;
             padding: 15px 20px;
-            gap: 15px;
-        }
-
-        .navbar > div {
+            /* Keep logo and hamburger in same row */
+            flex-direction: row;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
         }
 
-        .logo {
-            font-size: 20px;
+        /* Show Hamburger on Mobile */
+        .hamburger {
+            display: flex;
         }
 
-        .logo-img {
-            height: 40px;
+        /* Hide Menu by default on Mobile */
+        .nav-links {
+            display: none; /* Hidden */
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+
+        /* This class added by JavaScript when user clicks hamburger */
+        .nav-links.active {
+            display: flex; /* Visible */
+        }
+
+        /* Animate Hamburger into 'X' when active */
+        .hamburger.active .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .bar2 {
+            opacity: 0;
+        }
+        .hamburger.active .bar3 {
+            transform: rotate(45deg) translate(-5px, -6px);
         }
     }
 </style>
 
 <nav class="navbar">
-    <!-- Logo Section -->
-    <h1 class="logo">
+    <a href="index.jsp" class="logo">
         <img src="assets/img/logo_rheaka.png" alt="Logo" class="logo-img">
         Rheaka Design
-    </h1>
+    </a>
 
-    <!-- Navigation Links -->
-    <div>
+    <div class="hamburger" id="hamburger-btn">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+
+    <div class="nav-links" id="nav-menu">
         <a href="index.jsp">Home</a>
         <a href="products.jsp">Services</a>
         <a href="quote.jsp">Get A Quote</a>
-        <a href="contact.jsp">Contact</a>
+        <a href="contact.jsp">Contact Us</a>
 
-        <!-- Cart Icon -->
-        <a href="cart.jsp">
-            <img src="images/cart.png" width="30px" height="30px" alt="Cart" style="vertical-align: middle;">
+        <!-- FIXED: Cart with class, no inline style -->
+        <a href="cart.jsp" class="cart-link">
+            <img src="assets/img/cart.png" alt="Cart" class="cart-icon">
         </a>
 
-        <!-- Login/Logout Logic -->
         <% if (userLoggedIn == null) { %>
-        <a href="login.jsp">Login/Signup</a>
+        <!-- FIXED: Login with class, no inline style -->
+        <a href="login.jsp" class="login-link">Login/Signup</a>
         <% } else { %>
+        <a href="myorder.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>
 </nav>
+
+<script>
+    const hamburger = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+        // Toggle 'active' class on menu and button
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+</script>

@@ -194,6 +194,11 @@
             .form-row {
                 grid-template-columns: 1fr;
             }
+
+            .back-link {
+                text-align: center;
+                margin-top: 30px;
+            }
         }
     </style>
 </head>

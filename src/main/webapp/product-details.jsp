@@ -171,13 +171,13 @@
                         <div class="price-box">
                             Total: RM <span id="totalPrice">0.00</span>
                         </div>
-
+                        <input type="hidden" id="loginStatus" value="<%= session.getAttribute("currentUser") != null %>">
                         <button type="submit" class="btn-add">Add to Cart</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
+    </div>z
 </section>
 
 <script src="js/priceCalculator.js"></script>
