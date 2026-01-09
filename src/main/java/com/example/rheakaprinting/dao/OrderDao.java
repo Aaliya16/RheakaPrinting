@@ -60,4 +60,16 @@ public class OrderDao {
         }
         return list;
     }
+    public boolean updateOrderStatus(int orderId, String status) {
+        try {
+            String query = "UPDATE orders SET status=? WHERE order_id=?";
+            PreparedStatement pst = this.con.prepareStatement(query);
+            pst.setString(1, status);
+            pst.setInt(2, orderId);
+            return pst.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

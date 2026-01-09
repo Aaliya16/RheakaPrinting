@@ -10,7 +10,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/LoginServlet")
+// Change this line at the top of LoginServlet.java
+@WebServlet(name = "LoginServlet", value = {"/LoginServlet", "/login"})
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
@@ -35,12 +36,12 @@ public class LoginServlet extends HttpServlet {
 
             if (role != null && role.equalsIgnoreCase("admin")) {
                 System.out.println("Redirecting to admin dashboard...");
-                // If Admin -> Go to Dashboard
-                response.sendRedirect("admin_dashboard.jsp");
+                // FIX: This ensures the URL includes /RheakaPrinting_war_exploded/
+                response.sendRedirect(request.getContextPath() + "/admin_dashboard.jsp");
             } else {
                 System.out.println("Redirecting to index...");
-                // If Customer -> Go to Homepage
-                response.sendRedirect("index.jsp");
+                // FIX: Same for the homepage
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
             }
         } else {
 

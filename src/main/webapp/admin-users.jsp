@@ -1,346 +1,133 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 31/12/2025
-  Time: 5:49 pm
-  To change this template use File | Settings | File Templates.
---%>
-<%--
-  Created by IntelliJ IDEA.
-  User: MSI MODERN 15
-  Date: 25/12/2025
-  Time: 12:57 am
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.example.rheakaprinting.model.*" %>
+<%@ page import="com.example.rheakaprinting.dao.*" %>
+<%@ page import="com.example.rheakaprinting.model.DbConnection" %>
+<%@ page import="java.util.*" %>
+<%@ include file="admin-auth-check.jsp" %>
 <%
-    // 1. Retrieve the User object using the "auth" key from Login.java
-    com.example.website.model.User authUser = (com.example.website.model.User) session.getAttribute("auth");
-
-    // 2. Security: Redirect if not logged in or not an admin
-    if (authUser == null || !"admin".equalsIgnoreCase(authUser.getRole())) {
-        response.sendRedirect("login.jsp?msg=unauthorized");
-        return; // Stops unauthorized content from loading
-    }
-
-    // 3. Set name for the sidebar/topbar
-    String adminUser = authUser.getName();
-
-    // Sample products data (Keep this for now as you requested)
-    String[][] products = {
-            {"14", "Apron Custom", "Apparel", "16.00", "In Stock"},
-            {"4", "Banner & Bunting", "Printing", "18.00", "In Stock"},
-            {"3", "Apparel Printing", "Printing", "11.90", "In Stock"},
-            {"15", "Acrylic Clear", "Signage", "47.00", "In Stock"}
-    };
+    UserAdminDao uDao = new UserAdminDao(DbConnection.getConnection());
+    List<User> allUsers = uDao.getAllUsers();
+    if (allUsers == null) allUsers = new ArrayList<>();
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products Management - Admin Panel</title>
+    <title>User Management - Rheaka Printing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #2c3e50; }
 
-        :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .main-content {
+            margin-left: 260px; /* Matches your sidebar width */
+            padding: 30px;
+            min-height: 100vh;
             background: #f5f6fa;
         }
 
-        /* Sidebar (copy from dashboard) */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 250px;
-            height: 100vh;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .sidebar-header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 30px;
-        }
-
-        .sidebar-header h2 { font-size: 24px; margin-bottom: 5px; }
-        .sidebar-header p { font-size: 12px; color: #bdc3c7; }
-
-        .nav-menu { list-style: none; }
-        .nav-item { margin-bottom: 5px; }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: #ecf0f1;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background: rgba(52, 152, 219, 0.2);
-            color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-
+        /* 2. Force the Top Bar to be exactly 70px tall */
         .top-bar {
             background: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 0 35px; /* Side padding for the content inside */
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 70px; /* THIS IS THE KEY SIZE */
         }
 
+        /* 3. Fix the title alignment */
         .top-bar h1 {
-            color: var(--primary);
-            font-size: 28px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-weight: 600; /* This creates the specific bold effect you like */
+            font-size: 24px;
+            color: #1a3a6d; /* The deep navy blue used in your panel */
+            margin: 0;
         }
 
-        .btn-add {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
+        .admin-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold;
         }
 
-        .btn-add:hover {
-            background: #27ae60;
-            transform: translateY(-2px);
-        }
+        .content-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
+        .search-input { width: 100%; padding: 12px 20px; border: 2px solid #f0f0f0; border-radius: 8px; margin-bottom: 25px; outline: none; }
 
-        /* Products Table */
-        .products-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 25px;
-        }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; background: #f8f9fa; color: #34495e; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #edf2f7; }
+        td { padding: 18px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
 
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
+        .role-badge { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .role-badge.admin { background: #cfe2ff; color: #084298; }
+        .role-badge.user { background: #e2e3e5; color: #41464b; }
 
-        .search-bar input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .search-bar input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: #f8f9fa;
-        }
-
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--primary);
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .status-badge.in-stock {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-badge.out-stock {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-icon {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .btn-edit {
-            background: #e3f2fd;
-            color: var(--accent);
-        }
-
-        .btn-edit:hover {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-delete {
-            background: #ffebee;
-            color: var(--danger);
-        }
-
-        .btn-delete:hover {
-            background: var(--danger);
-            color: white;
-        }
+        .btn-delete { width: 38px; height: 38px; border-radius: 8px; border: none; cursor: pointer; background: #ffebee; color: #e74c3c; transition: 0.3s; }
+        .btn-delete:hover { background: #e74c3c; color: white; }
     </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>🛡️ ADMIN</h2>
-        <p>Rheaka Printing</p>
-    </div>
+<%@ include file="admin-sidebar.jsp" %>
 
-    <ul class="nav-menu">
-        <li class="nav-item">
-            <a href="admin-dashboard.jsp" class="nav-link">
-                <span>📊</span>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="admin-orders.jsp" class="nav-link">
-                <span>📦</span>
-                <span>Orders</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="admin-products.jsp" class="nav-link active">
-                <span>🏷️</span>
-                <span>Products</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="admin-users.jsp" class="nav-link">
-                <span>👥</span>
-                <span>Users</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="admin-settings.jsp" class="nav-link">
-                <span>⚙️</span>
-                <span>Settings</span>
-            </a>
-        </li>
-    </ul>
-</div>
-
-<!-- Main Content -->
 <div class="main-content">
     <div class="top-bar">
-        <h1>Products Management</h1>
-        <a href="#" class="btn-add">
-            <span>➕</span>
-            <span>Add New Product</span>
-        </a>
+        <h1><i class="fas fa-users" style="color:#3498db"></i> User Management</h1>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="admin-avatar">
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
+            </div>
+            <strong><%= adminUser %></strong>
+        </div>
     </div>
 
-    <div class="products-container">
-        <div class="search-bar">
-            <input type="text" placeholder="🔍 Search products..." id="searchInput">
-            <select style="padding: 10px; border: 2px solid #e0e0e0; border-radius: 6px;">
-                <option>All Categories</option>
-                <option>Apparel</option>
-                <option>Printing</option>
-                <option>Signage</option>
-            </select>
-        </div>
+    <div class="content-card">
+        <input type="text" class="search-input" id="userInput" placeholder="Search by name or email..." onkeyup="filterUsers()">
 
-        <table id="productsTable">
+        <table id="userTable">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Product Name</th>
-                <th>Category</th>
-                <th>Price (RM)</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th style="text-align: right;">Actions</th>
             </tr>
             </thead>
             <tbody>
-            <% for (String[] product : products) { %>
+            <%
+                // Ensure the list isn't empty before looping
+                if (allUsers != null && !allUsers.isEmpty()) {
+                    for (User user : allUsers) {
+            %>
             <tr>
-                <td>#<%= product[0] %></td>
-                <td><strong><%= product[1] %></strong></td>
-                <td><%= product[2] %></td>
-                <td>RM <%= product[3] %></td>
+                <td>#<%= user.getUserId() %></td>
+                <td><strong><%= user.getName() %></strong></td>
+                <td><%= user.getEmail() %></td>
                 <td>
-                        <span class="status-badge <%= product[4].equals("In Stock") ? "in-stock" : "out-stock" %>">
-                            <%= product[4] %>
-                        </span>
+            <span class="role-badge <%= user.getRole().toLowerCase() %>">
+                <%= user.getRole() %>
+            </span>
                 </td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn-icon btn-edit" onclick="editProduct(<%= product[0] %>)">
-                            ✏️ Edit
-                        </button>
-                        <button class="btn-icon btn-delete" onclick="deleteProduct(<%= product[0] %>)">
-                            🗑️ Delete
-                        </button>
-                    </div>
+                <td style="text-align: right;">
+                    <button class="btn-action btn-delete"
+                            onclick="confirmDelete(<%= user.getUserId() %>, '<%= user.getName() %>')"
+                            style="background: #ffebee; color: #c62828; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <%
+                }
+            } else {
+            %>
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 20px; color: #999;">
+                    No users found in database.
                 </td>
             </tr>
             <% } %>
@@ -350,25 +137,38 @@
 </div>
 
 <script>
-    // Search functionality
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#productsTable tbody tr');
-
+    function filterUsers() {
+        const search = document.getElementById('userInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#userTable tbody tr');
         rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+            row.style.display = row.textContent.toLowerCase().includes(search) ? '' : 'none';
         });
-    });
-
-    function editProduct(id) {
-        alert('Edit product #' + id + ' (implement later)');
     }
 
-    function deleteProduct(id) {
-        if (confirm('Are you sure you want to delete product #' + id + '?')) {
-            alert('Product deleted (implement later)');
+    function deleteUser(id, name) {
+        if (confirm("Delete user: " + name + "?")) {
+            window.location.href = "DeleteUserServlet?id=" + id;
         }
+    }
+</script>
+
+<script>
+    function confirmDelete(userId, userName) {
+        if (confirm("Are you sure you want to delete user: " + userName + "?")) {
+            // This sends the request to a DeleteUserServlet
+            window.location.href = "DeleteUserServlet?id=" + userId;
+        }
+    }
+
+    // Function for the search bar at the top of your screenshot
+    function filterUsers() {
+        let input = document.getElementById('userInput').value.toLowerCase();
+        let rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(input) ? '' : 'none';
+        });
     }
 </script>
 
