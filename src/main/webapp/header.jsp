@@ -219,7 +219,7 @@
         <!-- FIXED: Login with class, no inline style -->
         <a href="login.jsp" class="login-link">Login/Signup</a>
         <% } else { %>
-        <a href="myorder.jsp" class="order-link">My Orders</a>
+        <a href="orders.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>

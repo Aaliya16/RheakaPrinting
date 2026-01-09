@@ -1,31 +1,51 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.DecimalFormat" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="com.example.rheakaprinting.model.User" %>
+<%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 
 <%
-    DecimalFormat dcf = new DecimalFormat("#.##");
+    // 1. Setup Formatter
+    DecimalFormat dcf = new DecimalFormat("#,##0.00");
 
-    // Get order history from session
-    // In a real app, this would come from a database
-    List<Map<String, Object>> orderHistory = new ArrayList<>();
+    // 2. Prepare List to hold data
+    List<Map<String, Object>> ordersList = new ArrayList<>();
 
-    // Check if there's a recent completed order
-    String orderName = (String) session.getAttribute("order_name");
-    String orderEmail = (String) session.getAttribute("order_email");
-    Double orderTotal = (Double) session.getAttribute("order_total");
-    Integer orderItems = (Integer) session.getAttribute("order_items");
-    String orderNumber = "RKD" + System.currentTimeMillis();
+    // 3. Database Logic
+    User currentUser = (User) session.getAttribute("currentUser");
+    Connection conn = DbConnection.getConnection();
 
-    if (orderName != null && orderTotal != null) {
-        Map<String, Object> order = new HashMap<>();
-        order.put("orderNumber", orderNumber);
-        order.put("customerName", orderName);
-        order.put("email", orderEmail);
-        order.put("total", orderTotal);
-        order.put("items", orderItems);
-        order.put("status", "Processing");
-        order.put("date", new java.util.Date());
-        orderHistory.add(order);
+    if (currentUser != null && conn != null) {
+        try {
+            String query = "SELECT * FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, currentUser.getUserId());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+
+                // MAPPING: Get from DB -> Put into Map
+                // Ensure the string inside rs.get... match your actual DB column names
+                row.put("orderNumber", rs.getInt("id"));
+                row.put("date", rs.getTimestamp("order_date"));
+                row.put("status", rs.getString("status"));
+                row.put("customerName", currentUser.getName());
+                row.put("email", currentUser.getEmail());
+                row.put("total", rs.getDouble("total_amount"));
+
+                // If you don't have a 'total_items' column in DB,
+                // you might need to set a default or run a subquery.
+                // For now, I'm setting it to 1 to prevent errors.
+                // row.put("items", rs.getInt("total_items"));
+                row.put("items", 1);
+
+                ordersList.add(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log error to console
+        }
     }
 %>
 
@@ -282,22 +302,25 @@
         <a href="index.jsp" class="back-btn">← Back to Home</a>
     </div>
 
-    <%
-        if (!orderHistory.isEmpty()) {
-    %>
+    <%-- CHECK: If list is NOT empty --%>
+    <% if (!ordersList.isEmpty()) { %>
 
     <div class="orders-list">
         <%
-            for (Map<String, Object> order : orderHistory) {
-                String status = (String) order.get("status");
-                String statusClass = "status-processing";
+            // Loop through the list we created at the top
+            for (Map<String, Object> order : ordersList) {
 
-                if ("Shipped".equals(status)) {
-                    statusClass = "status-shipped";
-                } else if ("Delivered".equals(status)) {
-                    statusClass = "status-delivered";
+                // Status Logic
+                String status = (String) order.get("status");
+                String statusClass = "status-processing"; // Default
+
+                if (status != null) {
+                    if (status.equalsIgnoreCase("shipped")) statusClass = "status-shipped";
+                    else if (status.equalsIgnoreCase("delivered")) statusClass = "status-delivered";
+                    else if (status.equalsIgnoreCase("cancelled")) statusClass = "status-cancelled";
                 }
         %>
+
         <div class="order-card">
             <div class="order-header">
                 <div>
@@ -306,7 +329,7 @@
                         Placed on <%= String.format("%1$tB %1$te, %1$tY", order.get("date")) %>
                     </div>
                 </div>
-                <span class="order-status <%= statusClass %>"><%= order.get("status") %></span>
+                <span class="order-status <%= statusClass %>"><%= status %></span>
             </div>
 
             <div class="order-body">
@@ -325,7 +348,7 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Total Amount</span>
-                        <span class="order-total">RM <%= dcf.format((Double) order.get("total")) %></span>
+                        <span class="order-total">RM <%= dcf.format(order.get("total")) %></span>
                     </div>
                 </div>
 
@@ -335,14 +358,12 @@
                 </div>
             </div>
         </div>
-        <%
-            }
-        %>
+
+        <% } // End For Loop %>
     </div>
 
-    <%
-    } else {
-    %>
+    <%-- ELSE: If list IS empty --%>
+    <% } else { %>
 
     <div class="empty-orders">
         <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">

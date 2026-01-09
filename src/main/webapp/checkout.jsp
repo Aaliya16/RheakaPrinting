@@ -216,7 +216,7 @@
         <!-- Billing Information -->
         <div class="checkout-card">
             <h2>Billing Information</h2>
-            <form action="place-order" method="post" id="checkoutForm">
+            <form action="payment.jsp" method="post" id="checkoutForm">
                 <div class="form-group">
                     <label for="fullName">Full Name *</label>
                     <input type="text" id="fullName" name="fullName" required>
@@ -324,7 +324,7 @@
     <div class="checkout-card" style="text-align: center; padding: 80px 20px;">
         <h2>Your cart is empty!</h2>
         <p style="color: #666; margin: 20px 0;">Add some products to your cart before checking out.</p>
-        <a href="index.jsp" style="display: inline-block; background: var(--mongoose); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: 600;">Start Shopping</a>
+        <a href="products.jsp" style="display: inline-block; background: var(--mongoose); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: 600;">Start Shopping</a>
     </div>
 
     <% } %>
