@@ -178,3 +178,4 @@ public class AddToCartServlet extends HttpServlet {
         response.sendRedirect("products.jsp");
     }
 }
+
