@@ -18,8 +18,17 @@ public class QuantityIncDecServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        response.setContentType("text/html;charset=UTF-8");
+
         String action = request.getParameter("action");
         String idParam = request.getParameter("id");
+
+        // 1. TERIMA PARAMETER BARU: variation
+        // Kita perlu tahu user nak ubah quantity untuk variation yang mana satu
+        String variationParam = request.getParameter("variation");
+
+        // Null safety (kalau null, anggap kosong supaya tak error masa .equals)
+        if (variationParam == null) variationParam = "";
 
         if (action != null && idParam != null) {
             try {
@@ -30,22 +39,26 @@ public class QuantityIncDecServlet extends HttpServlet {
 
                 if (cart_list != null) {
                     for (Cart c : cart_list) {
-                        if (c.getId() == id) {
+                        // 2. CHECK ID **DAN** VARIATION
+                        // Dulu: if (c.getId() == id)
+                        // Sekarang: Kena check dua-dua match barulah betul
+
+                        // Nota: c.getVariation() mungkin null, jadi guna safe check
+                        String cartVariation = (c.getVariation() != null) ? c.getVariation() : "";
+
+                        if (c.getId() == id && cartVariation.equals(variationParam)) {
+
                             if (action.equals("inc")) {
-                                // Increase quantity
                                 c.setQuantity(c.getQuantity() + 1);
                             } else if (action.equals("dec")) {
-                                // Decrease quantity
                                 int newQty = c.getQuantity() - 1;
-
                                 if (newQty > 0) {
                                     c.setQuantity(newQty);
                                 } else {
-                                    // If quantity becomes 0, remove item from cart
                                     cart_list.remove(c);
                                 }
                             }
-                            break;
+                            break; // Dah jumpa & update, terus keluar loop
                         }
                     }
 
@@ -58,7 +71,6 @@ public class QuantityIncDecServlet extends HttpServlet {
             }
         }
 
-        // Redirect back to cart page
         response.sendRedirect("cart.jsp");
     }
 }

@@ -51,7 +51,7 @@ public class UserDAO {
 
             if (rs.next()) {
                 user = new User();
-                // Pastikan nama column dalam kurungan "" SAMA dengan database
+                user.setUserId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
                 user.setRole(rs.getString("role"));

@@ -228,7 +228,7 @@
                     <div>
                         <p><%= c.getName() != null && !c.getName().isEmpty() ? c.getName() : "Product #" + c.getId() %></p>
                         <small>Product ID: <%= c.getId() %></small>
-                        <a href="remove-from-cart?id=<%= c.getId() %>">🗑️ Remove</a>
+                        <a href="remove-from-cart?id=<%= c.getId() %>&variation=<%= c.getVariation() %>">🗑️ Remove</a>
                     </div>
                 </div>
             </td>
@@ -237,9 +237,9 @@
             </td>
             <td>
                 <div class="quantity-btn">
-                    <a href="quantity-inc-dec?action=dec&id=<%= c.getId() %>" title="Decrease">−</a>
-                    <input type="text" value="<%= c.getQuantity() %>" readonly>
-                    <a href="quantity-inc-dec?action=inc&id=<%= c.getId() %>" title="Increase">+</a>
+                    <a href="quantity-inc-dec?action=dec&id=<%= c.getId() %>&variation=<%= c.getVariation() %>" title="Decrease">−</a>
+                    <input type="text" name="quantity" value="<%= c.getQuantity() %>" readonly>
+                    <a href="quantity-inc-dec?action=inc&id=<%= c.getId() %>&variation=<%= c.getVariation() %>" title="Increase">+</a>
                 </div>
             </td>
             <td class="subtotal-cell">

@@ -121,34 +121,5 @@ public class ProductDao {
         }
         return product;
     }
-    public boolean deleteProduct(int id) {
-        boolean result = false;
-        try {
-            String query = "DELETE FROM products WHERE id=?";
-            java.sql.PreparedStatement ps = this.con.prepareStatement(query);
-            ps.setInt(1, id);
-            int rows = ps.executeUpdate();
-            if (rows > 0) result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    public boolean addProduct(Product p) {
-        boolean result = false;
-        try {
-            String query = "INSERT INTO products (name, category, price, quantity) VALUES (?, ?, ?, ?)";
-            java.sql.PreparedStatement ps = this.con.prepareStatement(query);
-            ps.setString(1, p.getName());
-            ps.setString(2, p.getCategory());
-            ps.setDouble(3, p.getPrice());
-            ps.setInt(4, p.getQuantity());
-
-            int rows = ps.executeUpdate();
-            if (rows > 0) result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 }
+

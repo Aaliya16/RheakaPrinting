@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 <%
     // Get product ID from URL parameter (e.g., product-details.jsp?id=1)
     String id = request.getParameter("id");
@@ -7,7 +9,28 @@
     String pName = "Printing Service";
     String pDesc = "High-quality custom printing solutions.";
     String pImage = "product_single_10.jpg";
+    String pCategory = ""; // Kita tambah category untuk logic include file nanti
 
+    // 2. DATABASE CONNECTION & QUERY
+    // Kita cari info produk berdasarkan ID yang user klik
+    if (id != null) {
+        try {
+            Connection conn = DbConnection.getConnection();
+            String sql = "SELECT * FROM products WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                pName = rs.getString("name");
+                pDesc = rs.getString("description");
+                pImage = rs.getString("image");
+                pCategory = rs.getString("category"); // Penting untuk tentukan file mana nak load
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     // Product Mapping: Assign Title, Description, and Image based on ID
     if (id != null) {
         switch (id) {
@@ -137,7 +160,7 @@
                 <p class="text-muted"><%= pDesc %></p>
                 <hr>
 
-                <form action="add-to-cart" method="post" id="addToCartForm">
+                <form action="add-to-cart" method="post" id="addToCartForm" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<%= id %>">
                     <input type="hidden" name="variation_name" id="hiddenVariationName" value="">
                     <input type="hidden" name="addon_name" id="hiddenAddonName" value="">
@@ -147,21 +170,46 @@
                         <%
                             // Logic to determine which dynamic option file to load based on Product ID
                             String sectionFile = "default_options.jsp";
-                            if ("1".equals(id)) sectionFile = "acrylic.jsp";
-                            else if ("2".equals(id)) sectionFile = "apron.jsp";
-                            else if ("3".equals(id)) sectionFile = "signage.jsp";
-                            else if ("4".equals(id)) sectionFile = "business_card.jsp";
-                            else if ("5".equals(id)) sectionFile = "apparel.jsp";
-                            else if ("6".equals(id)) sectionFile = "banner.jsp";
-                            else if ("7".equals(id)) sectionFile = "flags.jsp";
-                            else if ("8".equals(id)) sectionFile = "stickers.jsp";
+
+                            if (id != null) {
+                                switch (id) {
+                                    case "1":
+                                        sectionFile = "acrylic.jsp";
+                                        break;
+                                    case "2":
+                                        sectionFile = "apron.jsp";
+                                        break;
+                                    case "3":
+                                        sectionFile = "signage.jsp";
+                                        break;
+                                    case "4":
+                                        sectionFile = "business_card.jsp";
+                                        break;
+                                    case "5":
+                                        sectionFile = "apparel.jsp";
+                                        break;
+                                    case "6":
+                                        sectionFile = "banner.jsp";
+                                        break;
+                                    case "7":
+                                        sectionFile = "flags.jsp";
+                                        break;
+                                    case "8":
+                                        sectionFile = "stickers.jsp";
+                                        break;
+                                    default:
+                                        // Kalau ID baru masuk (contoh ID 9), dia akan load default
+                                        sectionFile = "default_options.jsp";
+                                        break;
+                                }
+                            }
                         %>
                         <jsp:include page="<%= \"sections/\" + sectionFile %>" />
 
                         <hr>
 
                         <label class="label-black">Upload Design (Optional)</label>
-                        <input type="file" class="form-control" id="design_file">
+                        <input type="file" class="form-control" id="design_file" name="design_image">
 
                         <div class="mt-3">
                             <label class="label-black">Quantity</label>
@@ -180,6 +228,38 @@
     </div>z
 </section>
 
+<script>
+    // Fungsi ini akan jalan bila user tukar pilihan
+    function updateHiddenInputs() {
+        // 1. Dapatkan element dropdown
+        var baseSelect = document.getElementById("base_item");
+        var addonSelect = document.getElementById("addon_service");
+
+        // 2. Dapatkan TEKS pilihan (Contoh: "Banner 2' x 1'")
+        // Kalau tak buat ni, dia akan hantar harga (6.00) je
+        if (baseSelect) {
+            var textVariation = baseSelect.options[baseSelect.selectedIndex].text;
+            // MASUKKAN KE DALAM HIDDEN INPUT (Ikut ID dalam screenshot awak)
+            document.getElementById("hiddenVariationName").value = textVariation;
+        }
+
+        if (addonSelect) {
+            var textAddon = addonSelect.options[addonSelect.selectedIndex].text;
+            // MASUKKAN KE DALAM HIDDEN INPUT (Ikut ID dalam screenshot awak)
+            document.getElementById("hiddenAddonName").value = textAddon;
+        }
+    }
+
+    // Jalankan script ini bila dropdown berubah
+    var drop1 = document.getElementById("base_item");
+    var drop2 = document.getElementById("addon_service");
+
+    if(drop1) drop1.addEventListener("change", updateHiddenInputs);
+    if(drop2) drop2.addEventListener("change", updateHiddenInputs);
+
+    // Jalankan sekali masa page baru load (supaya default value masuk)
+    window.addEventListener("load", updateHiddenInputs);
+</script>
 <script src="js/priceCalculator.js"></script>
 
 <%@ include file="footer.jsp" %>
