@@ -25,18 +25,26 @@ public class ProductAdminDao {
 
     public List<Product> getAllProducts() {
         List<Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM products";
+        String sql = "SELECT * FROM products ORDER BY id DESC"; // Added ordering for admin convenience
         try (Connection conn = DbConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
+                // Ensure your Product.java constructor matches these 8 parameters
                 list.add(new Product(
-                        rs.getInt("id"), rs.getString("name"), rs.getString("category"),
-                        rs.getDouble("price"), rs.getString("image"), rs.getInt("quantity"),
-                        rs.getString("description"), rs.getInt("stock")
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getDouble("price"),
+                        rs.getString("image"),
+                        rs.getInt("quantity"),
+                        rs.getString("description"),
+                        rs.getInt("stock")
                 ));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            System.err.println("Error in ProductAdminDao.getAllProducts: " + e.getMessage());
+        }
         return list;
     }
 

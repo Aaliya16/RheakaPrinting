@@ -90,7 +90,7 @@
     <h1 class="welcome-text">Welcome Back!</h1>
 
     <div class="login-card">
-        <form action="LoginServlet" method="post">
+        <form action="<%= request.getContextPath() %>/LoginServlet" method="POST">
             <div class="form-group">
                 <label>Email</label>
                 <div class="input-wrapper">

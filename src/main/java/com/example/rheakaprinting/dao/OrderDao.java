@@ -1,68 +1,63 @@
 package com.example.rheakaprinting.dao;
 
-import com.example.rheakaprinting.model.Cart;
+import com.example.rheakaprinting.model.Order;
+import com.example.rheakaprinting.model.Product;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDao {
-    private Connection con;
-    private String query;
-    private PreparedStatement pst;
-    private ResultSet rs;
 
+    // 1. Isytiharkan variable Connection
+    private Connection con;
+
+    // 2. Buat Constructor untuk terima Connection
     public OrderDao(Connection con) {
         this.con = con;
     }
 
-    public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone, String paymentMethod) {
-        int orderId = 0;
-
+    // Method untuk dapatkan senarai order bagi user tertentu
+    public List<Order> userOrders(int id) {
+        List<Order> list = new ArrayList<>();
         try {
-            // 1. INSERT INTO ORDERS (Table Induk)
-            // Pastikan nama column sama dengan Database! (u_id, total_price, shipping_address)
-            // Saya tambah column 'payment_method' juga (kalau database awak ada)
-            query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date) VALUES (?, ?, ?, ?, 'Processing', NOW())";
+            String query = "SELECT * FROM orders WHERE u_id=? ORDER BY order_id DESC";
+            PreparedStatement pst = this.con.prepareStatement(query);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
 
-            pst = this.con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pst.setInt(1, userId);
-            pst.setDouble(2, totalAmount);
-            pst.setString(3, address);
-            pst.setString(4, phone);
-            // pst.setString(5, paymentMethod); // Uncomment baris ini jika database orders ada column 'payment_method'
+            while (rs.next()) {
+                Order order = new Order();
 
-            int result = pst.executeUpdate();
+                // Ambil data produk menggunakan ProductDao
+                ProductDao productDao = new ProductDao(this.con);
+                int pId = rs.getInt("p_id");
 
-            if (result > 0) {
-                // Dapatkan Order ID yang baru di-generate
-                rs = pst.getGeneratedKeys();
-                if (rs.next()) {
-                    orderId = rs.getInt(1);
+                // ERROR FIXED: Guna method yang betul 'getProductById'
+                Product product = productDao.getProductById(pId);
+
+                order.setOrderId(rs.getInt("order_id"));
+                order.setId(pId);
+
+                // Pastikan product wujud sebelum ambil nama/kategori
+                if(product != null) {
+                    order.setName(product.getName());
+                    order.setCategory(product.getCategory());
+                    // Harga = Harga Unit * Kuantiti Order
+                    order.setPrice(product.getPrice() * rs.getInt("o_quantity"));
                 }
 
-                // 2. INSERT INTO ORDER_ITEMS (Table Barang)
-                // PENTING: Nama table ialah 'order_items' (ikut SQL sebelum ni)
-                // PENTING: Bilangan '?' mesti sama dengan bilangan column (6 column = 6 tanda soal)
-                String query2 = "INSERT INTO order_details (order_id, product_id, quantity, price, variation, addon, design_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                order.setQuantity(rs.getInt("o_quantity"));
+                order.setDate(rs.getString("o_date"));
 
-                PreparedStatement pst2 = this.con.prepareStatement(query2);
+                // ERROR POTENTIAL: Pastikan column 'status' wujud dalam DB orders
+                // Kalau tak wujud, buang baris ni atau tambah column dalam DB
+                // order.setStatus(rs.getString("status"));
 
-                for (Cart c : cartList) {
-                    pst2.setInt(1, orderId);
-                    pst2.setInt(2, c.getId());
-                    pst2.setInt(3, c.getQuantity());
-                    pst2.setDouble(4, c.getPrice() * c.getQuantity()); // Subtotal
-                    pst2.setString(5, c.getVariation());
-                    pst2.setString(6, c.getAddon());
-                    pst2.setString(7, c.getDesignImage());
-
-                    pst2.executeUpdate(); // Jalankan insert untuk setiap barang
-                }
+                list.add(order);
             }
-        } catch (SQLException e) {
-            System.out.println("❌ Error in OrderDao: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return orderId;
+        return list;
     }
 }
