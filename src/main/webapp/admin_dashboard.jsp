@@ -2,18 +2,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.rheakaprinting.model.*, com.example.rheakaprinting.dao.*, com.example.rheakaprinting.model.DbConnection, java.util.*" %>
 <%@ include file="admin-auth-check.jsp" %>
-<<%
+<%
     // Using the new Admin DAOs for live website integration
     UserAdminDao userAdminDao = new UserAdminDao(com.example.rheakaprinting.model.DbConnection.getConnection());
     OrderAdminDao orderAdminDao = new OrderAdminDao(com.example.rheakaprinting.model.DbConnection.getConnection());
 
-    // 1. Get total users directly (fixes the list size error)
     int totalUsers = userAdminDao.getTotalUsers();
-
-    // 2. Fetch admin count if needed for other parts of your UI
     int adminCount = userAdminDao.getAdminCount();
 
-    // 3. Fetch all orders for management summary
     List<com.example.rheakaprinting.model.Order> orderList = orderAdminDao.getAllOrders();
     int totalOrders = (orderList != null) ? orderList.size() : 0;
 
@@ -22,16 +18,13 @@
 
     if (orderList != null) {
         for(com.example.rheakaprinting.model.Order o : orderList) {
-            // Calculates revenue based on customized Price * Quantity
             totalRevenue += (o.getPrice() * o.getQuantity());
-
             if("pending".equalsIgnoreCase(o.getStatus())) {
                 pendingOrders++;
             }
         }
     }
 
-    // 4. Set the adminUser variable for the top bar (matches your auth-check)
     adminUser = (String) session.getAttribute("userName");
 %>
 <!DOCTYPE html>
@@ -45,7 +38,6 @@
         body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #2c3e50; }
         .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
 
-        /* Top Bar - Cleaned: No logout, added admin icon */
         .top-bar {
             background: white; padding: 0 35px; border-radius: 12px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.08); margin-bottom: 30px;
@@ -61,20 +53,27 @@
             font-weight: bold; font-size: 14px;
         }
 
-        /* Dashboard Summary Cards first */
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        /* Modified Summary Cards: Hover animation only, not interactive */
         .stat-card {
             background: white; padding: 15px 25px; height: 110px;
             border-radius: 12px; display: flex; align-items: center; gap: 20px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
+            cursor: default; /* Removes the "hand" cursor */
         }
+
+        .stat-card:hover {
+            transform: translateY(-5px); /* Gentle lift animation */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
         .stat-icon { width: 55px; height: 55px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; }
         .blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .green { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); }
         .pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .yellow { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
 
-        /* Quick Actions Grid - Now under summary */
         .quick-actions-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 20px; margin-bottom: 30px;
@@ -85,7 +84,14 @@
             border: 1px solid #edf2f7; transition: all 0.2s ease; cursor: pointer;
         }
         .action-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: #3498db; }
-        .action-card:active { transform: scale(0.95); }
+
+        /* Animation Classes */
+        @keyframes cardPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.92); }
+            100% { transform: scale(1); }
+        }
+        .animate-pulse { animation: cardPulse 0.3s ease-in-out; }
 
         .action-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .action-info h3 { font-size: 15px; font-weight: 600; color: #1a3a6d; margin: 0; }
@@ -97,7 +103,6 @@
 <%@ include file="admin-sidebar.jsp" %>
 
 <div class="main-content">
-    <%-- Top Bar: Standardized 70px Height --%>
     <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 15px;">
             <i class="fas fa-shield-alt" style="font-size: 24px; color: #3498db;"></i>
@@ -105,7 +110,8 @@
         </div>
         <div style="display:flex; align-items:center; gap:12px;">
             <div style="text-align: right;">
-                <span style="display:block; font-size: 11px; color: #7f8c8d; text-transform: uppercase;">Administrator</span>
+                <%-- Bolded and updated welcome message --%>
+                <span style="display:block; font-size: 11px; color: #2c3e50; text-transform: uppercase; font-weight: 800;">Welcome, Administrator</span>
                 <strong style="font-size: 14px;"><%= adminUser %></strong>
             </div>
             <div class="admin-avatar">
@@ -114,7 +120,8 @@
         </div>
     </div>
 
-    <%-- 1. Dashboard Summary (Moved to top) --%>
+    <%-- 1. Dashboard Summary with Animation --%>
+    <%-- 1. Dashboard Summary (Hover Animation Only) --%>
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-icon blue"><i class="fas fa-shopping-cart"></i></div>
@@ -126,7 +133,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-icon pink"><i class="fas fa-money-bill-wave"></i></div>
-            <div><h3 style="font-size:20px;">RM <%= String.format("%.2f", totalRevenue) %></h3><p>Revenue</p></div>
+            <div><h3 style="font-size:20px;">RM <%= String.format("%.2f", totalRevenue) %></h3><p style="color:#7f8c8d; font-size:13px;">Revenue</p></div>
         </div>
         <div class="stat-card">
             <div class="stat-icon yellow"><i class="fas fa-hourglass-half"></i></div>
@@ -134,37 +141,44 @@
         </div>
     </div>
 
-    <%-- 2. Quick Actions (Now including Users) --%>
     <h2 style="font-size: 18px; margin-bottom: 20px; color: #1a3a6d;">Quick Actions</h2>
-        <%-- Quick Actions Grid --%>
-        <div class="quick-actions-grid">
-            <a href="admin-products.jsp" class="action-card">
-                <div class="action-icon" style="background: #e1f5fe; color: #0288d1;"><i class="fas fa-tag"></i></div>
-                <div class="action-info"><h3>Manage Products</h3><p>Update inventory</p></div>
-            </a>
+    <div class="quick-actions-grid">
+        <a href="javascript:void(0)" onclick="playAnim(this, 'admin-products.jsp')" class="action-card">
+            <div class="action-icon" style="background: #e1f5fe; color: #0288d1;"><i class="fas fa-tag"></i></div>
+            <div class="action-info"><h3>Manage Products</h3><p>Update inventory</p></div>
+        </a>
 
-            <a href="admin-orders.jsp" class="action-card">
-                <div class="action-icon" style="background: #fff3e0; color: #f57c00;"><i class="fas fa-shopping-bag"></i></div>
-                <div class="action-info"><h3>Process Orders</h3><p>Manage sales</p></div>
-            </a>
+        <a href="javascript:void(0)" onclick="playAnim(this, 'admin-orders.jsp')" class="action-card">
+            <div class="action-icon" style="background: #fff3e0; color: #f57c00;"><i class="fas fa-shopping-bag"></i></div>
+            <div class="action-info"><h3>Process Orders</h3><p>Manage sales</p></div>
+        </a>
 
-            <%-- Users Action Restored --%>
-            <a href="admin-users.jsp" class="action-card">
-                <div class="action-icon" style="background: #f0f4ff; color: #5f27cd;"><i class="fas fa-users"></i></div>
-                <div class="action-info"><h3>Manage Users</h3><p>Customer accounts</p></div>
-            </a>
+        <a href="javascript:void(0)" onclick="playAnim(this, 'admin-users.jsp')" class="action-card">
+            <div class="action-icon" style="background: #f0f4ff; color: #5f27cd;"><i class="fas fa-users"></i></div>
+            <div class="action-info"><h3>Manage Users</h3><p>Customer accounts</p></div>
+        </a>
 
-            <a href="admin-contact-messages.jsp" class="action-card">
-                <div class="action-icon" style="background: #e8f5e9; color: #2e7d32;"><i class="fas fa-envelope"></i></div>
-                <div class="action-info"><h3>Messages</h3><p>Customer inquiries</p></div>
-            </a>
+        <a href="javascript:void(0)" onclick="playAnim(this, 'admin-contact-messages.jsp')" class="action-card">
+            <div class="action-icon" style="background: #e8f5e9; color: #2e7d32;"><i class="fas fa-envelope"></i></div>
+            <div class="action-info"><h3>Messages</h3><p>Customer inquiries</p></div>
+        </a>
 
-            <a href="admin-settings.jsp" class="action-card">
-                <div class="action-icon" style="background: #f3e5f5; color: #7b1fa2;"><i class="fas fa-cog"></i></div>
-                <div class="action-info"><h3>System Settings</h3><p>Configure panel</p></div>
-            </a>
-        </div>
+        <a href="javascript:void(0)" onclick="playAnim(this, 'admin-settings.jsp')" class="action-card">
+            <div class="action-icon" style="background: #f3e5f5; color: #7b1fa2;"><i class="fas fa-cog"></i></div>
+            <div class="action-info"><h3>System Settings</h3><p>Configure panel</p></div>
+        </a>
+    </div>
 </div>
+
+<script>
+    function playAnim(element, url) {
+        element.classList.add('animate-pulse');
+        setTimeout(() => {
+            if(url !== '#') window.location.href = url;
+            element.classList.remove('animate-pulse');
+        }, 300);
+    }
+</script>
 
 </body>
 </html>

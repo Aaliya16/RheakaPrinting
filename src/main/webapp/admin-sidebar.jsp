@@ -54,6 +54,13 @@
                 <i class="fas fa-box nav-icon"></i><span>Orders</span>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a href="<%= request.getContextPath() %>/admin-products.jsp" class="nav-link">
+                <i class="fas fa-tags nav-icon"></i><span>Products</span>
+            </a>
+        </li>
+
         <li class="nav-item">
             <a href="<%= request.getContextPath() %>/admin-users.jsp" class="nav-link">
                 <i class="fas fa-users nav-icon"></i><span>Users</span>

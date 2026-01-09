@@ -9,13 +9,12 @@
     String displayName = (adminUser != null && !adminUser.trim().isEmpty()) ? adminUser : "Admin";
     String avatarLetter = displayName.substring(0, 1).toUpperCase();
 
-    // Sample data - replace with ProductDao logic (e.g., productDao.getAllProducts()) when ready
-    String[][] products = {
-            {"14", "Apron Custom", "Apparel", "16.00", "In Stock"},
-            {"4", "Banner & Bunting", "Printing", "18.00", "In Stock"},
-            {"3", "Apparel Printing", "Printing", "11.90", "In Stock"},
-            {"15", "Acrylic Clear", "Signage", "47.00", "Out of Stock"}
-    };
+    ProductDao pDao = new ProductDao(DbConnection.getConnection());
+    List<Product> allProducts = pDao.getAllProducts();
+
+    if (allProducts == null) {
+        allProducts = new ArrayList<>();
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,9 +93,18 @@
         th { text-align: left; padding: 12px 15px; background: #fcfcfc; color: #7f8c8d; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #f1f1f1; }
         td { padding: 15px; border-bottom: 1px solid #f8f9fa; font-size: 14px; }
 
-        .status-badge { padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-        .status-badge.in-stock { background: #d1e7dd; color: #0f5132; }
-        .status-badge.out-stock { background: #f8d7da; color: #842029; }
+        /* Standardized Status Badges */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Matches the (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" logic */
+        .in-stock { background: #d1e7dd; color: #0f5132; }
+        .out-of-stock { background: #f8d7da; color: #842029; }
 
         .btn-action { width: 35px; height: 35px; border-radius: 8px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-edit { background: #f0f7ff; color: var(--accent-blue); }
@@ -175,27 +183,72 @@
             </thead>
             <tbody>
             <%-- Your existing loop here --%>
-            <% for (String[] product : products) {
-                String statusClass = product[4].equalsIgnoreCase("In Stock") ? "in-stock" : "out-stock";
-            %>
-            <tr data-category="<%= product[2] %>" data-status="<%= product[4] %>">
-                <td style="color: #7f8c8d;">#<%= product[0] %></td>
-                <td><strong style="color: var(--primary-dark);"><%= product[1] %></strong></td>
-                <td><%= product[2] %></td>
-                <td style="font-weight: 600;">RM <%= product[3] %></td>
-                <td><span class="status-badge <%= statusClass %>"><%= product[4] %></span></td>
+            <%-- Use this new loop to show live data --%>
+            <%-- Updated loop with Delete Action and Filter Attributes --%>
+            <% for (Product p : allProducts) { %>
+            <tr data-category="<%= p.getCategory() %>"
+                data-status="<%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>">
+                <td>#<%= p.getId() %></td>
+                <td><strong><%= p.getName() %></strong></td>
+                <td><%= p.getCategory() %></td>
+                <td>RM <%= String.format("%.2f", p.getPrice()) %></td>
+                <td>
+        <span class="status-badge <%= (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" %>">
+            <%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>
+        </span>
+                </td>
                 <td style="text-align: right;">
-                    <button class="btn-action btn-edit" onclick="openEditModal('<%= product[0] %>', '<%= product[1] %>', '<%= product[2] %>', '<%= product[3] %>', '10')">
+                    <button class="btn-action btn-edit"
+                            onclick="window.location.href='edit-product.jsp?id=<%= p.getId() %>'">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <a href="DeleteProductServlet?id=<%= product[0] %>" class="btn-action btn-delete" onclick="return confirm('Delete this product?')">
-                        <i class="fas fa-trash"></i>
-                    </a>
+
+                    <button class="btn-action btn-delete"
+                            style="background: #fff5f5; color: #ee5253; margin-left: 5px;"
+                            onclick="confirmDelete('<%= p.getId() %>', '<%= p.getName().replace("'", "\\'") %>')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </td>
             </tr>
             <% } %>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: #1a3a6d;">Add New Product</h2>
+            <span onclick="closeModal('addModal')" style="cursor: pointer; font-size: 24px;">&times;</span>
+        </div>
+        <form action="AddProductServlet" method="POST">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" name="name" required placeholder="e.g. Custom T-Shirt">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" required>
+                    <option value="Apparel">Apparel</option>
+                    <option value="Printing">Printing</option>
+                    <option value="Signage">Signage</option>
+                    <option value="Stationery">Stationery</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price (RM)</label>
+                <input type="number" step="0.01" name="price" required placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Stock Quantity</label>
+                <input type="number" name="quantity" required placeholder="0">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn-add" style="flex: 1; justify-content: center;">Save Product</button>
+                <button type="button" onclick="closeModal('addModal')" style="flex: 1; background: #eee; border: none; border-radius: 8px; cursor: pointer;">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -223,6 +276,28 @@
                 row.style.display = "none";
             }
         });
+    }
+
+    function confirmDelete(productId, productName) {
+        if (confirm("Are you sure you want to delete '" + productName + "'?\nThis action cannot be undone.")) {
+            // Redirect to a servlet that handles the deletion
+            window.location.href = "DeleteProductServlet?id=" + productId;
+        }
+    }
+    function openModal(id) {
+        document.getElementById(id).style.display = "block";
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+    }
+
+    // Close modal if user clicks outside the box
+    window.onclick = function(event) {
+        let modal = document.getElementById('addModal');
+        if (event.target == modal) {
+            closeModal('addModal');
+        }
     }
 </script>
 </body>
