@@ -125,25 +125,6 @@
 
 <%@ include file="admin-sidebar.jsp" %>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <i class="fas fa-shield-alt"></i>
-        <h2>ADMIN PANEL</h2>
-        <p>Rheaka Printing Management</p>
-    </div>
-    <ul class="nav-menu">
-        <li class="nav-item"><a href="admin_dashboard.jsp" class="nav-link"><i class="fas fa-chart-line nav-icon"></i><span>Dashboard</span></a></li>
-        <li class="nav-item"><a href="admin-orders.jsp" class="nav-link active"><i class="fas fa-box nav-icon"></i><span>Orders</span></a></li>
-        <li class="nav-item"><a href="admin-products.jsp" class="nav-link"><i class="fas fa-tags nav-icon"></i><span>Products</span></a></li>
-        <li class="nav-item"><a href="admin-users.jsp" class="nav-link"><i class="fas fa-users nav-icon"></i><span>Users</span></a></li>
-        <li class="nav-item"><a href="admin-messages.jsp" class="nav-link"><i class="fas fa-envelope nav-icon"></i><span>Messages</span></a></li>
-        <li class="nav-item"><a href="admin-settings.jsp" class="nav-link"><i class="fas fa-cog nav-icon"></i><span>Settings</span></a></li>
-        <li class="nav-item" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-            <a href="logout.jsp" class="nav-link" style="color: #e74c3c;"><i class="fas fa-sign-out-alt nav-icon"></i><span>Logout</span></a>
-        </li>
-    </ul>
-</div>
-
 <div class="main-content">
     <div class="top-bar">
         <h1><i class="fas fa-shopping-bag"></i> Orders</h1>
