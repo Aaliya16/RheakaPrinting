@@ -5,7 +5,7 @@
 <%@ page import="java.util.*" %>
 <%@ include file="admin-auth-check.jsp" %>
 <%
-    // Variable 'adminUser' is provided by admin-auth-check.jsp
+    // Logic remains exactly the same
     String displayName = (adminUser != null && !adminUser.trim().isEmpty()) ? adminUser : "Admin";
     String avatarLetter = displayName.substring(0, 1).toUpperCase();
 
@@ -14,6 +14,14 @@
 
     if (allProducts == null) {
         allProducts = new ArrayList<>();
+    }
+
+    int totalProducts = allProducts.size();
+    int outOfStock = 0;
+    int lowStock = 0;
+    for (Product p : allProducts) {
+        if (p.getQuantity() <= 0) outOfStock++;
+        else if (p.getQuantity() < 5) lowStock++;
     }
 %>
 <!DOCTYPE html>
@@ -26,88 +34,120 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary-dark: #1a3a6d;
-            --accent-blue: #3498db;
-            --success-green: #2ecc71;
+            --brand-color: #6c5ce7; /* Single professional purple */
+            --brand-light: rgba(108, 92, 231, 0.1);
+            --bg-body: #f1f2f6;
+            --text-main: #2d3436;
             --danger-red: #ee5253;
-            --bg-body: #f8f9fc;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: #333; }
 
-        .main-content {
-            margin-left: 260px;
-            padding: 30px;
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             min-height: 100vh;
-            background: #f5f6fa;
+            color: var(--text-main);
         }
 
+        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
+
+        /* Fixed Icon Sizes to match Dashboard exactly */
         .top-bar {
             background: white;
-            padding: 0 35px;
-            border-radius: 12px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 20px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px; /* Matches dashboard */
-        }
-        .top-bar h1 {
-            font-weight: 600;
-            font-size: 24px;
-            color: #1a3a6d;
-            margin: 0;
         }
 
-        .content-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-icon-box {
+            width: 50px; height: 50px; min-width: 50px;
+            background: var(--brand-color);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            color: white;
         }
-        .header-title { display: flex; align-items: center; gap: 12px; color: var(--primary-dark); }
+        .header-icon-box i { font-size: 22px; } /* Standardized icon size */
 
-        .admin-profile { display: flex; align-items: center; gap: 15px; }
+        .top-bar h1 { font-size: 24px; color: var(--text-main); margin: 0; line-height: 1.2; }
+
+        .search-container {
+            background: #f1f2f6; border-radius: 12px; padding: 10px 20px;
+            display: flex; align-items: center; gap: 10px; width: 350px;
+        }
+        .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
+
+        .admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
-            width: 35px; height: 35px; background: #5f27cd; color: white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--brand-color); color: white;
+            display: flex; align-items: center; justify-content: center;
             font-weight: bold; font-size: 14px;
         }
 
+        /* Monochrome Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 30px; }
+        .stat-card {
+            background: white; padding: 25px; border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-val { font-size: 32px; font-weight: 800; color: var(--text-main); }
+        .stat-label { font-size: 11px; color: #b2bec3; text-transform: uppercase; font-weight: 700; margin-top: 5px; }
+
+        .stat-icon-mini {
+            width: 45px; height: 45px; border-radius: 12px;
+            background: var(--brand-light);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--brand-color); font-size: 18px;
+        }
+
+        .content-card {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04); min-height: 400px;
+        }
+
         .btn-add {
-            background-color: var(--success-green); color: white; border: none; padding: 10px 20px;
-            border-radius: 8px; font-weight: 600; cursor: pointer; display: flex;
+            background-color: var(--brand-color); color: white; border: none; padding: 10px 25px;
+            border-radius: 12px; font-weight: 600; cursor: pointer; display: flex;
             align-items: center; gap: 10px; transition: 0.2s;
         }
-        .btn-add:hover { background-color: #27ae60; transform: translateY(-2px); }
-
-        .search-input { width: 100%; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none; }
+        .btn-add:hover { opacity: 0.9; transform: translateY(-2px); }
 
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px 15px; background: #fcfcfc; color: #7f8c8d; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #f1f1f1; }
-        td { padding: 15px; border-bottom: 1px solid #f8f9fa; font-size: 14px; }
+        th { text-align: left; padding: 15px; color: #b2bec3; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #f1f2f6; }
+        td { padding: 20px 15px; border-bottom: 1px solid #f1f2f6; font-size: 14px; }
 
         .status-badge {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
+            padding: 6px 12px; border-radius: 8px; font-size: 11px;
+            font-weight: 700; text-transform: uppercase;
         }
         .in-stock { background: #d1e7dd; color: #0f5132; }
         .out-of-stock { background: #f8d7da; color: #842029; }
 
-        .btn-action { width: 35px; height: 35px; border-radius: 8px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
-        .btn-edit { background: #f0f7ff; color: var(--accent-blue); }
+        .btn-action { width: 35px; height: 35px; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-edit { background: var(--brand-light); color: var(--brand-color); }
         .btn-delete { background: #fff5f5; color: var(--danger-red); margin-left: 5px; }
         .btn-action:hover { transform: scale(1.1); }
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 15px; width: 450px; animation: slideDown 0.3s ease; }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 25px; width: 450px; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #b2bec3; text-transform: uppercase;}
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #f1f2f6; background: #f1f2f6; border-radius: 12px; outline: none;}
+
+        /* Back Button */
+        .back-container { display: flex; justify-content: flex-end; margin-top: 25px; }
+        .btn-back {
+            display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+            background: white; color: var(--brand-color); border: 2px solid var(--brand-color);
+            border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--brand-color); color: white; }
     </style>
 </head>
 <body>
@@ -115,25 +155,61 @@
 <%@ include file="admin-sidebar.jsp" %>
 
 <div class="main-content">
+    <%-- Standardized Top Bar --%>
     <div class="top-bar">
-        <div class="header-title">
-            <i class="fas fa-tag" style="font-size: 24px; color: var(--accent-blue);"></i>
-            <h2>Products Management</h2>
+        <div class="header-left">
+            <div class="header-icon-box"><i class="fas fa-tag"></i></div>
+            <h1>Products<br><span style="font-weight: 400; font-size: 22px;">Management</span></h1>
         </div>
+
+        <div class="search-container">
+            <i class="fas fa-search" style="color: var(--brand-color);"></i>
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search products...">
+        </div>
+
+        <%-- Profile section with "Admin" text removed --%>
         <div class="admin-profile">
-            <strong style="font-size: 14px;"><%= displayName %></strong>
-            <div class="avatar-circle"><%= avatarLetter %></div>
+            <div class="avatar-circle">
+                <%= (displayName != null && !displayName.isEmpty()) ? displayName.substring(0, 1).toUpperCase() : "A" %>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div>
+                <div class="stat-val"><%= totalProducts %></div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-boxes"></i></div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-val"><%= outOfStock %></div>
+                <div class="stat-label">Out of Stock</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-exclamation-triangle"></i></div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-val"><%= lowStock %></div>
+                <div class="stat-label">Low Stock</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-chart-line"></i></div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-val">Live</div>
+                <div class="stat-label">Sync Status</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-sync"></i></div>
         </div>
     </div>
 
     <div class="content-card">
-        <div class="filter-action-bar" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;">
+        <div class="filter-action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div style="display: flex; gap: 15px;">
-                <input type="text" class="search-input" id="searchInput"
-                       placeholder="Search products..." onkeyup="filterTable()"
-                       style="flex: 2;">
-
-                <select id="categoryFilter" onchange="filterTable()" style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer;">
+                <select id="categoryFilter" onchange="filterTable()" style="padding: 10px 20px; border: none; border-radius: 12px; background: #f1f2f6; cursor: pointer; outline: none; font-size: 13px;">
                     <option value="">All Categories</option>
                     <option value="Apparel">Apparel</option>
                     <option value="Printing">Printing</option>
@@ -141,25 +217,23 @@
                     <option value="Stationery">Stationery</option>
                 </select>
 
-                <select id="statusFilter" onchange="filterTable()" style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer;">
+                <select id="statusFilter" onchange="filterTable()" style="padding: 10px 20px; border: none; border-radius: 12px; background: #f1f2f6; cursor: pointer; outline: none; font-size: 13px;">
                     <option value="">All Status</option>
                     <option value="In Stock">In Stock</option>
                     <option value="Out of Stock">Out of Stock</option>
                 </select>
             </div>
 
-            <div style="display: flex; justify-content: flex-start;">
-                <button type="button" class="btn-add" onclick="openAddModal()">
-                    <i class="fas fa-plus"></i> Add New Product
-                </button>
-            </div>
+            <button type="button" class="btn-add" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Add New Product
+            </button>
         </div>
 
         <table id="productsTable">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Product Name</th>
+                <th>Product Details</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Status</th>
@@ -172,7 +246,7 @@
                 <td>#<%= p.getId() %></td>
                 <td><strong><%= p.getName() %></strong></td>
                 <td><%= p.getCategory() %></td>
-                <td>RM <%= String.format("%.2f", p.getPrice()) %></td>
+                <td style="font-weight: 700;">RM <%= String.format("%.2f", p.getPrice()) %></td>
                 <td>
                     <span class="status-badge <%= (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" %>">
                         <%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>
@@ -192,14 +266,21 @@
             <% } %>
             </tbody>
         </table>
+
+        <%-- Standardized Back Button --%>
+        <div class="back-container">
+            <button onclick="window.history.back()" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+        </div>
     </div>
 </div>
 
 <div id="productModal" class="modal">
     <div class="modal-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 id="modalTitle">Add New Product</h2>
-            <span onclick="closeModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h2 id="modalTitle" style="color: var(--brand-color);">Add New Product</h2>
+            <span onclick="closeModal()" style="cursor: pointer; font-size: 24px; color: #b2bec3;">&times;</span>
         </div>
         <form action="AddProductServlet" method="POST" id="productForm">
             <input type="hidden" name="id" id="prodId">
@@ -224,9 +305,9 @@
                 <label>Stock Quantity</label>
                 <input type="number" name="quantity" id="prodQuantity" required>
             </div>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
                 <button type="submit" class="btn-add" id="submitBtn" style="flex: 1; justify-content: center;">Save Product</button>
-                <button type="button" onclick="closeModal()" style="flex: 1; background: #eee; border: none; border-radius: 8px; cursor: pointer;">Cancel</button>
+                <button type="button" onclick="closeModal()" style="flex: 1; background: #f1f2f6; border: none; border-radius: 12px; cursor: pointer; color: #636e72; font-weight: 600;">Cancel</button>
             </div>
         </form>
     </div>

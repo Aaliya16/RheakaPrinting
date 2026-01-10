@@ -17,7 +17,8 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        UserDAO dao = new UserDAO();
+        // Pass the database connection into the constructor
+        UserDAO dao = new UserDAO(com.example.rheakaprinting.model.DbConnection.getConnection());
         User validUser = dao.authenticate(email, password);
 
         if (validUser != null) {
