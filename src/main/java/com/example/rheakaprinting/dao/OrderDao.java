@@ -111,24 +111,27 @@ public class OrderDao {
         return result;
     }
     // Update this in your OrderDao.java
-    public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone, String paymentMethod) {
+    public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone, String paymentMethod, String fullName, String email) {
         int orderId = 0;
         try {
-            // Added payment_method to the SQL query
-            String query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date, payment_method) VALUES (?, ?, ?, ?, 'Pending', NOW(), ?)";
+            // 1. Masukkan ke table 'orders'
+            // Pastikan table 'orders' anda mempunyai column: payment_method, full_name, email
+            String query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date, payment_method, full_name, email) VALUES (?, ?, ?, ?, 'Pending', NOW(), ?, ?, ?)";
 
             PreparedStatement pst = this.con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pst.setInt(1, userId);
             pst.setDouble(2, totalAmount);
             pst.setString(3, address);
             pst.setString(4, phone);
-            pst.setString(5, paymentMethod); // This is the new 5th parameter for the SQL
+            pst.setString(5, paymentMethod);
+            pst.setString(6, fullName);
+            pst.setString(7, email);
 
             if (pst.executeUpdate() > 0) {
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) orderId = rs.getInt(1);
 
-                // Insert into order_details (Logic remains the same)
+                // 2. Masukkan item ke table 'order_details'
                 String query2 = "INSERT INTO order_details (order_id, product_id, quantity, price, variation, addon, design_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pst2 = this.con.prepareStatement(query2);
                 for (Cart c : cartList) {

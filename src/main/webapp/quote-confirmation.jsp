@@ -1,3 +1,6 @@
+<%--
+    Fail: quote-confirmation.jsp
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String quoteName = (String) session.getAttribute("quote_name");
@@ -17,18 +20,17 @@
     <title>Quote Submitted - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        :root {
-            --mongoose: #baa987;
-        }
-
         body {
-            background-color: #f5f5f5;
+            /* Tema gradient biru Steel Blue */
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            margin: 0;
         }
 
         .confirmation-container {
             max-width: 700px;
-            margin: 80px auto;
+            margin: 50px auto;
             padding: 20px;
             width: 90%;
         }
@@ -37,29 +39,26 @@
             background: #fff;
             padding: 50px;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             text-align: center;
         }
 
         .success-icon {
             width: 80px;
             height: 80px;
-            background: #4CAF50;
+            background: #4CAF50; /* Kekalkan hijau untuk simbol kejayaan */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 30px;
             animation: scaleIn 0.5s ease-out;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
         }
 
         @keyframes scaleIn {
-            from {
-                transform: scale(0);
-            }
-            to {
-                transform: scale(1);
-            }
+            from { transform: scale(0); }
+            to { transform: scale(1); }
         }
 
         .success-icon svg {
@@ -74,6 +73,7 @@
             color: #333;
             margin-bottom: 15px;
             font-size: 32px;
+            font-weight: 700;
         }
 
         .subtitle {
@@ -83,23 +83,26 @@
             line-height: 1.6;
         }
 
+        /* --- KOTAK RUJUKAN (Steel Blue) --- */
         .reference-box {
-            background: var(--mongoose);
+            background: #4682B4;
             color: white;
-            padding: 20px 30px;
-            border-radius: 10px;
+            padding: 15px 30px;
+            border-radius: 25px;
             display: inline-block;
-            margin: 30px 0;
+            margin: 20px 0;
             font-weight: bold;
             font-size: 18px;
+            box-shadow: 0 4px 10px rgba(70, 130, 180, 0.3);
         }
 
         .quote-details {
             background: #f8f9fa;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 12px;
             margin: 30px 0;
             text-align: left;
+            border: 1px solid #eee;
         }
 
         .detail-row {
@@ -123,12 +126,13 @@
             font-weight: 600;
         }
 
+        /* --- INFO BOX (Biru Muda) --- */
         .info-box {
             background: #e3f2fd;
-            border-left: 4px solid #2196F3;
+            border-left: 5px solid #4682B4;
             padding: 20px;
             margin: 30px 0;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: left;
         }
 
@@ -144,44 +148,7 @@
             line-height: 1.6;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 40px;
-        }
-
-        .btn {
-            padding: 15px 35px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: var(--mongoose);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #a49374;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--mongoose);
-            border: 2px solid var(--mongoose);
-        }
-
-        .btn-secondary:hover {
-            background: var(--mongoose);
-            color: white;
-        }
-
+        /* --- TIMELINE SECTION --- */
         .timeline {
             margin: 40px 0;
             text-align: left;
@@ -189,23 +156,25 @@
 
         .timeline h3 {
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: center;
+            font-weight: 700;
         }
 
         .timeline-step {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding: 15px;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 1px solid #eee;
         }
 
         .step-number {
-            width: 40px;
-            height: 40px;
-            background: var(--mongoose);
+            width: 35px;
+            height: 35px;
+            background: #4682B4;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -213,10 +182,11 @@
             justify-content: center;
             font-weight: bold;
             margin-right: 15px;
+            flex-shrink: 0;
         }
 
         .step-content h4 {
-            margin: 0 0 5px 0;
+            margin: 0 0 3px 0;
             color: #333;
             font-size: 16px;
         }
@@ -227,18 +197,55 @@
             font-size: 14px;
         }
 
+        /* --- ACTION BUTTONS (Steel Blue Theme) --- */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn-blue {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #4682B4;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-blue:hover {
+            background: #357ABD;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+            color: white;
+        }
+
+        .btn-outline-blue {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #4682B4;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #4682B4;
+            font-size: 16px;
+        }
+
+        .btn-outline-blue:hover {
+            background: #4682B4;
+            color: white;
+        }
+
         @media (max-width: 768px) {
-            .confirmation-card {
-                padding: 30px 20px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
+            .action-buttons { flex-direction: column; }
+            .btn-blue, .btn-outline-blue { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -281,7 +288,7 @@
 
         <div class="info-box">
             <h3>📧 What Happens Next?</h3>
-            <p>A confirmation email has been sent to <%= quoteEmail != null ? quoteEmail : "your email address" %>. Our team will review your requirements and send you a detailed quote within 24 hours.</p>
+            <p>Our team will review your requirements and send you a detailed quote to <strong><%= quoteEmail != null ? quoteEmail : "your email" %></strong> within 24 hours.</p>
         </div>
 
         <div class="timeline">
@@ -291,7 +298,7 @@
                 <div class="step-number">1</div>
                 <div class="step-content">
                     <h4>Request Received</h4>
-                    <p>Your quote request has been submitted successfully</p>
+                    <p>Your request is now in our system</p>
                 </div>
             </div>
 
@@ -299,34 +306,27 @@
                 <div class="step-number">2</div>
                 <div class="step-content">
                     <h4>Review & Analysis</h4>
-                    <p>Our team reviews your requirements (1-2 hours)</p>
+                    <p>Our team calculates the best pricing for you</p>
                 </div>
             </div>
 
             <div class="timeline-step">
                 <div class="step-number">3</div>
                 <div class="step-content">
-                    <h4>Quote Preparation</h4>
-                    <p>We prepare a detailed quotation (12-24 hours)</p>
-                </div>
-            </div>
-
-            <div class="timeline-step">
-                <div class="step-number">4</div>
-                <div class="step-content">
                     <h4>Quote Sent</h4>
-                    <p>You receive the quote via email</p>
+                    <p>You receive the final quotation via email</p>
                 </div>
             </div>
         </div>
 
         <div class="action-buttons">
-            <a href="index.jsp" class="btn btn-primary">Back to Home</a>
-            <a href="quote.jsp" class="btn btn-secondary">Submit Another Quote</a>
+            <a href="index.jsp" class="btn-blue">Back to Home</a>
+            <a href="quote.jsp" class="btn-outline-blue">Submit Another Quote</a>
         </div>
 
-        <p style="margin-top: 30px; color: #999; font-size: 14px;">
-            Need urgent assistance? Contact us at <a href="tel:+60123456789" style="color: var(--mongoose); font-weight: 600;">+60 12-345 6789</a>
+        <p style="margin-top: 30px; color: #777; font-size: 14px;">
+            Need urgent assistance? <br>
+            Contact us at <a href="tel:+60123456789" style="color: #4682B4; font-weight: 600; text-decoration:none;">+60 12-345 6789</a>
         </p>
     </div>
 </div>

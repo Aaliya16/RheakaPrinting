@@ -61,8 +61,10 @@ function updatePrice() {
     const quantity = parseInt(qtyInput?.value) || 1;
 
     // 5. Final Calculation Formula
-    // Total = ((Base Item + Size + Nametag) * Qty) + Fixed Setup Fee
-    const total = ((unitPrice + sizeUpgrade + nametagPrice) * quantity) + setupFee;
+    const shippingFee = 10.0; // Tetapkan kos shipping di sini
+
+    // Total = ((Base Item + Size + Nametag) * Qty) + Setup Fee + Shipping Fee
+    const total = ((unitPrice + sizeUpgrade + nametagPrice) * quantity) + setupFee + shippingFee;
 
     // 6. Update UI Elements
     const priceText = document.getElementById('totalPrice');

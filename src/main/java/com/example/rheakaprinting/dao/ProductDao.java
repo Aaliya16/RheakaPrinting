@@ -151,6 +151,25 @@ public class ProductDao {
         }
         return result;
     }
+
+    public boolean reduceStock(int productId, int quantityPurchased) {
+        boolean result = false;
+        try {
+            // Guna 'stock_quantity' mengikut column database anda
+            String query = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
+            PreparedStatement pst = this.con.prepareStatement(query);
+            pst.setInt(1, quantityPurchased);
+            pst.setInt(2, productId);
+            pst.setInt(3, quantityPurchased); // Pastikan stok cukup sebelum ditolak
+
+            int row = pst.executeUpdate();
+            if (row > 0) result = true;
+        } catch (SQLException e) {
+            System.err.println("Error in reduceStock: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
     // Fetch one product by ID
     public Product getSingleProduct(int id) {
         Product p = null;
@@ -164,8 +183,10 @@ public class ProductDao {
                 p.setId(rs.getInt("id"));
                 p.setName(rs.getString("name"));
                 p.setPrice(rs.getDouble("price"));
-                p.setQuantity(rs.getInt("quantity"));
                 p.setCategory(rs.getString("category"));
+                int dbStock = rs.getInt("stock_quantity");
+                p.setStock(dbStock);
+                p.setQuantity(dbStock);
             }
         } catch (Exception e) { e.printStackTrace(); }
         return p;
@@ -187,4 +208,5 @@ public class ProductDao {
         return result;
     }
 }
+
 

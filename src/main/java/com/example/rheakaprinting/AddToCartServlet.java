@@ -1,5 +1,9 @@
 package com.example.rheakaprinting;
 
+import com.example.rheakaprinting.dao.ProductDao;
+import com.example.rheakaprinting.model.DbConnection;
+import com.example.rheakaprinting.model.Product;
+import com.example.rheakaprinting.model.User;
 import com.example.rheakaprinting.model.Cart;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -24,6 +28,20 @@ public class AddToCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
+        HttpSession session = request.getSession();
+
+        User auth = (User) session.getAttribute("auth");
+        if (auth == null) {
+            auth = (User) session.getAttribute("currentUser");
+        }
+
+        // Jika pengguna belum login, hantar ke login.jsp dengan mesej amaran
+        if (auth == null) {
+            System.out.println("❌ Unauthorized access: User must login to add to cart");
+            response.sendRedirect("login.jsp?msg=notLoggedIn");
+            return; // PENTING: Mesti ada return supaya kod seterusnya tidak dijalankan
+        }
 
         try (PrintWriter out = response.getWriter()) {
 
@@ -121,46 +139,55 @@ public class AddToCartServlet extends HttpServlet {
             System.out.println("Final Addon: " + finalAddon);
 
             // --- 3. CREATE CART OBJECT ---
+            ProductDao pDao = new ProductDao(DbConnection.getConnection());
+            Product product = pDao.getSingleProduct(id);
+
             Cart cm = new Cart();
             cm.setId(id);
+            cm.setName(product.getName());   // TAMBAH INI supaya tak keluar 'null'
+            cm.setImage(product.getImage()); // TAMBAH INI supaya gambar keluar
             cm.setQuantity(quantity);
             cm.setPrice(unitPrice);
-
-            // ✅ PENTING: Set Variation & Addon masuk ke object
+            cm.setStock(product.getStock()); // Ini untuk fungsi butang +/- anda
             cm.setVariation(finalVariation);
             cm.setAddon(finalAddon);
 
-            // --- 4. SESSION CART LOGIC ---
-            HttpSession session = request.getSession();
+            // --- 4. DATABASE & SESSION LOGIC ---
+
+            // A. SIMPAN KE DATABASE (Supaya barang tak hilang bila logout)
+            // Sila pastikan anda sudah import com.example.rheakaprinting.dao.CartDao;
+            try {
+                com.example.rheakaprinting.dao.CartDao cartDao = new com.example.rheakaprinting.dao.CartDao(DbConnection.getConnection());
+                cartDao.insertCartItem(cm, auth.getUserId());
+                System.out.println("✅ Item disimpan ke Database untuk User: " + auth.getUserId());
+            } catch (Exception e) {
+                System.out.println("⚠️ Gagal simpan ke DB, tapi teruskan ke Session: " + e.getMessage());
+            }
+
+            // B. KEMASKINI SESSION (Untuk paparan serta-merta di cart.jsp)
             ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
 
             if (cart_list == null) {
                 cart_list = new ArrayList<>();
                 cart_list.add(cm);
-                session.setAttribute("cart-list", cart_list);
-                System.out.println("✅ New cart created");
+                System.out.println("✅ New cart created in session");
             } else {
                 boolean exist = false;
-
                 for (Cart c : cart_list) {
                     if (c.getId() == id && c.getVariation().equals(finalVariation)) {
                         exist = true;
                         c.setQuantity(c.getQuantity() + quantity);
-                        System.out.println("✅ Quantity updated for existing item");
+                        System.out.println("✅ Quantity updated in session");
                         break;
                     }
                 }
-
                 if (!exist) {
                     cart_list.add(cm);
-                    System.out.println("✅ Added new unique item to cart");
+                    System.out.println("✅ Added new item to session cart");
                 }
             }
 
-            // Update session
             session.setAttribute("cart-list", cart_list);
-
-            // Redirect to cart page
             response.sendRedirect("cart.jsp");
 
         } catch (NumberFormatException e) {
@@ -178,4 +205,5 @@ public class AddToCartServlet extends HttpServlet {
         response.sendRedirect("products.jsp");
     }
 }
+
 

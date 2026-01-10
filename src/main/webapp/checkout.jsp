@@ -7,12 +7,15 @@
     DecimalFormat dcf = new DecimalFormat("#.##");
     ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
     double total = 0.0;
+    double shipping = 10.0;
 
     if (cart_list != null) {
         for (Cart c : cart_list) {
             total += c.getPrice() * c.getQuantity();
         }
     }
+
+    double grandTotal = total + shipping;
 %>
 
 <!DOCTYPE html>
@@ -23,13 +26,11 @@
     <title>Checkout - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        :root {
-            --mongoose: #baa987;
-        }
-
         body {
-            background-color: #f5f5f5;
+            /* Tema gradient biru Steel Blue */
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
         }
 
         .checkout-container {
@@ -49,13 +50,14 @@
             background: #fff;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         h2 {
             color: #333;
             margin-bottom: 20px;
             font-size: 24px;
+            font-weight: 700;
         }
 
         .form-group {
@@ -75,8 +77,17 @@
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4682B4;
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.1);
         }
 
         .form-group textarea {
@@ -90,7 +101,6 @@
             gap: 15px;
         }
 
-        /* Order Summary */
         .order-summary {
             position: sticky;
             top: 20px;
@@ -103,57 +113,57 @@
             border-bottom: 1px solid #eee;
         }
 
-        .summary-item span:first-child {
-            color: #666;
-        }
-
-        .summary-item span:last-child {
-            font-weight: 600;
-        }
-
+        /* --- GARISAN TOTAL WARNA BIRU --- */
         .summary-total {
             display: flex;
             justify-content: space-between;
             padding: 20px 0;
             font-size: 20px;
             font-weight: bold;
-            border-top: 2px solid var(--mongoose);
+            border-top: 2px solid #4682B4;
             margin-top: 10px;
         }
 
         .summary-total span:last-child {
-            color: var(--mongoose);
+            color: #4682B4;
             font-size: 24px;
         }
 
+        /* --- BUTANG PLACE ORDER (Blue Theme) --- */
         .place-order-btn {
+            display: inline-block;
             width: 100%;
-            background: var(--mongoose);
+            padding: 15px;
+            background: #4682B4;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
             margin-top: 20px;
         }
 
         .place-order-btn:hover {
-            background: #a49374;
+            background: #357ABD;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
         }
 
+        /* --- BACK TO CART LINK --- */
         .back-to-cart {
             display: inline-block;
-            color: var(--mongoose);
+            color: white;
             text-decoration: none;
             margin-bottom: 20px;
             font-weight: 600;
+            transition: 0.3s;
         }
 
         .back-to-cart:hover {
             text-decoration: underline;
+            color: #f0f0f0;
         }
 
         .cart-items-list {
@@ -167,37 +177,15 @@
             border-bottom: 1px solid #eee;
         }
 
-        .item-name {
-            flex: 1;
-            color: #333;
-        }
-
-        .item-qty {
-            color: #666;
-            margin: 0 10px;
-        }
-
-        .item-price {
-            font-weight: 600;
-            color: #333;
-        }
+        .item-name { flex: 1; color: #333; }
+        .item-price { font-weight: 600; }
 
         @media (max-width: 768px) {
             .checkout-grid {
                 grid-template-columns: 1fr;
             }
-
-            .order-summary {
-                position: static;
-            }
-
             .form-row {
                 grid-template-columns: 1fr;
-            }
-
-            .back-link {
-                text-align: center;
-                margin-top: 30px;
             }
         }
     </style>
@@ -213,28 +201,27 @@
     %>
 
     <div class="checkout-grid">
-        <!-- Billing Information -->
         <div class="checkout-card">
             <h2>Billing Information</h2>
             <form action="payment.jsp" method="post" id="checkoutForm">
                 <div class="form-group">
                     <label for="fullName">Full Name *</label>
-                    <input type="text" id="fullName" name="fullName" required>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter recipient's name" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email">
+                    <input type="email" id="email" name="email" placeholder="recipient@example.com" required>
                 </div>
 
                 <div class="form-group">
                     <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" name="phone" required>
+                    <input type="tel" id="phone" name="phone" placeholder="+60 12-345 6789" required>
                 </div>
 
                 <div class="form-group">
                     <label for="address">Street Address *</label>
-                    <textarea id="address" name="address" required></textarea>
+                    <textarea id="address" name="address" placeholder="No. House, Street Name" required></textarea>
                 </div>
 
                 <div class="form-row">
@@ -279,7 +266,6 @@
             </form>
         </div>
 
-        <!-- Order Summary -->
         <div class="checkout-card order-summary">
             <h2>Order Summary</h2>
 
@@ -290,8 +276,8 @@
                 %>
                 <div class="cart-item-row">
                     <span class="item-name"><%= c.getName() != null ? c.getName() : "Product #" + c.getId() %></span>
-                    <span class="item-qty">x <%= c.getQuantity() %></span>
                     <span class="item-price">RM <%= dcf.format(itemTotal) %></span>
+                    <span class="item-qty">x <%= c.getQuantity() %></span>
                 </div>
                 <%
                     }
@@ -305,12 +291,12 @@
 
             <div class="summary-item">
                 <span>Shipping</span>
-                <span>Free</span>
+                <span>RM <%= dcf.format(shipping) %></span>
             </div>
 
             <div class="summary-total">
                 <span>Total</span>
-                <span>RM <%= dcf.format(total) %></span>
+                <span>RM <%= dcf.format(grandTotal) %></span>
             </div>
 
             <button type="submit" form="checkoutForm" class="place-order-btn">Place Order</button>
@@ -324,7 +310,7 @@
     <div class="checkout-card" style="text-align: center; padding: 80px 20px;">
         <h2>Your cart is empty!</h2>
         <p style="color: #666; margin: 20px 0;">Add some products to your cart before checking out.</p>
-        <a href="products.jsp" style="display: inline-block; background: var(--mongoose); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: 600;">Start Shopping</a>
+        <a href="products.jsp" class="place-order-btn" style="text-decoration:none;">Start Shopping</a>
     </div>
 
     <% } %>
@@ -333,3 +319,4 @@
 <%@ include file="footer.jsp" %>
 </body>
 </html>
+

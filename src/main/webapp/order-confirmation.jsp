@@ -2,23 +2,17 @@
 <%@ page import="java.text.DecimalFormat" %>
 
 <%
-    // 1. Setup Formatter (Guna "0.00" supaya nampak macam duit)
+    // 1. Setup Formatter
     DecimalFormat dcf = new DecimalFormat("#,##0.00");
 
-    // 2. Ambil data dari Session (yang diset oleh PlaceOrderServlet)
+    // 2. Ambil data dari Session
     String orderName = (String) session.getAttribute("order_name");
-
-    // Guna Integer untuk ID (sebab dalam Servlet kita set int)
     Integer orderId = (Integer) session.getAttribute("order_id");
-
     Double orderTotal = (Double) session.getAttribute("order_total");
     Integer orderItems = (Integer) session.getAttribute("order_items");
-
-    // Data Baru (Address & Payment)
     String orderAddress = (String) session.getAttribute("order_address");
     String orderPayment = (String) session.getAttribute("order_payment");
 
-    // Fallback kalau null (elak error kalau user refresh page lepas session clear)
     String displayId = (orderId != null) ? String.valueOf(orderId) : "---";
 %>
 
@@ -30,8 +24,13 @@
     <title>Order Confirmation - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        :root { --mongoose: #baa987; }
-        body { background-color: #f5f5f5; font-family: 'Roboto', sans-serif; }
+        body {
+            /* Tema gradient biru Steel Blue */
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
 
         .confirmation-container {
             max-width: 700px;
@@ -42,67 +41,118 @@
         .confirmation-card {
             background: #fff;
             padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             text-align: center;
         }
         .success-icon {
             width: 80px; height: 80px; background: #4CAF50;
             border-radius: 50%; display: flex; align-items: center;
             justify-content: center; margin: 0 auto 30px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
         }
         .success-icon svg {
             width: 50px; height: 50px; stroke: white; stroke-width: 3; fill: none;
         }
-        h1 { color: #333; margin-bottom: 10px; font-size: 32px; }
+        h1 { color: #333; margin-bottom: 10px; font-size: 32px; font-weight: 700; }
         .subtitle { color: #666; font-size: 16px; margin-bottom: 40px; }
 
-        .order-number {
-            background: var(--mongoose); color: white;
-            padding: 15px 25px; border-radius: 5px;
-            display: inline-block; margin: 20px 0;
-            font-weight: bold; font-size: 18px;
+        /* --- KOTAK NOMBOR ORDER (Steel Blue) --- */
+        .order-number-box {
+            background: #4682B4;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(70, 130, 180, 0.3);
         }
 
         .order-details {
-            background: #f8f9fa; padding: 30px;
-            border-radius: 8px; margin: 30px 0; text-align: left;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: left;
+            border: 1px solid #eee;
         }
         .order-detail-row {
-            display: flex; justify-content: space-between;
-            padding: 12px 0; border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
         }
         .order-detail-row span:first-child { color: #666; font-weight: 500; }
         .order-detail-row span:last-child { color: #333; font-weight: 600; text-align: right; max-width: 60%; }
 
+        /* --- GARISAN TOTAL (Steel Blue) --- */
         .order-detail-row:last-child {
-            border-bottom: none; padding-top: 20px; margin-top: 10px;
-            border-top: 2px solid var(--mongoose);
-            font-weight: bold; font-size: 18px;
+            border-bottom: none;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid #4682B4;
+            font-weight: bold;
+            font-size: 18px;
         }
         .order-detail-row:last-child span:last-child {
-            color: var(--mongoose); font-size: 20px;
+            color: #4682B4;
+            font-size: 22px;
         }
 
         .action-buttons {
-            display: flex; gap: 15px; justify-content: center; margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
         }
-        .btn {
-            padding: 12px 30px; border-radius: 5px; text-decoration: none;
-            font-weight: 600; font-size: 16px; transition: all 0.3s; display: inline-block;
+
+        /* --- BUTANG UTAMA (Steel Blue Style) --- */
+        .btn-blue {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #4682B4;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
         }
-        .btn-primary { background: var(--mongoose); color: white; border: none; }
-        .btn-primary:hover { background: #a49374; }
-        .btn-secondary { background: white; color: var(--mongoose); border: 2px solid var(--mongoose); }
-        .btn-secondary:hover { background: var(--mongoose); color: white; }
+        .btn-blue:hover {
+            background: #357ABD;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+            color: white;
+        }
+
+        /* --- BUTANG OUTLINE (Border Steel Blue) --- */
+        .btn-outline-blue {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #4682B4;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #4682B4;
+            font-size: 16px;
+        }
+        .btn-outline-blue:hover {
+            background: #4682B4;
+            color: white;
+        }
 
         @media (max-width: 768px) {
             .action-buttons { flex-direction: column; }
-            .btn { width: 100%; }
+            .btn-blue, .btn-outline-blue { width: 100%; text-align: center; }
         }
     </style>
 </head>
-<body style="background-color: lightsteelblue !important;">
+<body>
 
 <%@ include file="header.jsp" %>
 
@@ -117,7 +167,7 @@
         <h1>Order Confirmed!</h1>
         <p class="subtitle">Thank you for your order, <%= orderName != null ? orderName : "Customer" %>!</p>
 
-        <div class="order-number">
+        <div class="order-number-box">
             Order #<%= displayId %>
         </div>
 
@@ -134,7 +184,7 @@
 
             <div class="order-detail-row">
                 <span>Payment Method</span>
-                <span><%= orderPayment != null ? orderPayment : "Cash" %></span>
+                <span><%= orderPayment != null ? orderPayment : "Cash / COD" %></span>
             </div>
 
             <div class="order-detail-row">
@@ -154,10 +204,12 @@
         </div>
 
         <div class="action-buttons">
-            <a href="products.jsp" class="btn btn-primary">Continue Shopping</a>
-            <a href="orders.jsp" class="btn btn-secondary">View My Orders</a>
+            <a href="products.jsp" class="btn-blue">Continue Shopping</a>
+            <a href="orders.jsp" class="btn-outline-blue">View My Orders</a>
         </div>
     </div>
 </div>
 
 <%@ include file="footer.jsp" %>
+</body>
+</html>

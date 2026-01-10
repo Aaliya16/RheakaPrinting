@@ -1,3 +1,4 @@
+<%@ page import="com.example.rheakaprinting.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +54,7 @@
 
         .page-header p {
             font-size: 18px;
-            color: #7f8c8d;
+            color: #2c3e50;
         }
 
         .contact-grid {
@@ -163,8 +164,8 @@
         select:focus,
         textarea:focus {
             outline: none;
-            border-color: var(--mongoose);
-            box-shadow: 0 0 0 3px rgba(186, 169, 135, 0.1);
+            border-color: #4682B4; /* Tukar border focus jadi biru */
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.1);
         }
 
         textarea {
@@ -172,28 +173,33 @@
             resize: vertical;
         }
 
+        /* --- STYLE BUTANG BARU (Sama seperti view-btn) --- */
         .btn-submit {
-            width: 100%;
-            background: var(--mongoose);
+            display: inline-block;
+            padding: 12px 35px;
+            background: #4682B4; /* Warna Steel Blue */
             color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 16px;
+            text-decoration: none;
+            border-radius: 25px;
             font-weight: 600;
+            transition: all 0.3s ease;
+
+            /* Tambahan untuk tag <button> dalam form */
+            width: 100%;
+            border: none;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 16px;
             margin-top: 10px;
         }
 
         .btn-submit:hover {
-            background: #a49374;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(186, 169, 135, 0.4);
+            background: #357ABD;
+            transform: scale(1.02); /* Scale sikit je supaya tak terkeluar */
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
         }
 
         .btn-submit:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         @media (max-width: 768px) {
@@ -203,6 +209,7 @@
 
             .page-header h1 {
                 font-size: 32px;
+            }
         }
 
     </style>
@@ -216,7 +223,6 @@
     </div>
 
     <div class="contact-grid">
-        <!-- Contact Form -->
         <div class="contact-form-card">
             <h2 class="form-title">Send Us a Message</h2>
             <p class="form-subtitle">Fill out the form below and we'll get back to you soon</p>
@@ -248,7 +254,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email Address <span class="required">*</span></label>
+                    <label for="email">Email Address</label>
                     <input type="email"
                            id="email"
                            name="email"
@@ -257,11 +263,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
+                    <label for="phone">Phone Number <span class="required">*</span></label>
                     <input type="tel"
                            id="phone"
-                           name="phone"
-                           placeholder="+60 12-345 6789">
+                           name="phone"  placeholder="+60 12-345 6789"
+                           required>
                 </div>
 
                 <div class="form-group">
@@ -285,13 +291,34 @@
                               required></textarea>
                 </div>
 
-                <button type="submit" class="btn-submit">
-                    Send Message
-                </button>
+                <button type="button" class="btn-submit" onclick="handleContactSubmit()">Send Message</button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function handleContactSubmit() {
+        <%
+            User authContact = (User) session.getAttribute("auth");
+            if (authContact == null) authContact = (User) session.getAttribute("currentUser");
+        %>
+        var isLoggedIn = <%= (authContact != null) ? "true" : "false" %>;
+
+        if (!isLoggedIn) {
+            alert("⚠️ MAAF! Sila LOGIN dahulu untuk menghantar mesej kepada kami.");
+            window.location.href = "login.jsp";
+            return;
+        }
+
+        var form = document.getElementById('contactForm');
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    }
+</script>
 
 <script>
     // Form validation
