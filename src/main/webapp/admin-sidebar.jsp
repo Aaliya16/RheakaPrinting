@@ -18,6 +18,14 @@
     .sidebar-header h2 { font-size: 24px; font-weight: 600; margin: 0; }
     .sidebar-header p { font-size: 13px; color: #bdc3c7; margin-top: 5px; font-weight: 300; }
 
+    /* Sidebar Active State */
+    .sidebar-link.active {
+        background: rgba(108, 92, 231, 0.1); /* Light purple highlight */
+        color: #6c5ce7; /* Brand purple text */
+        border-left: 4px solid #6c5ce7; /* Distinct vertical bar */
+        font-weight: 700;
+    }
+
     /* Navigation Links */
     .nav-menu { list-style: none; padding: 20px 0; margin: 0; }
     .nav-item { width: 100%; }
