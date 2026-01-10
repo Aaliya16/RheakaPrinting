@@ -308,28 +308,28 @@
                 <i class="fas fa-chevron-down"></i>
             </a>
             <div class="dropdown-menu">
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=1">
                     Acrylic Clear
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=2">
                     Apron Custom
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=3">
                     Industrial Signage
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=4">
                     Business Card
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=5">
                     Apparel Printing
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=6">
                     Banner & Bunting
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=7">
                     Flags & Backdrop
                 </a>
-                <a href="products.jsp">
+                <a href="product-details.jsp?id=8">
                     Stickers & Plaque
                 </a>
             </div>
