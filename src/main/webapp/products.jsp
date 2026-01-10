@@ -15,7 +15,7 @@
         }
 
         body {
-            background-color: var(--steelblue) !important;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;

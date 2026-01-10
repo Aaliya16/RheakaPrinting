@@ -8,175 +8,537 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #b0c4de;
+            overflow-x: hidden;
         }
 
-        .hero {
-            text-align: center;
-            padding: 50px 20px 30px 20px;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .hero h2 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: #000;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        /* Centered banner container */
-        .banner-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 20px;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .hero-banner {
-            width: 100%;
-            max-width: 1200px;
-            height: auto;
-            border-radius: 15px;
-            display: block;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn-container {
-            text-align: center;
-            padding: 30px 20px;
-            background: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 15px 50px;
-            background: black;
+        /* Hero Section - Lightsteelblue Gradient */
+        .hero-section {
+            background: linear-gradient(135deg, #b0c4de 0%, #87CEEB 50%, #4682B4 100%);
             color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background: #333;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        /* Featured Services Section */
-        .featured {
-            padding: 60px 20px;
             text-align: center;
-            background-color: #b0c4de;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .featured h3 {
-            font-size: 32px;
-            margin-bottom: 50px;
-            color: #000;
-            font-weight: bold;
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.3;
         }
 
-        /* Product Grid - 4 columns */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1400px;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
         }
 
-        /* Product Card */
-        .product-card {
-            background: white;
-            padding: 40px 20px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .product-card i {
-            font-size: 60px;
-            color: #000;
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.8s ease;
         }
 
-        .product-card h4 {
-            font-size: 22px;
-            color: #baa987;
-            margin: 15px 0 10px 0;
+        .hero-section p {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: white;
+            color: #4682B4;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        /* Banner Image Section */
+        .banner-section {
+            padding: 40px 20px;
+            background: white;
+        }
+
+        .banner-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .banner-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Carousel Section */
+        .carousel-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #b0c4de 0%, #87CEEB 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 15px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .carousel-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            padding: 0 60px;
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 25px;
+        }
+
+        .category-card {
+            min-width: calc(25% - 19px);
+            background: white;
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .category-card i {
+            font-size: 4rem;
+            color: #4682B4;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover i {
+            transform: rotateY(360deg) scale(1.1);
+        }
+
+        .category-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #333;
             font-weight: 700;
         }
 
-        .product-card p {
+        .category-card p {
+            font-size: 0.95rem;
             color: #666;
-            font-size: 14px;
             line-height: 1.6;
-            margin-bottom: 0;
-            min-height: 60px;
         }
 
-        /* Removed - No button needed */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* Responsive design */
+        .carousel-btn:hover {
+            background: #4682B4;
+            color: white;
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .carousel-btn i {
+            font-size: 1.5rem;
+        }
+
+        .carousel-btn.prev {
+            left: 0;
+        }
+
+        .carousel-btn.next {
+            right: 0;
+        }
+
+        /* Featured Services */
+        .featured-section {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .featured-section .section-header h2 {
+            color: #333;
+            text-shadow: none;
+        }
+
+        .featured-section .section-header p {
+            color: #666;
+        }
+
+        .services-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, white 100%);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-color: #4682B4;
+        }
+
+        .service-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #4682B4 0%, #87CEEB 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotateY(360deg) scale(1.1);
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            padding: 12px 35px;
+            background: #4682B4;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background: #357ABD;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            color: white;
+        }
+
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .step-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 45px 35px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.4s ease;
+        }
+
+        .step-card:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: white;
+            color: #4682B4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 auto 25px;
+        }
+
+        .step-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .step-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .step-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        /* Why Choose Us */
+        .why-choose-us {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .why-choose-us .section-header h2 {
+            color: #333;
+            text-shadow: none;
+        }
+
+        .why-choose-us .section-header p {
+            color: #666;
+        }
+
+        .benefits-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+        }
+
+        .benefit-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            padding: 35px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .benefit-card:hover {
+            background: linear-gradient(135deg, #4682B4 0%, #87CEEB 100%);
+            color: white;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(70, 130, 180, 0.3);
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4682B4 0%, #87CEEB 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover .benefit-icon {
+            background: white;
+            color: #4682B4;
+            transform: rotateY(360deg);
+        }
+
+        .benefit-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .benefit-card:hover .benefit-content h3 {
+            color: white;
+        }
+
+        .benefit-content p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .benefit-card:hover .benefit-content p {
+            color: rgba(255,255,255,0.95);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #b0c4de 0%, #4682B4 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 55px;
+            background: white;
+            color: #4682B4;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 1200px) {
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .category-card {
+                min-width: calc(33.333% - 17px);
             }
         }
 
         @media (max-width: 900px) {
-            .product-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .category-card {
+                min-width: calc(50% - 13px);
             }
         }
 
         @media (max-width: 768px) {
-            .hero h2 {
-                font-size: 24px;
+            .hero-section h1 {
+                font-size: 2.2rem;
             }
 
-            .hero p {
-                font-size: 16px;
+            .section-header h2 {
+                font-size: 2rem;
             }
 
-            .hero-banner {
-                border-radius: 10px;
+            .carousel-container {
+                padding: 0 50px;
             }
 
-            .btn {
-                padding: 12px 40px;
-                font-size: 16px;
+            .category-card {
+                min-width: 100%;
             }
 
-            .featured h3 {
-                font-size: 26px;
-            }
-
-            .product-grid {
+            .services-grid,
+            .steps-container,
+            .benefits-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
         }
     </style>
@@ -184,86 +546,318 @@
 <body>
 <%@ include file="header.jsp" %>
 
-<!-- Hero Section - Text Only -->
-<section class="hero">
-    <h2>Professional Printing & Custom Design Services</h2>
-    <p>Upload your design, customize your order, and print with high quality.</p>
-</section>
-
-<!-- Banner Section - Centered Horizontally -->
-<div class="banner-wrapper">
-    <img src="assets/img/HOMEPAGE_RHEAKA.jpg" alt="Printing Banner" class="hero-banner">
-</div>
-
-<!-- Button Section -->
-<div class="btn-container">
-    <a href="products.jsp" class="btn">Shop Now</a>
-</div>
-
-<!-- Featured Services Section - All 8 Services -->
-<section class="featured">
-    <h3>Featured Services</h3>
-    <div class="product-grid">
-
-        <!-- 1. Acrylic Clear -->
-        <div class="product-card">
-            <i class="fas fa-gem"></i>
-            <h4>Acrylic Clear</h4>
-            <p>Premium 3mm laser-cut acrylic and high-impact boards.</p>
-        </div>
-
-        <!-- 2. Apron Custom -->
-        <div class="product-card">
-            <i class="fas fa-utensils"></i>
-            <h4>Apron Custom</h4>
-            <p>Professional kitchen wear with customization options.</p>
-        </div>
-
-        <!-- 3. Industrial Signage -->
-        <div class="product-card">
-            <i class="fas fa-industry"></i>
-            <h4>Industrial Signage</h4>
-            <p>Composite and high-impact boards with installation service.</p>
-        </div>
-
-        <!-- 4. Business Card -->
-        <div class="product-card">
-            <i class="fas fa-address-card"></i>
-            <h4>Business Card</h4>
-            <p>Premium matte or glossy laminated name cards.</p>
-        </div>
-
-        <!-- 5. Apparel Printing -->
-        <div class="product-card">
-            <i class="fas fa-tshirt"></i>
-            <h4>Apparel Printing</h4>
-            <p>Custom T-Shirts from XS to 7XL with optional add-ons.</p>
-        </div>
-
-        <!-- 6. Banner & Bunting -->
-        <div class="product-card">
-            <i class="fas fa-scroll"></i>
-            <h4>Banner & Bunting</h4>
-            <p>High-quality event banners and roll-up buntings in all sizes.</p>
-        </div>
-
-        <!-- 7. Flags & Backdrop -->
-        <div class="product-card">
-            <i class="fas fa-flag"></i>
-            <h4>Flags & Backdrop</h4>
-            <p>Beach flags, custom flags and photo backdrops.</p>
-        </div>
-
-        <!-- 8. Stickers & Plaque -->
-        <div class="product-card">
-            <i class="fas fa-award"></i>
-            <h4>Stickers & Plaque</h4>
-            <p>Vinyl stickers, Trophies, Medals, and Epoxy Nametags.</p>
-        </div>
-
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Professional Printing & Custom Design Services</h1>
+        <p>Transform your ideas into reality with our premium printing solutions. Fast, reliable, and affordable.</p>
+        <a href="products.jsp" class="hero-btn">Get Started Today</a>
     </div>
 </section>
 
+<!-- Banner Image -->
+<section class="banner-section">
+    <div class="banner-wrapper">
+        <img src="assets/img/HOMEPAGE_RHEAKA.jpg" alt="Rheaka Design Banner">
+    </div>
+</section>
+
+<!-- Carousel Section -->
+<section class="carousel-section">
+    <div class="section-header">
+        <h2>Explore Our Services</h2>
+        <p>Browse through our wide range of printing solutions</p>
+    </div>
+
+    <div class="carousel-container">
+        <button class="carousel-btn prev" onclick="moveCarousel(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="carousel-wrapper">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-gem"></i>
+                    <h3>Acrylic Clear</h3>
+                    <p>Premium quality acrylic printing</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Apron Custom</h3>
+                    <p>Personalized aprons for business</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-industry"></i>
+                    <h3>Industrial Signage</h3>
+                    <p>Durable signs for your company</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-address-card"></i>
+                    <h3>Business Card</h3>
+                    <p>Professional business cards</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-tshirt"></i>
+                    <h3>Apparel Printing</h3>
+                    <p>Custom t-shirts and clothing</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-scroll"></i>
+                    <h3>Banner & Bunting</h3>
+                    <p>Eye-catching banners for events</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-flag"></i>
+                    <h3>Flags & Backdrop</h3>
+                    <p>Custom flags and backdrops</p>
+                </div>
+                <div class="category-card" onclick="window.location.href='products.jsp'">
+                    <i class="fas fa-award"></i>
+                    <h3>Stickers & Plaque</h3>
+                    <p>High-quality stickers and plaques</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="carousel-btn next" onclick="moveCarousel(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</section>
+
+<!-- Featured Services -->
+<section class="featured-section">
+    <div class="section-header">
+        <h2>Our Featured Services</h2>
+        <p>Professional printing solutions tailored to your needs</p>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-gem"></i>
+            </div>
+            <h3>Acrylic Clear</h3>
+            <p>Crystal-clear acrylic prints perfect for displaying photos, signage, and artwork.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h3>Apron Custom</h3>
+            <p>Customized aprons for restaurants, cafes, and businesses with vibrant printing.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-industry"></i>
+            </div>
+            <h3>Industrial Signage</h3>
+            <p>Weather-resistant signage built to last in harsh industrial conditions.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-address-card"></i>
+            </div>
+            <h3>Business Card</h3>
+            <p>Make a lasting impression with premium business cards in multiple finishes.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-tshirt"></i>
+            </div>
+            <h3>Apparel Printing</h3>
+            <p>Custom t-shirt printing for teams, events, and businesses with DTG technology.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-scroll"></i>
+            </div>
+            <h3>Banner & Bunting</h3>
+            <p>Large-format banners perfect for events, promotions, and grand openings.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-flag"></i>
+            </div>
+            <h3>Flags & Backdrop</h3>
+            <p>Custom flags and backdrops for exhibitions and special events.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-award"></i>
+            </div>
+            <h3>Stickers & Plaque</h3>
+            <p>High-quality stickers and commemorative plaques for branding and awards.</p>
+            <a href="products.jsp" class="view-btn">View Details</a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Simple process from design to delivery</p>
+    </div>
+
+    <div class="steps-container">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <i class="fas fa-cloud-upload-alt step-icon"></i>
+            <h3>Upload Your Design</h3>
+            <p>Upload your artwork or choose from our templates. Our design team is here to help.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <i class="fas fa-sliders-h step-icon"></i>
+            <h3>Customize Options</h3>
+            <p>Select your preferred size, material, quantity, and finishing options.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <i class="fas fa-truck step-icon"></i>
+            <h3>We Print & Deliver</h3>
+            <p>We'll print your order with precision and deliver it right to your doorstep.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-choose-us">
+    <div class="section-header">
+        <h2>Why Choose Rheaka Design?</h2>
+        <p>We're committed to delivering excellence in every project</p>
+    </div>
+
+    <div class="benefits-grid">
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Fast Turnaround</h3>
+                <p>Quick production times without compromising quality. Most orders ready within 3-5 business days.</p>
+            </div>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-palette"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Expert Design Team</h3>
+                <p>Professional designers ready to bring your vision to life with creative solutions.</p>
+            </div>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-certificate"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Premium Quality</h3>
+                <p>We use only the best materials and latest printing technology for exceptional results.</p>
+            </div>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>24/7 Support</h3>
+                <p>Our customer service team is always available to answer questions and provide assistance.</p>
+            </div>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Competitive Pricing</h3>
+                <p>Affordable rates without hidden fees. Bulk discounts available for larger orders.</p>
+            </div>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="benefit-content">
+                <h3>Satisfaction Guaranteed</h3>
+                <p>100% satisfaction guarantee. If you're not happy, we'll make it right.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <h2>Ready to Bring Your Ideas to Life?</h2>
+    <p>Get a free personalized quote for your printing project today!</p>
+    <a href="quote.jsp" class="cta-btn">Get Your Free Quote</a>
+</section>
+
 <%@ include file="footer.jsp" %>
+
+<script>
+    let currentIndex = 0;
+    const track = document.getElementById('carouselTrack');
+    const cards = document.querySelectorAll('.category-card');
+    const totalCards = cards.length;
+
+    function getCardsToShow() {
+        if (window.innerWidth >= 1200) return 4;
+        if (window.innerWidth >= 900) return 3;
+        if (window.innerWidth >= 600) return 2;
+        return 1;
+    }
+
+    function moveCarousel(direction) {
+        const cardsToShow = getCardsToShow();
+        const maxIndex = totalCards - cardsToShow;
+
+        currentIndex += direction;
+
+        if (currentIndex < 0) {
+            currentIndex = maxIndex;
+        } else if (currentIndex > maxIndex) {
+            currentIndex = 0;
+        }
+
+        const cardWidth = cards[0].offsetWidth;
+        const gap = 25;
+        const offset = currentIndex * (cardWidth + gap);
+
+        track.style.transform = `translateX(-${offset}px)`;
+    }
+
+    setInterval(() => {
+        moveCarousel(1);
+    }, 5000);
+
+    window.addEventListener('resize', () => {
+        currentIndex = 0;
+        track.style.transform = 'translateX(0)';
+    });
+</script>
+
 </body>
 </html>

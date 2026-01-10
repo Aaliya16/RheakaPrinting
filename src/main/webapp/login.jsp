@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body {
-            background-color: #B0C4DEFF;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
         }

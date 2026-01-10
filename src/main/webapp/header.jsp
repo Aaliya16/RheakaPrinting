@@ -3,7 +3,6 @@
     // Maintain Java logic to check session
     Object userLoggedIn = session.getAttribute("currentUser");
 %>
-
 <style>
     /* Reset */
     * {
@@ -12,41 +11,44 @@
         box-sizing: border-box;
     }
 
-    /* Navigation Bar */
+    /* Navbar Styling */
     .navbar {
         background-color: #ffffff;
         padding: 15px 50px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         position: sticky;
         top: 0;
         z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     /* Logo Section */
-    .logo {
+    .logo-section {
         display: flex;
         align-items: center;
         gap: 15px;
-        font-size: 24px;
-        font-weight: bold;
-        color: #000;
-        margin: 0;
-        text-decoration: none;
     }
 
-    .logo-img {
+    .logo-section img {
         height: 50px;
         width: auto;
     }
 
-    /* Navigation Links Container (Desktop) */
+    .logo-section h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Navigation Links */
     .nav-links {
         display: flex;
         align-items: center;
         gap: 35px;
+        list-style: none;
     }
 
     .nav-links a {
@@ -54,23 +56,19 @@
         color: #333;
         font-weight: 500;
         font-size: 16px;
-        transition: all 0.3s ease;
+        transition: color 0.3s ease;
         position: relative;
-    }
-
-    .nav-links a:hover {
-        color: #000;
     }
 
     /* Underline on hover */
     .nav-links a::after {
         content: '';
         position: absolute;
-        width: 0;
-        height: 2px;
         bottom: -5px;
         left: 0;
-        background-color: #000;
+        width: 0;
+        height: 2px;
+        background-color: #333;
         transition: width 0.3s ease;
     }
 
@@ -78,10 +76,86 @@
         width: 100%;
     }
 
-    /* Cart Icon - FIXED: No inline styles */
-    .cart-link {
-        display: inline-flex;
+    .nav-links a:hover {
+        color: #000;
+    }
+
+    /* Dropdown Container */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle {
+        cursor: pointer;
+        display: flex;
         align-items: center;
+        gap: 5px;
+    }
+
+    .dropdown-toggle i {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-toggle i {
+        transform: rotate(180deg);
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        min-width: 280px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        border-radius: 8px;
+        padding: 15px 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        margin-top: 15px;
+    }
+
+    .dropdown:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 25px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 15px;
+    }
+
+    .dropdown-menu a i {
+        font-size: 20px;
+        color: #baa987;
+        width: 25px;
+    }
+
+    .dropdown-menu a:hover {
+        background: #f5f7fa;
+        color: #000;
+        padding-left: 30px;
+    }
+
+    .dropdown-menu a::after {
+        display: none;
+    }
+
+    /* Cart Icon */
+    .cart-link {
+        position: relative;
     }
 
     .cart-icon {
@@ -95,37 +169,23 @@
         transform: scale(1.1);
     }
 
-    /* Login/Signup Link - FIXED: No inline styles */
+    /* Login/Logout Links */
     .login-link {
         font-weight: bold;
         color: #333;
     }
 
-    .login-link:hover {
-        color: #000;
-    }
-
-    /* My Orders Link */
     .order-link {
         color: #333;
         font-weight: 500;
     }
 
-    .order-link:hover {
-        color: #000;
-    }
-
-    /* Logout Button Special Styling */
     .logout-link {
         color: #ff4d4d;
         font-weight: bold;
     }
 
-    .logout-link:hover {
-        color: #cc0000;
-    }
-
-    /* HAMBURGER MENU (Default Hidden on Desktop) */
+    /* Mobile Hamburger Menu */
     .hamburger {
         display: none;
         flex-direction: column;
@@ -133,105 +193,190 @@
         gap: 5px;
     }
 
-    .hamburger div {
+    .hamburger span {
         width: 25px;
         height: 3px;
         background-color: #333;
         transition: all 0.3s ease;
     }
 
-    /* RESPONSIVE: TABLET & MOBILE */
-    @media (max-width: 992px) {
-        .navbar {
-            padding: 15px 30px;
-        }
-        .nav-links {
-            gap: 20px;
-        }
-    }
-
+    /* Responsive Design */
     @media (max-width: 768px) {
         .navbar {
             padding: 15px 20px;
-            /* Keep logo and hamburger in same row */
-            flex-direction: row;
-            flex-wrap: wrap;
         }
 
-        /* Show Hamburger on Mobile */
+        .logo-section h1 {
+            font-size: 18px;
+        }
+
+        .logo-section img {
+            height: 40px;
+        }
+
         .hamburger {
             display: flex;
         }
 
-        /* Hide Menu by default on Mobile */
         .nav-links {
-            display: none; /* Hidden */
+            position: fixed;
+            top: 70px;
+            right: -100%;
             width: 100%;
+            max-width: 300px;
+            background-color: #ffffff;
             flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            background-color: white;
-            border-top: 1px solid #eee;
+            align-items: flex-start;
+            padding: 30px 20px;
+            gap: 20px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
         }
 
-        /* This class added by JavaScript when user clicks hamburger */
         .nav-links.active {
-            display: flex; /* Visible */
+            right: 0;
         }
 
-        /* Animate Hamburger into 'X' when active */
-        .hamburger.active .bar1 {
-            transform: rotate(-45deg) translate(-5px, 6px);
+        .nav-links a::after {
+            display: none;
         }
-        .hamburger.active .bar2 {
+
+        /* Mobile Dropdown */
+        .dropdown-menu {
+            position: static;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 10px 0 10px 20px;
+            margin-top: 10px;
+            background: #f5f7fa;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+        }
+
+        .dropdown-menu a {
+            padding: 10px 15px;
+        }
+
+        .dropdown-menu a:hover {
+            padding-left: 15px;
+            background: #e8ebef;
+        }
+
+        /* Hamburger Animation */
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
             opacity: 0;
         }
-        .hamburger.active .bar3 {
-            transform: rotate(45deg) translate(-5px, -6px);
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
         }
     }
 </style>
 
 <nav class="navbar">
-    <a href="index.jsp" class="logo">
-        <img src="assets/img/logo_rheaka.png" alt="Logo" class="logo-img">
-        Rheaka Design
-    </a>
-
-    <div class="hamburger" id="hamburger-btn">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <img src="assets/img/logo_rheaka.png" alt="Rheaka Design Logo">
+        <h1>Rheaka Design</h1>
     </div>
 
+    <!-- Hamburger Menu (Mobile) -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Navigation Links -->
     <div class="nav-links" id="nav-menu">
         <a href="index.jsp">Home</a>
-        <a href="products.jsp">Services</a>
+
+        <!-- Services Dropdown -->
+        <div class="dropdown">
+            <a class="dropdown-toggle">
+                Services
+                <i class="fas fa-chevron-down"></i>
+            </a>
+            <div class="dropdown-menu">
+                <a href="products.jsp">
+                    Acrylic Clear
+                </a>
+                <a href="products.jsp">
+                    Apron Custom
+                </a>
+                <a href="products.jsp">
+                    Industrial Signage
+                </a>
+                <a href="products.jsp">
+                    Business Card
+                </a>
+                <a href="products.jsp">
+                    Apparel Printing
+                </a>
+                <a href="products.jsp">
+                    Banner & Bunting
+                </a>
+                <a href="products.jsp">
+                    Flags & Backdrop
+                </a>
+                <a href="products.jsp">
+                    Stickers & Plaque
+                </a>
+            </div>
+        </div>
+
         <a href="quote.jsp">Get A Quote</a>
         <a href="contact.jsp">Contact Us</a>
 
-        <!-- FIXED: Cart with class, no inline style -->
         <a href="cart.jsp" class="cart-link">
-            <img src="assets/img/cart.png" alt="Cart" class="cart-icon">
+            <img src="images/cart.png" alt="Cart" class="cart-icon">
         </a>
 
         <% if (userLoggedIn == null) { %>
-        <!-- FIXED: Login with class, no inline style -->
         <a href="login.jsp" class="login-link">Login/Signup</a>
         <% } else { %>
-        <a href="orders.jsp" class="order-link">My Orders</a>
+        <a href="myorders.jsp" class="order-link">My Orders</a>
         <a href="LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>
 </nav>
 
 <script>
-    const hamburger = document.getElementById('hamburger-btn');
+    // Toggle mobile menu
+    const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
 
     hamburger.addEventListener('click', () => {
-        // Toggle 'active' class on menu and button
         navMenu.classList.toggle('active');
         hamburger.classList.toggle('active');
     });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+    });
+
+    // Mobile dropdown toggle
+    if (window.innerWidth <= 768) {
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        dropdownToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
 </script>
