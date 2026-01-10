@@ -12,7 +12,6 @@
     String pCategory = ""; // Kita tambah category untuk logic include file nanti
 
     // 2. DATABASE CONNECTION & QUERY
-    // Kita cari info produk berdasarkan ID yang user klik
     if (id != null) {
         try {
             Connection conn = DbConnection.getConnection();

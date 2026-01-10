@@ -1,3 +1,4 @@
+<%-- admin-users.jsp --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.rheakaprinting.model.*" %>
 <%@ page import="com.example.rheakaprinting.dao.*" %>
@@ -5,9 +6,17 @@
 <%@ page import="java.util.*" %>
 <%@ include file="admin-auth-check.jsp" %>
 <%
-    UserAdminDao uDao = new UserAdminDao(DbConnection.getConnection());
+    // Logic remains exactly the same
+    UserDAO uDao = new UserDAO(DbConnection.getConnection());
     List<User> allUsers = uDao.getAllUsers();
     if (allUsers == null) allUsers = new ArrayList<>();
+
+    int totalUsers = allUsers.size();
+    int adminCount = 0;
+    for(User u : allUsers) {
+        if("admin".equalsIgnoreCase(u.getRole())) adminCount++;
+    }
+    int customerCount = totalUsers - adminCount;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,57 +26,103 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; color: #2c3e50; }
-
-        .main-content {
-            margin-left: 260px; /* Matches your sidebar width */
-            padding: 30px;
-            min-height: 100vh;
-            background: #f5f6fa;
+        :root {
+            --brand-color: #6c5ce7; /* Professional Purple */
+            --brand-light: rgba(108, 92, 231, 0.1);
+            --bg-body: #f1f2f6;
+            --text-main: #2d3436;
         }
 
-        /* 2. Force the Top Bar to be exactly 70px tall */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+
+        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
+
+        /* Standardized Top Bar */
         .top-bar {
             background: white;
-            padding: 0 35px; /* Side padding for the content inside */
-            border-radius: 12px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 20px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px; /* THIS IS THE KEY SIZE */
         }
 
-        /* 3. Fix the title alignment */
-        .top-bar h1 {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            font-weight: 600; /* This creates the specific bold effect you like */
-            font-size: 24px;
-            color: #1a3a6d; /* The deep navy blue used in your panel */
-            margin: 0;
-        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
 
-        .admin-avatar {
+        /* Standardized Icon Box size */
+        .header-icon-box {
+            width: 50px; height: 50px; min-width: 50px;
+            background: var(--brand-color);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            color: white;
+        }
+        .header-icon-box i { font-size: 22px; }
+
+        .top-bar h1 { font-size: 24px; color: var(--text-main); margin: 0; line-height: 1.2; }
+
+        .search-container {
+            background: #f1f2f6; border-radius: 12px; padding: 10px 20px;
+            display: flex; align-items: center; gap: 10px; width: 350px;
+        }
+        .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
+
+        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--brand-color); color: white;
             display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold;
+            font-weight: bold; font-size: 14px;
         }
 
-        .content-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); }
-        .search-input { width: 100%; padding: 12px 20px; border: 2px solid #f0f0f0; border-radius: 8px; margin-bottom: 25px; outline: none; }
+        /* Monochrome Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 30px; }
+        .stat-card {
+            background: white; padding: 25px; border-radius: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-val { font-size: 32px; font-weight: 800; color: var(--text-main); }
+        .stat-label { font-size: 11px; color: #b2bec3; text-transform: uppercase; font-weight: 700; margin-top: 5px; }
+
+        .stat-icon-mini {
+            width: 45px; height: 45px; border-radius: 12px;
+            background: var(--brand-light);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--brand-color); font-size: 18px;
+        }
+
+        .content-card {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04); min-height: 400px;
+        }
 
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; background: #f8f9fa; color: #34495e; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #edf2f7; }
-        td { padding: 18px 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        th { text-align: left; padding: 15px; color: #b2bec3; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #f1f2f6; }
+        td { padding: 20px 15px; border-bottom: 1px solid #f1f2f6; font-size: 14px; }
 
         .role-badge { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .role-badge.admin { background: #cfe2ff; color: #084298; }
-        .role-badge.user { background: #e2e3e5; color: #41464b; }
+        .role-badge.admin { background: #d1e7dd; color: #0f5132; }
+        .role-badge.user { background: #f1f2f6; color: #636e72; }
 
-        .btn-delete { width: 38px; height: 38px; border-radius: 8px; border: none; cursor: pointer; background: #ffebee; color: #e74c3c; transition: 0.3s; }
-        .btn-delete:hover { background: #e74c3c; color: white; }
+        .btn-delete { width: 38px; height: 38px; border-radius: 10px; border: none; cursor: pointer; background: #fff5f5; color: #ee5253; transition: 0.2s; }
+        .btn-delete:hover { transform: scale(1.1); background: #ee5253; color: white; }
+
+        /* Back Button */
+        .back-container { display: flex; justify-content: flex-end; margin-top: 30px; }
+        .btn-back {
+            display: flex; align-items: center; gap: 8px; padding: 12px 25px;
+            background: white; color: var(--brand-color); border: 2px solid var(--brand-color);
+            border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--brand-color); color: white; }
     </style>
 </head>
 <body>
@@ -75,64 +130,106 @@
 <%@ include file="admin-sidebar.jsp" %>
 
 <div class="main-content">
+    <%-- Standardized Top Bar --%>
     <div class="top-bar">
-        <h1><i class="fas fa-users" style="color:#3498db"></i> User Management</h1>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div class="admin-avatar">
+        <div class="header-left">
+            <div class="header-icon-box"><i class="fas fa-users"></i></div>
+            <h1>User<br><span style="font-weight: 400; font-size: 22px;">Management</span></h1>
+        </div>
+
+        <div class="search-container">
+            <i class="fas fa-search" style="color: var(--brand-color);"></i>
+            <input type="text" id="userInput" onkeyup="filterUsers()" placeholder="Search by name or email...">
+        </div>
+
+        <div class="admin-profile">
+            <strong style="font-size: 14px; margin-right: 10px;"><%= adminUser %></strong>
+            <div class="avatar-circle">
                 <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
             </div>
-            <strong><%= adminUser %></strong>
+        </div>
+    </div>
+
+    <%-- 4-Column Stats Grid --%>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div>
+                <div class="stat-val"><%= totalUsers %></div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-user-friends"></i></div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-val"><%= adminCount %></div>
+                <div class="stat-label">Admins</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-user-shield"></i></div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-val"><%= customerCount %></div>
+                <div class="stat-label">Customers</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-user-tag"></i></div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-val">Live</div>
+                <div class="stat-label">Status</div>
+            </div>
+            <div class="stat-icon-mini"><i class="fas fa-signal"></i></div>
         </div>
     </div>
 
     <div class="content-card">
-        <input type="text" class="search-input" id="userInput" placeholder="Search by name or email..." onkeyup="filterUsers()">
-
         <table id="userTable">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
+                <th>User Details</th>
                 <th>Role</th>
                 <th style="text-align: right;">Actions</th>
             </tr>
             </thead>
             <tbody>
-            <%
-                // Ensure the list isn't empty before looping
-                if (allUsers != null && !allUsers.isEmpty()) {
-                    for (User user : allUsers) {
-            %>
+            <% if (!allUsers.isEmpty()) {
+                for (User user : allUsers) { %>
             <tr>
                 <td>#<%= user.getUserId() %></td>
-                <td><strong><%= user.getName() %></strong></td>
-                <td><%= user.getEmail() %></td>
                 <td>
-            <span class="role-badge <%= user.getRole().toLowerCase() %>">
-                <%= user.getRole() %>
-            </span>
+                    <div style="font-weight: 700; color: var(--text-main);"><%= user.getName() %></div>
+                    <div style="font-size: 12px; color: var(--brand-color);"><%= user.getEmail() %></div>
+                </td>
+                <td>
+                    <span class="role-badge <%= user.getRole().toLowerCase() %>">
+                        <%= user.getRole() %>
+                    </span>
                 </td>
                 <td style="text-align: right;">
-                    <button class="btn-action btn-delete"
-                            onclick="confirmDelete(<%= user.getUserId() %>, '<%= user.getName() %>')"
-                            style="background: #ffebee; color: #c62828; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">
-                        <i class="fas fa-trash"></i>
+                    <button class="btn-delete" title="Delete User"
+                            onclick="confirmDelete(<%= user.getUserId() %>, '<%= user.getName().replace("'", "\\'") %>')">
+                        <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
             </tr>
-            <%
-                }
-            } else {
-            %>
+            <% } } else { %>
             <tr>
-                <td colspan="5" style="text-align: center; padding: 20px; color: #999;">
+                <td colspan="4" style="text-align: center; padding: 60px; color: #b2bec3;">
+                    <i class="fas fa-user-slash" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
                     No users found in database.
                 </td>
             </tr>
             <% } %>
             </tbody>
         </table>
+
+        <%-- Standardized Back Button --%>
+        <div class="back-container">
+            <button onclick="window.history.back()" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+        </div>
     </div>
 </div>
 
@@ -141,34 +238,15 @@
         const search = document.getElementById('userInput').value.toLowerCase();
         const rows = document.querySelectorAll('#userTable tbody tr');
         rows.forEach(row => {
-            row.style.display = row.textContent.toLowerCase().includes(search) ? '' : 'none';
+            const rowText = row.innerText.toLowerCase();
+            row.style.display = rowText.includes(search) ? '' : 'none';
         });
     }
 
-    function deleteUser(id, name) {
-        if (confirm("Delete user: " + name + "?")) {
-            window.location.href = "DeleteUserServlet?id=" + id;
-        }
-    }
-</script>
-
-<script>
     function confirmDelete(userId, userName) {
-        if (confirm("Are you sure you want to delete user: " + userName + "?")) {
-            // This sends the request to a DeleteUserServlet
+        if (confirm("Are you sure you want to delete user: " + userName + "?\nThis action cannot be undone.")) {
             window.location.href = "DeleteUserServlet?id=" + userId;
         }
-    }
-
-    // Function for the search bar at the top of your screenshot
-    function filterUsers() {
-        let input = document.getElementById('userInput').value.toLowerCase();
-        let rows = document.querySelectorAll('tbody tr');
-
-        rows.forEach(row => {
-            let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(input) ? '' : 'none';
-        });
     }
 </script>
 

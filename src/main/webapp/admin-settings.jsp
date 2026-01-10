@@ -1,9 +1,11 @@
 <%-- admin-settings.jsp --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.sql.*, java.util.*" %>
+<%@ page import="com.example.rheakaprinting.dao.SettingsDao" %>
+<%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 <%@ include file="admin-auth-check.jsp" %>
 <%
     String displayName = (adminUser != null && !adminUser.trim().isEmpty()) ? adminUser : "Admin";
-    String avatarLetter = displayName.substring(0, 1).toUpperCase();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,76 +16,142 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary-dark: #1a3a6d;
-            --accent-blue: #3498db;
-            --success-green: #2ecc71;
+            --brand-color: #6c5ce7;
+            --brand-light: rgba(108, 92, 231, 0.1);
+            --bg-body: #f1f2f6;
+            --text-main: #2d3436;
             --danger-red: #ee5253;
-            --bg-body: #f8f9fc;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: #333; }
-        /* Standardized Layout Sizes */
-        .main-content {
-            margin-left: 260px; /* Matches your sidebar width */
-            padding: 30px;
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             min-height: 100vh;
-            background: #f5f6fa;
+            color: var(--text-main);
         }
+
+        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
 
         .top-bar {
             background: white;
-            padding: 0 35px; /* Side padding for the content inside */
-            border-radius: 12px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 20px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px; /* THIS IS THE KEY SIZE */
-        }
-        .top-bar h1 {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            font-weight: 600; /* This creates the specific bold effect you like */
-            font-size: 24px;
-            color: #1a3a6d; /* The deep navy blue used in your panel */
-            margin: 0;
         }
 
-        .content-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-icon-box {
+            width: 50px; height: 50px; min-width: 50px;
+            background: var(--brand-color);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            color: white;
         }
-        /* Settings Grid - 3 Column Layout for more detail */
-        .settings-grid { display: grid; gap: 25px; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+        .header-icon-box i { font-size: 22px; }
+
+        .top-bar h1 { font-size: 24px; color: var(--text-main); margin: 0; line-height: 1.2; }
+
+        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar-circle {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--brand-color); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px;
+        }
+
+        .settings-grid {
+            display: grid;
+            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            align-items: stretch;
+        }
 
         .settings-card {
-            background: white; padding: 25px; border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); height: fit-content;
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s ease;
+        }
+        .settings-card:hover { transform: translateY(-5px); }
+
+        .settings-card form, .maintenance-actions {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .settings-card h2 {
-            color: var(--primary-dark); font-size: 18px; margin-bottom: 20px;
-            padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;
-            display: flex; align-items: center; gap: 10px;
+            color: var(--text-main); font-size: 18px; margin-bottom: 25px;
+            padding-bottom: 15px; border-bottom: 2px solid #f1f2f6;
+            display: flex; align-items: center; gap: 12px;
         }
+        .settings-card h2 i { color: var(--brand-color); }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #475569; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 11px; color: #b2bec3; text-transform: uppercase; }
         .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;
+            width: 100%; padding: 12px; border: 1px solid #f1f2f6; background: #f1f2f6; border-radius: 10px; font-size: 14px; outline: none;
         }
 
-        /* Toggle items */
         .setting-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 10px;
+            padding: 15px; background: #f8fafc; border-radius: 12px; margin-bottom: 15px;
         }
 
-        .btn { padding: 10px 18px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--accent-blue); color: white; width: 100%; }
-        .btn-success { background: var(--success-green); color: white; width: 100%; }
+        .btn { padding: 12px 20px; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: auto; }
+        .btn-primary { background: var(--brand-color); color: white; width: 100%; }
+        .btn-primary:hover { opacity: 0.9; }
+
+        .back-container { display: flex; justify-content: flex-end; margin-top: 30px; width: 100%; grid-column: 1 / -1; }
+        .btn-back {
+            display: flex; align-items: center; gap: 8px; padding: 12px 25px;
+            background: white; color: var(--brand-color); border: 2px solid var(--brand-color);
+            border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--brand-color); color: white; }
+
+        #toast {
+            visibility: hidden;
+            min-width: 300px;
+            background-color: #2ecc71;
+            color: #fff;
+            text-align: center;
+            border-radius: 12px;
+            padding: 16px 24px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: slideUpFade 0.5s, slideDownFade 0.5s 2.5s;
+        }
+
+        @keyframes slideUpFade {
+            from { bottom: 0; opacity: 0; transform: translate(-50%, 20px); }
+            to { bottom: 30px; opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        @keyframes slideDownFade {
+            from { bottom: 30px; opacity: 1; transform: translate(-50%, 0); }
+            to { bottom: 0; opacity: 0; transform: translate(-50%, 20px); }
+        }
     </style>
 </head>
 <body>
@@ -92,56 +160,61 @@
 
 <div class="main-content">
     <div class="top-bar">
-        <h2 style="color: var(--primary-dark);"><i class="fas fa-tools"></i> Advanced System Configuration</h2>
-        <div class="admin-profile" style="display:flex; align-items:center; gap:10px;">
-            <div style="width:35px; height:35px; border-radius:50%; background:#5f27cd; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold;"><%= avatarLetter %></div>
-            <span style="font-weight: 600;"><%= displayName %></span>
+        <div class="header-left">
+            <div class="header-icon-box"><i class="fas fa-tools"></i></div>
+            <h1>System<br><span style="font-weight: 400; font-size: 22px;">Configuration</span></h1>
+        </div>
+
+        <div class="admin-profile">
+            <div class="avatar-circle">
+                <%= (displayName != null && !displayName.isEmpty()) ? displayName.substring(0, 1).toUpperCase() : "A" %>
+            </div>
         </div>
     </div>
 
     <div class="settings-grid">
-
+        <%
+            Connection gridConn = DbConnection.getConnection();
+            SettingsDao gridDao = new SettingsDao(gridConn);
+            Map<String, String> gridSettings = gridDao.getAllSettings();
+        %>
+        <%-- Footer Contact Info Card --%>
         <div class="settings-card">
-            <h2><i class="fas fa-money-bill-wave"></i> Regional & Tax</h2>
-            <form action="UpdateRegionalSettings" method="POST">
+            <h2><i class="fas fa-map-marker-alt"></i> Footer Contact Info</h2>
+            <form action="UpdateSettingsServlet" method="POST">
                 <div class="form-group">
-                    <label>Currency Symbol</label>
-                    <input type="text" name="currency" value="RM">
+                    <label>Business Address</label>
+                    <input type="text" name="footer_address" value="<%= gridSettings.getOrDefault("footer_address", "Gerai No.12, Tapak Pauh Lama, 02600 Arau Perlis") %>">
                 </div>
                 <div class="form-group">
-                    <label>SST / Tax Percentage (%)</label>
-                    <input type="number" name="taxRate" value="6" step="0.1">
+                    <label>Public Email</label>
+                    <input type="email" name="footer_email" value="<%= gridSettings.getOrDefault("footer_email", "rheakadesign@gmail.com") %>">
                 </div>
-                <div class="form-group">
-                    <label>Timezone</label>
-                    <select name="timezone">
-                        <option value="Asia/Kuala_Lumpur">Kuala Lumpur (GMT+8)</option>
-                        <option value="Asia/Singapore">Singapore (GMT+8)</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Finance Settings</button>
+                <button type="submit" class="btn btn-primary">Update Website Footer</button>
             </form>
         </div>
 
+        <%-- Social Presence Card --%>
         <div class="settings-card">
             <h2><i class="fas fa-share-alt"></i> Social Presence</h2>
-            <form action="UpdateSocialSettings" method="POST">
+            <form action="UpdateSettingsServlet" method="POST">
                 <div class="form-group">
                     <label><i class="fab fa-facebook"></i> Facebook URL</label>
-                    <input type="url" name="fb" value="https://facebook.com/rheaka">
+                    <input type="url" name="facebook_url" value="<%= gridSettings.getOrDefault("facebook_url", "https://www.facebook.com/matuzair06/") %>">
                 </div>
                 <div class="form-group">
-                    <label><i class="fab fa-instagram"></i> Instagram URL</label>
-                    <input type="url" name="ig" value="https://instagram.com/rheaka">
+                    <label><i class="fab fa-tiktok"></i> TikTok URL</label>
+                    <input type="url" name="tiktok_url" value="<%= gridSettings.getOrDefault("tiktok_url", "https://www.tiktok.com/@rheakadesign") %>">
                 </div>
                 <div class="form-group">
-                    <label><i class="fab fa-whatsapp"></i> WhatsApp Business Number</label>
-                    <input type="text" name="wa" value="+60123456789">
+                    <label><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
+                    <input type="text" name="whatsapp_num" value="<%= gridSettings.getOrDefault("whatsapp_num", "011-7078-7469") %>">
                 </div>
                 <button type="submit" class="btn btn-primary">Update Social Links</button>
             </form>
         </div>
 
+        <%-- Shipping Rules --%>
         <div class="settings-card">
             <h2><i class="fas fa-shipping-fast"></i> Shipping Rules</h2>
             <form action="UpdateShippingSettings" method="POST">
@@ -154,38 +227,64 @@
                     <input type="number" name="freeShip" value="200.00">
                 </div>
                 <div class="setting-item">
-                    <span style="font-size: 13px; font-weight: 600;">Enable Self-Pickup</span>
-                    <input type="checkbox" checked>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">Self-Pickup</span>
+                    <input type="checkbox" checked style="width: auto;">
                 </div>
                 <button type="submit" class="btn btn-primary">Save Logistics</button>
             </form>
         </div>
 
+        <%-- Security --%>
         <div class="settings-card">
             <h2><i class="fas fa-key"></i> Security</h2>
             <form action="UpdateAdminPassword" method="POST">
                 <div class="form-group">
-                    <label>Change Admin Password</label>
+                    <label>Update Password</label>
                     <input type="password" placeholder="Current Password">
                     <input type="password" placeholder="New Password" style="margin-top: 10px;">
                 </div>
-                <button type="submit" class="btn btn-success">Change Password</button>
+                <button type="submit" class="btn btn-primary">Change Password</button>
             </form>
         </div>
 
+        <%-- Maintenance --%>
         <div class="settings-card">
-            <h2><i class="fas fa-database"></i> Database Maintenance</h2>
-            <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">Regular backups prevent data loss from server failures.</p>
-            <button class="btn btn-primary" style="background: #6c757d; margin-bottom: 10px;">
-                <i class="fas fa-download"></i> Generate SQL Backup
-            </button>
-            <button class="btn btn-primary" style="background: #e67e22;">
-                <i class="fas fa-broom"></i> Clear Old Audit Logs
-            </button>
+            <h2><i class="fas fa-database"></i> Maintenance</h2>
+            <p style="font-size: 13px; color: #636e72; margin-bottom: 25px; line-height: 1.6;">
+                Regular maintenance prevents data loss from unexpected server failures and keeps the system running fast.
+            </p>
+            <div class="maintenance-actions">
+                <button class="btn" style="background: var(--brand-light); color: var(--brand-color); margin-bottom: 12px; width: 100%;">
+                    <i class="fas fa-download" style="margin-right: 8px;"></i> Generate SQL Backup
+                </button>
+                <button class="btn" style="background: #fff5f5; color: var(--danger-red); border: 1px solid #ffe3e3; width: 100%;">
+                    <i class="fas fa-broom" style="margin-right: 8px;"></i> Clear Audit Logs
+                </button>
+            </div>
         </div>
 
+        <div class="back-container">
+            <button onclick="window.history.back()" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+        </div>
     </div>
 </div>
 
+<div id="toast"><i class="fas fa-check-circle"></i> Settings updated successfully!</div>
+
+<script>
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'success') {
+            var x = document.getElementById("toast");
+            x.className = "show";
+            setTimeout(function(){
+                x.className = x.className.replace("show", "");
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }, 3000);
+        }
+    };
+</script>
 </body>
 </html>

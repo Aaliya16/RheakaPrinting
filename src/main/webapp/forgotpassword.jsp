@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 28/12/2025
-  Time: 11:38 pm
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +63,7 @@
             outline: none;
         }
         .btn-reset {
-            background-color: #28a745; /* Your specific Rheaka Green */
+            background: #4682B4;
             color: white;
             border: none;
             padding: 15px;
@@ -82,7 +75,7 @@
             transition: background 0.3s;
         }
         .btn-reset:hover {
-            background-color: #218838;
+            background: #4682B4;
         }
         .back-link {
             display: block;
