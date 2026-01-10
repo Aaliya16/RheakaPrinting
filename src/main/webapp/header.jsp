@@ -72,6 +72,8 @@
         position: relative;
         display: inline-block;
         overflow: visible;
+        padding-bottom: 10px; /* Memberi ruang extra di bawah butang Services */
+        margin-bottom: -10px; /* Meneutralkan padding supaya layout tidak lari */
     }
 
     .dropdown-toggle {
@@ -111,11 +113,12 @@
         opacity: 0;
         visibility: hidden;
         transform: translateY(-10px);
-        transition: all 0.3s ease;
+        transition: all 0.3s ease, transform 0.3s ease, visibility 0s linear 0.1s;
         /* Increased z-index and added !important to override Bootstrap */
         z-index: 100000 !important;
-        margin-top: 10px;
+        margin-top: 0;
         display: none; /* Add this to prevent accidental clicks when hidden */
+        padding-top: 15px;
     }
 
     .dropdown:hover .dropdown-menu {
@@ -123,6 +126,7 @@
         opacity: 1 !important;
         visibility: visible !important;
         transform: translateY(0) !important;
+        transition-delay: 0s;
     }
 
     .dropdown-menu a {
