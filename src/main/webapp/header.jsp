@@ -3,6 +3,8 @@
     // Maintain Java logic to check session
     Object userLoggedIn = session.getAttribute("currentUser");
 %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
     /* Reset */
     * {
@@ -24,7 +26,6 @@
         justify-content: space-between;
     }
 
-    /* Logo Section */
     .logo-section {
         display: flex;
         align-items: center;
@@ -43,7 +44,7 @@
         margin: 0;
     }
 
-    /* Navigation Links */
+    /* Navigation Links  */
     .nav-links {
         display: flex;
         align-items: center;
@@ -54,33 +55,17 @@
     .nav-links a {
         text-decoration: none;
         color: #333;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 16px;
         transition: color 0.3s ease;
         position: relative;
-    }
-
-    /* Underline on hover */
-    .nav-links a::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: #333;
-        transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after {
-        width: 100%;
     }
 
     .nav-links a:hover {
         color: #000;
     }
 
-    /* Dropdown Container */
+    /* Dropdown Styling */
     .dropdown {
         position: relative;
         display: inline-block;
@@ -90,11 +75,12 @@
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 8px;
+        font-weight: 700;
     }
 
     .dropdown-toggle i {
-        font-size: 12px;
+        font-size: 14px;
         transition: transform 0.3s ease;
     }
 
@@ -102,7 +88,6 @@
         transform: rotate(180deg);
     }
 
-    /* Dropdown Menu */
     .dropdown-menu {
         position: absolute;
         top: 100%;
@@ -127,256 +112,72 @@
     }
 
     .dropdown-menu a {
-        display: flex;
-        align-items: center;
-        gap: 15px;
+        display: block;
         padding: 12px 25px;
         color: #333;
-        text-decoration: none;
-        transition: all 0.3s ease;
+        font-weight: 500;
         font-size: 15px;
-    }
-
-    .dropdown-menu a i {
-        font-size: 20px;
-        color: #baa987;
-        width: 25px;
     }
 
     .dropdown-menu a:hover {
         background: #f5f7fa;
         color: #000;
-        padding-left: 30px;
     }
 
-    .dropdown-menu a::after {
-        display: none;
-    }
-
-    /* Cart Icon */
-    .cart-link {
-        position: relative;
-    }
-
+    /* Cart & Auth Links */
     .cart-icon {
         width: 24px;
         height: 24px;
         vertical-align: middle;
-        transition: transform 0.3s ease;
     }
 
-    .cart-link:hover .cart-icon {
-        transform: scale(1.1);
-    }
-
-    /* Login/Logout Links */
-    .login-link {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .order-link {
-        color: #333;
-        font-weight: 500;
+    .login-link, .order-link {
+        font-weight: 700 !important;
     }
 
     .logout-link {
-        color: #ff4d4d;
-        font-weight: bold;
-    }
-
-    /* Mobile Hamburger Menu */
-    .hamburger {
-        display: none;
-        flex-direction: column;
-        cursor: pointer;
-        gap: 5px;
-    }
-
-    .hamburger span {
-        width: 25px;
-        height: 3px;
-        background-color: #333;
-        transition: all 0.3s ease;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .navbar {
-            padding: 15px 20px;
-        }
-
-        .logo-section h1 {
-            font-size: 18px;
-        }
-
-        .logo-section img {
-            height: 40px;
-        }
-
-        .hamburger {
-            display: flex;
-        }
-
-        .nav-links {
-            position: fixed;
-            top: 70px;
-            right: -100%;
-            width: 100%;
-            max-width: 300px;
-            background-color: #ffffff;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 30px 20px;
-            gap: 20px;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            transition: right 0.3s ease;
-            height: calc(100vh - 70px);
-            overflow-y: auto;
-        }
-
-        .nav-links.active {
-            right: 0;
-        }
-
-        .nav-links a::after {
-            display: none;
-        }
-
-        /* Mobile Dropdown */
-        .dropdown-menu {
-            position: static;
-            box-shadow: none;
-            border-radius: 0;
-            padding: 10px 0 10px 20px;
-            margin-top: 10px;
-            background: #f5f7fa;
-        }
-
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: none;
-        }
-
-        .dropdown-menu a {
-            padding: 10px 15px;
-        }
-
-        .dropdown-menu a:hover {
-            padding-left: 15px;
-            background: #e8ebef;
-        }
-
-        /* Hamburger Animation */
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
+        color: #ff4d4d !important;
+        font-weight: 700 !important;
     }
 </style>
 
 <nav class="navbar">
-    <!-- Logo Section -->
     <div class="logo-section">
-        <img src="assets/img/logo_rheaka.png" alt="Rheaka Design Logo">
+        <img src="${pageContext.request.contextPath}/assets/img/logo_rheaka.png" alt="Rheaka Design Logo">
         <h1>Rheaka Design</h1>
     </div>
 
-    <!-- Hamburger Menu (Mobile) -->
-    <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-
-    <!-- Navigation Links -->
     <div class="nav-links" id="nav-menu">
-        <a href="index.jsp">Home</a>
+        <a href="${pageContext.request.contextPath}/index.jsp">Home</a>
 
-        <!-- Services Dropdown -->
         <div class="dropdown">
             <a class="dropdown-toggle">
                 Services
-                <i class="fas fa-chevron-down"></i>
-            </a>
+                <i class="fas fa-chevron-down"></i> </a>
             <div class="dropdown-menu">
-                <a href="product-details.jsp?id=1">
-                    Acrylic Clear
-                </a>
-                <a href="product-details.jsp?id=2">
-                    Apron Custom
-                </a>
-                <a href="product-details.jsp?id=3">
-                    Industrial Signage
-                </a>
-                <a href="product-details.jsp?id=4">
-                    Business Card
-                </a>
-                <a href="product-details.jsp?id=5">
-                    Apparel Printing
-                </a>
-                <a href="product-details.jsp?id=6">
-                    Banner & Bunting
-                </a>
-                <a href="product-details.jsp?id=7">
-                    Flags & Backdrop
-                </a>
-                <a href="product-details.jsp?id=8">
-                    Stickers & Plaque
-                </a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=1">Acrylic Clear</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=2">Apron Custom</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=3">Industrial Signage</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=4">Business Card</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=5">Apparel Printing</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=6">Banner & Bunting</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=7">Flags & Backdrop</a>
+                <a href="${pageContext.request.contextPath}/product-details.jsp?id=8">Stickers & Plaque</a>
             </div>
         </div>
 
-        <a href="quote.jsp">Get A Quote</a>
-        <a href="contact.jsp">Contact Us</a>
+        <a href="${pageContext.request.contextPath}/quote.jsp">Get A Quote</a>
+        <a href="${pageContext.request.contextPath}/contact.jsp">Contact Us</a>
 
-        <a href="cart.jsp" class="cart-link">
-            <img src="assets/img/cart.png" alt="Cart" class="cart-icon">
+        <a href="${pageContext.request.contextPath}/cart.jsp" class="cart-link">
+            <img src="${pageContext.request.contextPath}/assets/img/cart.png" alt="Cart" class="cart-icon">
         </a>
 
         <% if (userLoggedIn == null) { %>
-        <a href="login.jsp" class="login-link">Login/Signup</a>
+        <a href="${pageContext.request.contextPath}/login.jsp" class="login-link">Login/Signup</a>
         <% } else { %>
-        <a href="orders.jsp" class="order-link">My Orders</a>
-        <a href="LogoutServlet" class="logout-link">Logout</a>
+        <a href="${pageContext.request.contextPath}/orders.jsp" class="order-link">My Orders</a>
+        <a href="${pageContext.request.contextPath}/LogoutServlet" class="logout-link">Logout</a>
         <% } %>
     </div>
 </nav>
-
-<script>
-    // Toggle mobile menu
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('nav-menu');
-
-    hamburger.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
-    });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-            navMenu.classList.remove('active');
-            hamburger.classList.remove('active');
-        }
-    });
-
-    // Mobile dropdown toggle
-    if (window.innerWidth <= 768) {
-        const dropdownToggle = document.querySelector('.dropdown-toggle');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-
-        dropdownToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        });
-    }
-</script>

@@ -88,7 +88,7 @@
         :root { --mongoose: #baa987; --steelblue: #b0c4de; }
 
         body {
-            background-color: var(--steelblue) !important;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -112,27 +112,32 @@
         .price-box {
             font-size: 26px;
             font-weight: bold;
-            color: var(--mongoose);
+            color: #4682B4;
             margin: 20px 0;
             padding: 15px;
             background: #fff;
-            border: 2px dashed var(--mongoose);
+            border: 2px dashed #4682B4;
             text-align: center;
             border-radius: 10px;
         }
 
         .btn-add {
-            background: var(--mongoose);
+            background: #4682B4; /* Steel blue - matches View Details */
             color: white;
             border: none;
             width: 100%;
             padding: 15px;
             border-radius: 10px;
             font-weight: bold;
-            transition: 0.3s;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .btn-add:hover { background: #a39375; }
+        .btn-add:hover {
+            background: #357ABD; /* Darker blue on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+        }
 
         .product-img {
             max-width: 100%;
@@ -224,7 +229,7 @@
                 </form>
             </div>
         </div>
-    </div>z
+    </div>
 </section>
 
 <script>

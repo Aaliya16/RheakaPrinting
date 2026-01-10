@@ -105,15 +105,6 @@
         <option value="11.00">7XL (+RM 11.00)</option>
     </select>
 
-    <label class="label-black">6. Add Nametag (Optional)</label>
-    <select class="form-select" id="nametag_addon">
-        <option value="0">No Nametag</option>
-        <option value="12.00">Epoxy Magnet &ndash; RM 12.00</option>
-        <option value="8.00">Epoxy Pin &ndash; RM 8.00</option>
-        <option value="10.00">Plain Magnet &ndash; RM 10.00</option>
-        <option value="6.00">Plain Pin &ndash; RM 6.00</option>
-    </select>
-
 </div>
 
 <script>
