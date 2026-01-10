@@ -121,5 +121,70 @@ public class ProductDao {
         }
         return product;
     }
+    public boolean addProduct(Product p) {
+        boolean result = false;
+        try {
+            String query = "INSERT INTO products (name, category, price, quantity) VALUES (?, ?, ?, ?)";
+            java.sql.PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getCategory());
+            ps.setDouble(3, p.getPrice());
+            ps.setInt(4, p.getQuantity());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public boolean deleteProduct(int id) {
+        boolean result = false;
+        try {
+            String query = "DELETE FROM products WHERE id=?";
+            java.sql.PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setInt(1, id);
+            int rows = ps.executeUpdate();
+            if (rows > 0) result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    // Fetch one product by ID
+    public Product getSingleProduct(int id) {
+        Product p = null;
+        try {
+            String query = "SELECT * FROM products WHERE id=?";
+            PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                p.setPrice(rs.getDouble("price"));
+                p.setQuantity(rs.getInt("quantity"));
+                p.setCategory(rs.getString("category"));
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return p;
+    }
+
+    // Update the database
+    public boolean updateProduct(Product p) {
+        boolean result = false;
+        try {
+            String query = "UPDATE products SET name=?, price=?, quantity=?, category=? WHERE id=?";
+            PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setString(1, p.getName());
+            ps.setDouble(2, p.getPrice());
+            ps.setInt(3, p.getQuantity());
+            ps.setString(4, p.getCategory());
+            ps.setInt(5, p.getId());
+            result = ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); }
+        return result;
+    }
 }
 

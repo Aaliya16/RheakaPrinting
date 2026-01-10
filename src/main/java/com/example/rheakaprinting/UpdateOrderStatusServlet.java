@@ -45,6 +45,7 @@ public class UpdateOrderStatusServlet extends HttpServlet {
 
             // Use OrderDao to update status
             OrderDao orderDao = new OrderDao(DbConnection.getConnection());
+            // orderId should be an int, newStatus should be a String
             boolean updated = orderDao.updateOrderStatus(orderId, newStatus);
 
             if (updated) {

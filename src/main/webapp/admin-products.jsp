@@ -34,10 +34,8 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: #333; }
 
-        /* --- Main Content Layout --- */
-        /* Standardized Layout Sizes */
         .main-content {
-            margin-left: 260px; /* Matches your sidebar width */
+            margin-left: 260px;
             padding: 30px;
             min-height: 100vh;
             background: #f5f6fa;
@@ -45,20 +43,19 @@
 
         .top-bar {
             background: white;
-            padding: 0 35px; /* Side padding for the content inside */
+            padding: 0 35px;
             border-radius: 12px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.08);
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px; /* THIS IS THE KEY SIZE */
+            height: 70px; /* Matches dashboard */
         }
         .top-bar h1 {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            font-weight: 600; /* This creates the specific bold effect you like */
+            font-weight: 600;
             font-size: 24px;
-            color: #1a3a6d; /* The deep navy blue used in your panel */
+            color: #1a3a6d;
             margin: 0;
         }
 
@@ -84,16 +81,12 @@
         }
         .btn-add:hover { background-color: #27ae60; transform: translateY(-2px); }
 
-        /* --- Content Card & Table --- */
-        .content-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .filter-bar { margin-bottom: 25px; }
         .search-input { width: 100%; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none; }
 
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 12px 15px; background: #fcfcfc; color: #7f8c8d; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #f1f1f1; }
         td { padding: 15px; border-bottom: 1px solid #f8f9fa; font-size: 14px; }
 
-        /* Standardized Status Badges */
         .status-badge {
             padding: 6px 12px;
             border-radius: 6px;
@@ -101,8 +94,6 @@
             font-weight: 700;
             text-transform: uppercase;
         }
-
-        /* Matches the (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" logic */
         .in-stock { background: #d1e7dd; color: #0f5132; }
         .out-of-stock { background: #f8d7da; color: #842029; }
 
@@ -111,7 +102,6 @@
         .btn-delete { background: #fff5f5; color: var(--danger-red); margin-left: 5px; }
         .btn-action:hover { transform: scale(1.1); }
 
-        /* --- Modal Styles --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
         .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 15px; width: 450px; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -122,7 +112,6 @@
 </head>
 <body>
 
-<%-- Include the unified sidebar --%>
 <%@ include file="admin-sidebar.jsp" %>
 
 <div class="main-content">
@@ -132,21 +121,19 @@
             <h2>Products Management</h2>
         </div>
         <div class="admin-profile">
-            <div class="avatar-circle"><%= avatarLetter %></div>
             <strong style="font-size: 14px;"><%= displayName %></strong>
+            <div class="avatar-circle"><%= avatarLetter %></div>
         </div>
     </div>
 
     <div class="content-card">
         <div class="filter-action-bar" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;">
-
             <div style="display: flex; gap: 15px;">
                 <input type="text" class="search-input" id="searchInput"
                        placeholder="Search products..." onkeyup="filterTable()"
-                       style="flex: 2; padding: 12px 15px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none;">
+                       style="flex: 2;">
 
-                <select id="categoryFilter" onchange="filterTable()"
-                        style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none; background: white; cursor: pointer;">
+                <select id="categoryFilter" onchange="filterTable()" style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer;">
                     <option value="">All Categories</option>
                     <option value="Apparel">Apparel</option>
                     <option value="Printing">Printing</option>
@@ -154,8 +141,7 @@
                     <option value="Stationery">Stationery</option>
                 </select>
 
-                <select id="statusFilter" onchange="filterTable()"
-                        style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; outline: none; background: white; cursor: pointer;">
+                <select id="statusFilter" onchange="filterTable()" style="flex: 1; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; background: white; cursor: pointer;">
                     <option value="">All Status</option>
                     <option value="In Stock">In Stock</option>
                     <option value="Out of Stock">Out of Stock</option>
@@ -163,8 +149,7 @@
             </div>
 
             <div style="display: flex; justify-content: flex-start;">
-                <button type="button" class="btn-add" onclick="openModal('addModal')"
-                        style="background-color: var(--success-green); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s;">
+                <button type="button" class="btn-add" onclick="openAddModal()">
                     <i class="fas fa-plus"></i> Add New Product
                 </button>
             </div>
@@ -182,29 +167,23 @@
             </tr>
             </thead>
             <tbody>
-            <%-- Your existing loop here --%>
-            <%-- Use this new loop to show live data --%>
-            <%-- Updated loop with Delete Action and Filter Attributes --%>
             <% for (Product p : allProducts) { %>
-            <tr data-category="<%= p.getCategory() %>"
-                data-status="<%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>">
+            <tr data-category="<%= p.getCategory() %>" data-status="<%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>">
                 <td>#<%= p.getId() %></td>
                 <td><strong><%= p.getName() %></strong></td>
                 <td><%= p.getCategory() %></td>
                 <td>RM <%= String.format("%.2f", p.getPrice()) %></td>
                 <td>
-        <span class="status-badge <%= (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" %>">
-            <%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>
-        </span>
+                    <span class="status-badge <%= (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" %>">
+                        <%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>
+                    </span>
                 </td>
                 <td style="text-align: right;">
-                    <button class="btn-action btn-edit"
-                            onclick="window.location.href='edit-product.jsp?id=<%= p.getId() %>'">
+                    <button class="btn-action btn-edit" title="Edit"
+                            onclick="openEditModal('<%= p.getId() %>', '<%= p.getName().replace("'", "\\'") %>', '<%= p.getCategory() %>', '<%= p.getPrice() %>', '<%= p.getQuantity() %>')">
                         <i class="fas fa-edit"></i>
                     </button>
-
-                    <button class="btn-action btn-delete"
-                            style="background: #fff5f5; color: #ee5253; margin-left: 5px;"
+                    <button class="btn-action btn-delete" title="Delete"
                             onclick="confirmDelete('<%= p.getId() %>', '<%= p.getName().replace("'", "\\'") %>')">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -216,20 +195,21 @@
     </div>
 </div>
 
-<div id="addModal" class="modal">
+<div id="productModal" class="modal">
     <div class="modal-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="color: #1a3a6d;">Add New Product</h2>
-            <span onclick="closeModal('addModal')" style="cursor: pointer; font-size: 24px;">&times;</span>
+            <h2 id="modalTitle">Add New Product</h2>
+            <span onclick="closeModal()" style="cursor: pointer; font-size: 24px;">&times;</span>
         </div>
-        <form action="AddProductServlet" method="POST">
+        <form action="AddProductServlet" method="POST" id="productForm">
+            <input type="hidden" name="id" id="prodId">
             <div class="form-group">
                 <label>Product Name</label>
-                <input type="text" name="name" required placeholder="e.g. Custom T-Shirt">
+                <input type="text" name="name" id="prodName" required>
             </div>
             <div class="form-group">
                 <label>Category</label>
-                <select name="category" required>
+                <select name="category" id="prodCategory" required>
                     <option value="Apparel">Apparel</option>
                     <option value="Printing">Printing</option>
                     <option value="Signage">Signage</option>
@@ -238,15 +218,15 @@
             </div>
             <div class="form-group">
                 <label>Price (RM)</label>
-                <input type="number" step="0.01" name="price" required placeholder="0.00">
+                <input type="number" step="0.01" name="price" id="prodPrice" required>
             </div>
             <div class="form-group">
                 <label>Stock Quantity</label>
-                <input type="number" name="quantity" required placeholder="0">
+                <input type="number" name="quantity" id="prodQuantity" required>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button type="submit" class="btn-add" style="flex: 1; justify-content: center;">Save Product</button>
-                <button type="button" onclick="closeModal('addModal')" style="flex: 1; background: #eee; border: none; border-radius: 8px; cursor: pointer;">Cancel</button>
+                <button type="submit" class="btn-add" id="submitBtn" style="flex: 1; justify-content: center;">Save Product</button>
+                <button type="button" onclick="closeModal()" style="flex: 1; background: #eee; border: none; border-radius: 8px; cursor: pointer;">Cancel</button>
             </div>
         </form>
     </div>
@@ -257,7 +237,6 @@
         let searchText = document.getElementById("searchInput").value.toLowerCase();
         let categoryValue = document.getElementById("categoryFilter").value.toLowerCase();
         let statusValue = document.getElementById("statusFilter").value.toLowerCase();
-
         let rows = document.querySelectorAll("#productsTable tbody tr");
 
         rows.forEach(row => {
@@ -265,38 +244,51 @@
             let rowCategory = row.getAttribute("data-category").toLowerCase();
             let rowStatus = row.getAttribute("data-status").toLowerCase();
 
-            // Check if row matches all filters
             let matchesSearch = productName.includes(searchText);
             let matchesCategory = categoryValue === "" || rowCategory === categoryValue;
             let matchesStatus = statusValue === "" || rowStatus === statusValue;
 
-            if (matchesSearch && matchesCategory && matchesStatus) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
+            row.style.display = (matchesSearch && matchesCategory && matchesStatus) ? "" : "none";
         });
     }
 
     function confirmDelete(productId, productName) {
         if (confirm("Are you sure you want to delete '" + productName + "'?\nThis action cannot be undone.")) {
-            // Redirect to a servlet that handles the deletion
             window.location.href = "DeleteProductServlet?id=" + productId;
         }
     }
-    function openModal(id) {
-        document.getElementById(id).style.display = "block";
+
+    function openEditModal(id, name, category, price, quantity) {
+        document.getElementById('modalTitle').innerText = "Edit Product";
+        document.getElementById('submitBtn').innerText = "Update Product";
+        document.getElementById('productForm').action = "UpdateProductServlet";
+
+        document.getElementById('prodId').value = id;
+        document.getElementById('prodName').value = name;
+        document.getElementById('prodCategory').value = category;
+        document.getElementById('prodPrice').value = price;
+        document.getElementById('prodQuantity').value = quantity;
+
+        document.getElementById('productModal').style.display = "block";
     }
 
-    function closeModal(id) {
-        document.getElementById(id).style.display = "none";
+    function openAddModal() {
+        document.getElementById('modalTitle').innerText = "Add New Product";
+        document.getElementById('submitBtn').innerText = "Save Product";
+        document.getElementById('productForm').action = "AddProductServlet";
+        document.getElementById('productForm').reset();
+        document.getElementById('prodId').value = "";
+        document.getElementById('productModal').style.display = "block";
     }
 
-    // Close modal if user clicks outside the box
+    function closeModal() {
+        document.getElementById('productModal').style.display = "none";
+    }
+
     window.onclick = function(event) {
-        let modal = document.getElementById('addModal');
+        let modal = document.getElementById('productModal');
         if (event.target == modal) {
-            closeModal('addModal');
+            closeModal();
         }
     }
 </script>

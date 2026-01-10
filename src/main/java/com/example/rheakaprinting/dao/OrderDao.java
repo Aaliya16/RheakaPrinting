@@ -104,4 +104,22 @@ public class OrderDao {
         }
         return list;
     }
+    public boolean updateOrderStatus(int id, String status) {
+        boolean result = false;
+        try {
+            // SQL query to update the status of a specific order
+            String query = "UPDATE orders SET status=? WHERE id=?";
+            java.sql.PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setString(1, status);
+            ps.setInt(2, id);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                result = true;
+            }
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
