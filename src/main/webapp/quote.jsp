@@ -17,7 +17,15 @@
     <title>Rheaka Design Services</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* --- QUOTE FORM STYLES --- */
+        body {
+            /* Gradient biru yang Mia mahu */
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+
+            /* Pastikan gradient memenuhi seluruh skrin */
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
 
         /* Ini kotak putih untuk form (Sama style macam Cart) */
         .quote-box {

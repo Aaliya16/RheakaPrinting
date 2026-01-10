@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: lightsteelblue;
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
 }
 
 .navbar {
