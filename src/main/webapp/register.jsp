@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 20/12/2025
-  Time: 12:24 pm
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -68,7 +61,7 @@
             outline: none;
         }
         .signup-btn {
-            background: linear-gradient(to right, #44cc00, #22aa00); /* Green gradient matching login.jsp */
+            background: #4682B4;
             color: white;
             border: none;
             width: 100%;
@@ -90,6 +83,21 @@
         .footer-links a {
             color: #0055ff;
             text-decoration: none;
+        }
+        .field-icon {
+            width: 20px;          /* Specific width for the icon */
+            height: 20px;         /* Specific height for the icon */
+            object-fit: contain;  /* Keeps the icon from stretching */
+            flex-shrink: 0;       /* IMPORTANT: Prevents the "squishing" seen in your photo */
+            margin-right: 12px;   /* Space between icon and text input */
+        }
+
+        .input-wrapper {
+            background: #f0f0f0;
+            border-radius: 12px;
+            padding: 8px 15px;    /* Adjusted padding for a cleaner look */
+            display: flex;
+            align-items: center;  /* Vertically centers icon and text */
         }
     </style>
 </head>
@@ -124,23 +132,23 @@
             <div class="form-group">
                 <label>Username</label>
                 <div class="input-wrapper">
-                    <span>👤</span>
-                    <input type="text" name="name" placeholder="Full Name" required>
+                    <img src="${pageContext.request.contextPath}/assets/img/icons8-account-male-50.png" class="field-icon" alt="Lock">
+                    <input type="text" name="name" placeholder="Username" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Email</label>
                 <div class="input-wrapper">
-                    <span>✉️</span>
-                    <input type="email" name="email" placeholder="Email Address" required>
+                    <img src="${pageContext.request.contextPath}/assets/img/icons8-email-30.png" class="field-icon" alt="User">
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Password</label>
+                <label>Your password</label>
                 <div class="input-wrapper">
-                    <span>🔒</span>
+                    <img src="${pageContext.request.contextPath}/assets/img/icons8-lock-30.png" class="field-icon" alt="Lock">
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
             </div>
