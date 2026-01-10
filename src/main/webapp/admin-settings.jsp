@@ -5,7 +5,6 @@
 <%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 <%@ include file="admin-auth-check.jsp" %>
 <%
-    // Restoring the displayName variable you had originally
     String displayName = (adminUser != null && !adminUser.trim().isEmpty()) ? adminUser : "Admin";
 %>
 <!DOCTYPE html>
@@ -17,7 +16,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --brand-color: #6c5ce7; /* Professional monochrome purple */
+            --brand-color: #6c5ce7;
             --brand-light: rgba(108, 92, 231, 0.1);
             --bg-body: #f1f2f6;
             --text-main: #2d3436;
@@ -33,7 +32,6 @@
 
         .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
 
-        /* Standardized Top Bar */
         .top-bar {
             background: white;
             padding: 20px 35px;
@@ -64,7 +62,6 @@
             font-weight: bold; font-size: 14px;
         }
 
-        /* Settings Grid Layout */
         .settings-grid {
             display: grid;
             gap: 25px;
@@ -82,6 +79,12 @@
             transition: 0.3s ease;
         }
         .settings-card:hover { transform: translateY(-5px); }
+
+        .settings-card form, .maintenance-actions {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
 
         .settings-card h2 {
             color: var(--text-main); font-size: 18px; margin-bottom: 25px;
@@ -105,7 +108,6 @@
         .btn-primary { background: var(--brand-color); color: white; width: 100%; }
         .btn-primary:hover { opacity: 0.9; }
 
-        /* Back Button */
         .back-container { display: flex; justify-content: flex-end; margin-top: 30px; width: 100%; grid-column: 1 / -1; }
         .btn-back {
             display: flex; align-items: center; gap: 8px; padding: 12px 25px;
@@ -114,11 +116,10 @@
         }
         .btn-back:hover { background: var(--brand-color); color: white; }
 
-        /* Updated Toast: Bottom-Center Slide Up */
         #toast {
             visibility: hidden;
             min-width: 300px;
-            background-color: #2ecc71; /* Success Green */
+            background-color: #2ecc71;
             color: #fff;
             text-align: center;
             border-radius: 12px;
@@ -126,8 +127,8 @@
             position: fixed;
             z-index: 1000;
             left: 50%;
-            bottom: 30px; /* Distance from bottom */
-            transform: translateX(-50%); /* Centering logic */
+            bottom: 30px;
+            transform: translateX(-50%);
             font-size: 15px;
             font-weight: 600;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -142,13 +143,11 @@
             animation: slideUpFade 0.5s, slideDownFade 0.5s 2.5s;
         }
 
-        /* Slide Up and Fade In from Bottom */
         @keyframes slideUpFade {
             from { bottom: 0; opacity: 0; transform: translate(-50%, 20px); }
             to { bottom: 30px; opacity: 1; transform: translate(-50%, 0); }
         }
 
-        /* Slide Down and Fade Out */
         @keyframes slideDownFade {
             from { bottom: 30px; opacity: 1; transform: translate(-50%, 0); }
             to { bottom: 0; opacity: 0; transform: translate(-50%, 20px); }
@@ -174,70 +173,48 @@
     </div>
 
     <div class="settings-grid">
-        <%-- Fixed Data Logic to prevent "Variable already defined" errors --%>
         <%
             Connection gridConn = DbConnection.getConnection();
             SettingsDao gridDao = new SettingsDao(gridConn);
             Map<String, String> gridSettings = gridDao.getAllSettings();
         %>
-            <%-- New Footer Contact Info Card --%>
-            <div class="settings-card">
-                <h2><i class="fas fa-map-marker-alt"></i> Footer Contact Info</h2>
-                <form action="UpdateSettingsServlet" method="POST">
-                    <div class="form-group">
-                        <label>Business Address</label>
-                        <%-- Value pulled from your settings map --%>
-                        <input type="text" name="footer_address" value="<%= gridSettings.getOrDefault("footer_address", "Gerai No.12, Tapak Pauh Lama, 02600 Arau Perlis") %>">
-                    </div>
-                    <div class="form-group">
-                        <label>Public Email</label>
-                        <input type="email" name="footer_email" value="<%= gridSettings.getOrDefault("footer_email", "rheakadesign@gmail.com") %>">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Website Footer</button>
-                </form>
-            </div>
-        <%-- CARD 1: Updated Social Presence with TikTok --%>
-            <%-- CARD 1: Corrected Social Presence with TikTok --%>
-            <div class="settings-card">
-                <h2><i class="fas fa-share-alt"></i> Social Presence</h2>
-                <form action="UpdateSettingsServlet" method="POST">
-                    <div class="form-group">
-                        <label><i class="fab fa-facebook"></i> Facebook URL</label>
-                        <%-- name changed to "facebook_url" to match footer --%>
-                        <input type="url" name="facebook_url" value="<%= gridSettings.getOrDefault("facebook_url", "https://www.facebook.com/matuzair06/") %>">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fab fa-tiktok"></i> TikTok URL</label>
-                        <%-- name remains "tiktok_url" --%>
-                        <input type="url" name="tiktok_url" value="<%= gridSettings.getOrDefault("tiktok_url", "https://www.tiktok.com/@rheakadesign") %>">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
-                        <%-- name changed to "whatsapp_num" to match footer --%>
-                        <input type="text" name="whatsapp_num" value="<%= gridSettings.getOrDefault("whatsapp_num", "011-7078-7469") %>">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Social Links</button>
-                </form>
-            </div>
+        <%-- Footer Contact Info Card --%>
+        <div class="settings-card">
+            <h2><i class="fas fa-map-marker-alt"></i> Footer Contact Info</h2>
+            <form action="UpdateSettingsServlet" method="POST">
+                <div class="form-group">
+                    <label>Business Address</label>
+                    <input type="text" name="footer_address" value="<%= gridSettings.getOrDefault("footer_address", "Gerai No.12, Tapak Pauh Lama, 02600 Arau Perlis") %>">
+                </div>
+                <div class="form-group">
+                    <label>Public Email</label>
+                    <input type="email" name="footer_email" value="<%= gridSettings.getOrDefault("footer_email", "rheakadesign@gmail.com") %>">
+                </div>
+                <button type="submit" class="btn btn-primary">Update Website Footer</button>
+            </form>
+        </div>
 
-        <%-- CARD 2: Regional & Tax --%>
-            <%-- Regional & Tax Card --%>
-            <div class="settings-card">
-                <h2><i class="fas fa-money-bill-wave"></i> Regional & Tax</h2>
-                <form action="UpdateSettingsServlet" method="POST">
-                    <div class="form-group">
-                        <label>Currency Symbol</label>
-                        <input type="text" name="currency_symbol" value="<%= gridSettings.getOrDefault("currency_symbol", "RM") %>">
-                    </div>
-                    <div class="form-group">
-                        <label>SST / Tax Percentage (%)</label>
-                        <input type="number" name="tax_rate" step="0.1" value="<%= gridSettings.getOrDefault("tax_rate", "6") %>">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Finance Settings</button>
-                </form>
-            </div>
+        <%-- Social Presence Card --%>
+        <div class="settings-card">
+            <h2><i class="fas fa-share-alt"></i> Social Presence</h2>
+            <form action="UpdateSettingsServlet" method="POST">
+                <div class="form-group">
+                    <label><i class="fab fa-facebook"></i> Facebook URL</label>
+                    <input type="url" name="facebook_url" value="<%= gridSettings.getOrDefault("facebook_url", "https://www.facebook.com/matuzair06/") %>">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-tiktok"></i> TikTok URL</label>
+                    <input type="url" name="tiktok_url" value="<%= gridSettings.getOrDefault("tiktok_url", "https://www.tiktok.com/@rheakadesign") %>">
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-whatsapp"></i> WhatsApp Number</label>
+                    <input type="text" name="whatsapp_num" value="<%= gridSettings.getOrDefault("whatsapp_num", "011-7078-7469") %>">
+                </div>
+                <button type="submit" class="btn btn-primary">Update Social Links</button>
+            </form>
+        </div>
 
-        <%-- CARD 3: Shipping Rules --%>
+        <%-- Shipping Rules --%>
         <div class="settings-card">
             <h2><i class="fas fa-shipping-fast"></i> Shipping Rules</h2>
             <form action="UpdateShippingSettings" method="POST">
@@ -257,7 +234,7 @@
             </form>
         </div>
 
-        <%-- CARD 4: Security --%>
+        <%-- Security --%>
         <div class="settings-card">
             <h2><i class="fas fa-key"></i> Security</h2>
             <form action="UpdateAdminPassword" method="POST">
@@ -270,16 +247,20 @@
             </form>
         </div>
 
-        <%-- CARD 5: Maintenance --%>
+        <%-- Maintenance --%>
         <div class="settings-card">
             <h2><i class="fas fa-database"></i> Maintenance</h2>
-            <p style="font-size: 13px; color: #b2bec3; margin-bottom: 20px; line-height: 1.5;">Regular maintenance prevents data loss from unexpected server failures.</p>
-            <button class="btn btn-primary" style="background: var(--brand-light); color: var(--brand-color); margin-bottom: 12px;">
-                <i class="fas fa-download"></i> Generate SQL Backup
-            </button>
-            <button class="btn btn-primary" style="background: #f1f2f6; color: var(--danger-red);">
-                <i class="fas fa-broom"></i> Clear Audit Logs
-            </button>
+            <p style="font-size: 13px; color: #636e72; margin-bottom: 25px; line-height: 1.6;">
+                Regular maintenance prevents data loss from unexpected server failures and keeps the system running fast.
+            </p>
+            <div class="maintenance-actions">
+                <button class="btn" style="background: var(--brand-light); color: var(--brand-color); margin-bottom: 12px; width: 100%;">
+                    <i class="fas fa-download" style="margin-right: 8px;"></i> Generate SQL Backup
+                </button>
+                <button class="btn" style="background: #fff5f5; color: var(--danger-red); border: 1px solid #ffe3e3; width: 100%;">
+                    <i class="fas fa-broom" style="margin-right: 8px;"></i> Clear Audit Logs
+                </button>
+            </div>
         </div>
 
         <div class="back-container">
@@ -289,20 +270,17 @@
         </div>
     </div>
 </div>
+
 <div id="toast"><i class="fas fa-check-circle"></i> Settings updated successfully!</div>
 
 <script>
     window.onload = function() {
-        // Check if the URL contains 'status=success'
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('status') === 'success') {
             var x = document.getElementById("toast");
             x.className = "show";
-
-            // Remove the notification after 3 seconds
             setTimeout(function(){
                 x.className = x.className.replace("show", "");
-                // Clean the URL so the toast doesn't reappear on manual refresh
                 window.history.replaceState({}, document.title, window.location.pathname);
             }, 3000);
         }
