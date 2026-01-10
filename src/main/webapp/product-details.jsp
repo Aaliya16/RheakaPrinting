@@ -9,7 +9,7 @@
     String pName = "Printing Service";
     String pDesc = "High-quality custom printing solutions.";
     String pImage = "product_single_10.jpg";
-    String pCategory = ""; // Kita tambah category untuk logic include file nanti
+    String pCategory = "";
 
     // 2. DATABASE CONNECTION & QUERY
     if (id != null) {
@@ -24,7 +24,7 @@
                 pName = rs.getString("name");
                 pDesc = rs.getString("description");
                 pImage = rs.getString("image");
-                pCategory = rs.getString("category"); // Penting untuk tentukan file mana nak load
+                pCategory = rs.getString("category");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -219,7 +219,7 @@
                                         sectionFile = "stickers.jsp";
                                         break;
                                     default:
-                                        // Kalau ID baru masuk (contoh ID 9), dia akan load default
+
                                         sectionFile = "default_options.jsp";
                                         break;
                                 }
@@ -250,35 +250,30 @@
 </section>
 
 <script>
-    // Fungsi ini akan jalan bila user tukar pilihan
     function updateHiddenInputs() {
-        // 1. Dapatkan element dropdown
         var baseSelect = document.getElementById("base_item");
         var addonSelect = document.getElementById("addon_service");
 
-        // 2. Dapatkan TEKS pilihan (Contoh: "Banner 2' x 1'")
-        // Kalau tak buat ni, dia akan hantar harga (6.00) je
         if (baseSelect) {
             var textVariation = baseSelect.options[baseSelect.selectedIndex].text;
-            // MASUKKAN KE DALAM HIDDEN INPUT (Ikut ID dalam screenshot awak)
+
             document.getElementById("hiddenVariationName").value = textVariation;
         }
 
         if (addonSelect) {
             var textAddon = addonSelect.options[addonSelect.selectedIndex].text;
-            // MASUKKAN KE DALAM HIDDEN INPUT (Ikut ID dalam screenshot awak)
+
             document.getElementById("hiddenAddonName").value = textAddon;
         }
     }
 
-    // Jalankan script ini bila dropdown berubah
+
     var drop1 = document.getElementById("base_item");
     var drop2 = document.getElementById("addon_service");
 
     if(drop1) drop1.addEventListener("change", updateHiddenInputs);
     if(drop2) drop2.addEventListener("change", updateHiddenInputs);
 
-    // Jalankan sekali masa page baru load (supaya default value masuk)
     window.addEventListener("load", updateHiddenInputs);
 </script>
 <script src="js/priceCalculator.js"></script>
