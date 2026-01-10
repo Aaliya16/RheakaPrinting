@@ -195,7 +195,7 @@
     <div class="content-card">
         <div class="filter-section">
             <select class="filter-select" id="statusFilter" onchange="filterTable()">
-                <option value="">All Statuses</option>
+                <option value="">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="processing">Processing</option>
                 <option value="completed">Completed</option>
