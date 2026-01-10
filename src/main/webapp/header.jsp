@@ -20,7 +20,7 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         position: sticky;
         top: 0;
-        z-index: 2000; /* Ditingkatkan supaya sentiasa di atas */
+        z-index: 99999;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -50,6 +50,8 @@
         align-items: center;
         gap: 35px;
         list-style: none;
+        position: relative;
+        overflow: visible;
     }
 
     .nav-links a {
@@ -69,6 +71,7 @@
     .dropdown {
         position: relative;
         display: inline-block;
+        overflow: visible;
     }
 
     .dropdown-toggle {
@@ -81,7 +84,6 @@
         color: #333;
     }
 
-    /* ✅ FIX: PADAM ARROW KECIL BOLD (CARET) BOOTSTRAP */
     .dropdown-toggle::after {
         display: none !important;
         content: none !important;
@@ -96,7 +98,7 @@
         transform: rotate(180deg);
     }
 
-    /* Dropdown Menu */
+    /* Dropdown Menu - Updated */
     .dropdown-menu {
         position: absolute;
         top: 100%;
@@ -110,14 +112,17 @@
         visibility: hidden;
         transform: translateY(-10px);
         transition: all 0.3s ease;
-        z-index: 3000; /* Sangat penting supaya tidak "slack" di belakang produk */
+        /* Increased z-index and added !important to override Bootstrap */
+        z-index: 100000 !important;
         margin-top: 10px;
+        display: none; /* Add this to prevent accidental clicks when hidden */
     }
 
     .dropdown:hover .dropdown-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+        display: block !important; /* Overrides Bootstrap .dropdown-menu { display: none; } */
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateY(0) !important;
     }
 
     .dropdown-menu a {

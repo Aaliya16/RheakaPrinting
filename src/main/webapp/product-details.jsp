@@ -81,8 +81,8 @@
 <html lang="en">
 <head>
     <title>Rheaka Design - <%= pName %></title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
         /* Color Variables for Consistency */
         :root { --mongoose: #baa987; --steelblue: #b0c4de; }
@@ -143,6 +143,23 @@
             max-width: 100%;
             height: auto;
             border-radius: 15px;
+        }
+
+        /* Force the custom dropdown to be visible over Bootstrap defaults */
+        .dropdown:hover .dropdown-menu {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Ensure the navbar remains the top-most element on this specific page */
+        .navbar {
+            z-index: 99999 !important;
+        }
+
+        .dropdown-menu {
+            z-index: 100000 !important;
         }
     </style>
 </head>
@@ -267,5 +284,7 @@
 <script src="js/priceCalculator.js"></script>
 
 <%@ include file="footer.jsp" %>
+<section class="container py-5">
+</section>
 </body>
 </html>
