@@ -22,7 +22,7 @@
 
         /* Hero Section - Lightsteelblue Gradient */
         .hero-section {
-            background: linear-gradient(135deg, #b0c4de 0%, #87CEEB 50%, #4682B4 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;

@@ -20,7 +20,7 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         position: sticky;
         top: 0;
-        z-index: 1000;
+        z-index: 2000; /* Ditingkatkan supaya sentiasa di atas */
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -77,6 +77,14 @@
         align-items: center;
         gap: 8px;
         font-weight: 700;
+        text-decoration: none;
+        color: #333;
+    }
+
+    /* ✅ FIX: PADAM ARROW KECIL BOLD (CARET) BOOTSTRAP */
+    .dropdown-toggle::after {
+        display: none !important;
+        content: none !important;
     }
 
     .dropdown-toggle i {
@@ -88,6 +96,7 @@
         transform: rotate(180deg);
     }
 
+    /* Dropdown Menu */
     .dropdown-menu {
         position: absolute;
         top: 100%;
@@ -101,8 +110,8 @@
         visibility: hidden;
         transform: translateY(-10px);
         transition: all 0.3s ease;
-        z-index: 1000;
-        margin-top: 15px;
+        z-index: 3000; /* Sangat penting supaya tidak "slack" di belakang produk */
+        margin-top: 10px;
     }
 
     .dropdown:hover .dropdown-menu {
