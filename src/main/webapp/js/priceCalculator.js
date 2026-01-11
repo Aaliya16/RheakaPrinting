@@ -1,12 +1,3 @@
-/**
- * Rheaka Design - Universal Price Calculation Engine (FIXED VERSION)
- * ✅ Fixed: Removed hardcoded shipping fee to prevent price inflation
- * ✅ Fixed: Added debouncing to prevent multiple calculations
- * ✅ Fixed: Added calculation lock to prevent race conditions
- * ✅ Updated: Handles Apparel (Sublimation, Silkscreen, Logo), Nametag Add-ons,
- * and all other 7 standard products.
- */
-
 // Global flag to prevent multiple simultaneous calculations
 let isCalculating = false;
 
