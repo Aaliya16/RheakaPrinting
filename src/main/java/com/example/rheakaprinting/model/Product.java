@@ -1,18 +1,20 @@
 package com.example.rheakaprinting.model;
 
+//Base model representing a product in the catalog
 public class Product {
     private int id;
     private String name;
     private String category;
     private double price;
     private String image;
-    private int quantity;
+    private int quantity; //typically used for user-selected quantity
     private String description;
-    private int stock;
+    private int stock; // physical stock available in the warehouse
 
     public Product() {
     }
 
+    //Parameterized constructor for product initialization.
     public Product(int id, String name, String category, double price, String image, int quantity, String description, int stock) {
         this.id = id;
         this.name = name;
@@ -24,6 +26,7 @@ public class Product {
         this.stock = stock;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }

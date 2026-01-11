@@ -5,6 +5,7 @@ import com.example.rheakaprinting.model.Product;
 import java.sql.*;
 import java.util.*;
 
+//Data Access Object for product management and inventory control
 public class ProductDao {
     private Connection con;
     private String query;
@@ -15,9 +16,9 @@ public class ProductDao {
         this.con = con;
     }
 
-    // PENTING: Gunakan nama kolum 'stock_quantity' secara konsisten jika itu yang ada di DB
     private static final String COL_STOCK = "stock_quantity";
 
+    // Retrieves all products currently available in the database
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM products";
@@ -39,6 +40,7 @@ public class ProductDao {
         return products;
     }
 
+    // Adds a new product to the catalog
     public boolean addProduct(Product p) {
         boolean result = false;
         // Dibaiki: Guna COL_STOCK (stock_quantity)
@@ -55,6 +57,7 @@ public class ProductDao {
         return result;
     }
 
+    // Reduces stock level only if the requested amount is available
     public boolean reduceStock(int productId, int quantityPurchased) {
         boolean result = false;
         String query = "UPDATE products SET " + COL_STOCK + " = " + COL_STOCK + " - ? WHERE id = ? AND " + COL_STOCK + " >= ?";
@@ -69,12 +72,12 @@ public class ProductDao {
         return result;
     }
 
+    // Maps session cart items to actual product data from the database
     public List<Cart> getCartProducts(ArrayList<Cart> cartList) {
         List<Cart> cartProducts = new ArrayList<>();
         try {
             if (cartList != null && cartList.size() > 0) {
                 for (Cart item : cartList) {
-                    // Pastikan SELECT * atau pilih kolum stok secara spesifik
                     query = "SELECT * FROM products WHERE id=?";
                     pst = this.con.prepareStatement(query);
                     pst.setInt(1, item.getId());
@@ -100,6 +103,7 @@ public class ProductDao {
         return cartProducts;
     }
 
+    // Calculates the total price for all items in the cart
     public double getTotalCartPrice(ArrayList<Cart> cartList) {
         double sum = 0;
         try {
@@ -115,6 +119,7 @@ public class ProductDao {
         return sum;
     }
 
+    // Removes a product from the database by ID
     public boolean deleteProduct(int id) {
         boolean result = false;
         try {
@@ -129,6 +134,7 @@ public class ProductDao {
         return result;
     }
 
+    // Fetches detailed information for a specific product
     public Product getSingleProduct(int id) {
         Product p = null;
         try {
@@ -150,6 +156,7 @@ public class ProductDao {
         return p;
     }
 
+    // Updates existing product details like price or stock quantity
     public boolean updateProduct(Product p) {
         boolean result = false;
         try {

@@ -17,11 +17,13 @@
     }
 
     int totalProducts = allProducts.size();
+    int inStock = 0;
     int outOfStock = 0;
     int lowStock = 0;
     for (Product p : allProducts) {
         if (p.getQuantity() <= 0) outOfStock++;
         else if (p.getQuantity() < 5) lowStock++;
+        else inStock++;
     }
 %>
 <!DOCTYPE html>
@@ -114,7 +116,7 @@
         }
         .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--brand-color); color: white;
@@ -161,6 +163,7 @@
             font-weight: 700; text-transform: uppercase;
         }
         .in-stock { background: #d1e7dd; color: #0f5132; }
+        .low-stock { background: #f2e7c3; color: #d4af37}
         .out-of-stock { background: #f8d7da; color: #842029; }
 
         .btn-action { width: 35px; height: 35px; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
@@ -202,10 +205,17 @@
             <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search products...">
         </div>
 
-        <%-- Profile section with "Admin" text removed --%>
-        <div class="admin-profile">
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
+            </div>
+
+            <%-- Avatar Circle --%>
             <div class="avatar-circle">
-                <%= (displayName != null && !displayName.isEmpty()) ? displayName.substring(0, 1).toUpperCase() : "A" %>
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
             </div>
         </div>
     </div>
@@ -234,8 +244,8 @@
         </div>
         <div class="stat-card">
             <div>
-                <div class="stat-val">Live</div>
-                <div class="stat-label">Sync Status</div>
+                <div class="stat-val"><%= inStock %></div>
+                <div class="stat-label">In Stock</div>
             </div>
             <div class="stat-icon-mini"><i class="fas fa-sync"></i></div>
         </div>
@@ -284,8 +294,8 @@
                 <td><%= p.getCategory() %></td>
                 <td style="font-weight: 700;">RM <%= String.format("%.2f", p.getPrice()) %></td>
                 <td>
-                    <span class="status-badge <%= (p.getQuantity() > 0) ? "in-stock" : "out-of-stock" %>">
-                        <%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>
+                    <span class="status-badge <%= (p.getQuantity() == 0) ? "out-of-stock" : (p.getQuantity() <= 5) ? "low-stock" : "in-stock" %>">
+                    <%= (p.getQuantity() == 0) ? "Out of Stock" : (p.getQuantity() <= 5) ? "Low Stock" : "In Stock" %>
                     </span>
                 </td>
                 <td style="font-weight: 700; color: var(--text-main);"><%= p.getQuantity() %> units</td>

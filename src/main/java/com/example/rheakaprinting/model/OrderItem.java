@@ -1,14 +1,15 @@
 package com.example.rheakaprinting.model;
 
+//Stores specific details for printing such as variations and custom design.
 public class OrderItem {
     private int id;
-    private int orderId;
-    private int productId;
+    private int orderId; // link to 'orders' table
+    private int productId; // link to the 'products' table
     private int quantity;
-    private double price;
+    private double price; // price at the time of purchase
     private String variation;
     private String addon;
-    private String designImage;
+    private String designImage; //path to the uploaded design file
 
     // Default Constructor
     public OrderItem() {}

@@ -90,7 +90,7 @@
         }
         .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--brand-color); color: white;
@@ -162,8 +162,15 @@
             <input type="text" id="userInput" onkeyup="filterUsers()" placeholder="Search by name or email...">
         </div>
 
-        <div class="admin-profile">
-            <strong style="font-size: 14px; margin-right: 10px;"><%= adminUser %></strong>
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
+            </div>
+
+            <%-- Avatar Circle --%>
             <div class="avatar-circle">
                 <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
             </div>

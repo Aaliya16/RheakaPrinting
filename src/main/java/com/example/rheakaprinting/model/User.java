@@ -1,5 +1,6 @@
 package com.example.rheakaprinting.model;
 
+//supports role-based access control
 public class User {
     private int userId;
     private String username;
@@ -11,6 +12,7 @@ public class User {
     public User() {
     }
 
+    //constructor
     public User(int userId, String username, String email, String password, String role) {
         this.userId = userId;
         this.username = username;
@@ -19,7 +21,7 @@ public class User {
         this.role = role;
     }
 
-    // --- GETTERS & SETTERS (Wajib Ada!) ---
+    // --- GETTERS & SETTERS
 
     public int getUserId() {
         return userId;

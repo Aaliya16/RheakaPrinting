@@ -147,10 +147,11 @@
 
         .message-row[data-status*="read"] { opacity: 0.7; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
-            width: 40px; height: 40px; background: var(--brand-color); color: white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--brand-color); color: white;
+            display: flex; align-items: center; justify-content: center;
             font-weight: bold; font-size: 14px;
         }
 
@@ -179,10 +180,17 @@
             <input type="text" id="msgInput" onkeyup="searchTable()" placeholder="Search messages...">
         </div>
 
-        <div class="admin-profile">
-            <strong style="font-size: 14px; margin-right: 10px;"><%= adminUser %></strong>
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
+            </div>
+
+            <%-- Avatar Circle --%>
             <div class="avatar-circle">
-                <%= (adminUser != null && adminUser.length() > 0) ? adminUser.substring(0,1).toUpperCase() : "A" %>
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
             </div>
         </div>
     </div>

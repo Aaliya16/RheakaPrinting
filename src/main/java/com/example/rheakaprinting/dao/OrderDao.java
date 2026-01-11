@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//Data Access Object for managing customer orders and inventory synchronization.
 public class OrderDao {
     private Connection con;
 
@@ -17,58 +18,60 @@ public class OrderDao {
     public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone, String paymentMethod, String fullName, String email, String orderNotes) {
         int orderId = 0;
         try {
-            // A. MULAKAN TRANSAKSI
+            //Start Transaction : Prevent partial data entry if an error occurs
             con.setAutoCommit(false);
 
-            // 1. Masukkan ke table 'orders' (GUNA recipient_name & recipient_email)
             String query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date, payment_method, recipient_name, recipient_email, order_notes) VALUES (?, ?, ?, ?, 'Pending', NOW(), ?, ?, ?, ?)";
             PreparedStatement pst = this.con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pst.setInt(1, userId);
-            pst.setDouble(2, totalAmount);
-            pst.setString(3, address);
-            pst.setString(4, phone);
-            pst.setString(5, paymentMethod);
-            pst.setString(6, fullName);
-            pst.setString(7, email);
-            pst.setString(8, orderNotes);
+
+            // FIXED: Parameter mapping now matches SQL column order
+            pst.setInt(1, userId);              // user_id
+            pst.setDouble(2, totalAmount);      // total_amount
+            pst.setString(3, address);          // address
+            pst.setString(4, phone);            // phone_number
+            // position 5 = 'Pending' (hardcoded in SQL)
+            // position 6 = NOW() (hardcoded in SQL)
+            pst.setString(5, paymentMethod);    // payment_method (? position 5 in VALUES)
+            pst.setString(6, fullName);         // recipient_name (? position 6 in VALUES)
+            pst.setString(7, email);            // recipient_email (? position 7 in VALUES)
+            pst.setString(8, orderNotes);       // order_notes (? position 8 in VALUES)
 
             if (pst.executeUpdate() > 0) {
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) orderId = rs.getInt(1);
 
-                // 2. Masukkan item ke 'order_details' DAN tolak stok
                 String queryDetails = "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
                 String queryStock = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
 
                 PreparedStatement pstDetails = this.con.prepareStatement(queryDetails);
                 PreparedStatement pstStock = this.con.prepareStatement(queryStock);
 
+                //Process each item in the cart
                 for (Cart c : cartList) {
-                    // Simpan Detail
+                    // save item record
                     pstDetails.setInt(1, orderId);
                     pstDetails.setInt(2, c.getId());
                     pstDetails.setInt(3, c.getQuantity());
                     pstDetails.setDouble(4, c.getPrice());
                     pstDetails.executeUpdate();
 
-                    // Tolak Stok
                     pstStock.setInt(1, c.getQuantity());
                     pstStock.setInt(2, c.getId());
                     pstStock.setInt(3, c.getQuantity());
 
                     int stockCheck = pstStock.executeUpdate();
                     if (stockCheck == 0) {
-                        throw new SQLException("Stok tidak mencukupi untuk Produk ID: " + c.getId());
+                        throw new SQLException("Insufficient stock for Product ID: " + c.getId());
                     }
                 }
 
                 con.commit();
-                System.out.println("✅ Transaksi Berjaya: Order disimpan & Stok ditolak.");
+                System.out.println("✅ Success: Order placed and stock updated.");
             }
         } catch (SQLException e) {
             try {
                 if (con != null) con.rollback();
-                System.err.println("❌ Transaksi Gagal: Rollback dilakukan. " + e.getMessage());
+                System.err.println("❌ Transaction Failed: Rollback executed. " + e.getMessage());
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -83,7 +86,7 @@ public class OrderDao {
         return orderId;
     }
 
-    // --- METHOD 2: USER ORDERS (Customer "My Orders" Page) ---
+    //fetches order history for a specific customer
     public List<Order> userOrders(int userId) {
         List<Order> list = new ArrayList<>();
         try {
@@ -111,15 +114,16 @@ public class OrderDao {
     public List<Order> getAllOrders() {
         List<Order> list = new ArrayList<>();
         try {
-            // Join dengan users table untuk dapat customer name
-            String query = "SELECT orders.*, users.name FROM orders JOIN users ON orders.user_id = users.id ORDER BY orders.id DESC";
+            // Join dengan users table untuk dapat customer name & email
+            String query = "SELECT orders.*, orders.recipient_name, orders.recipient_email FROM orders ORDER BY orders.id DESC";
             PreparedStatement ps = this.con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order();
                 order.setOrderId(rs.getInt("id"));
-                order.setName(rs.getString("name"));
-                order.setShippingAddress(rs.getString("address")); // Customer name dari users table
+                order.setName(rs.getString("recipient_name"));  // FIXED: Use recipient_name from orders table
+                order.setEmail(rs.getString("recipient_email")); // FIXED: Get email too
+                order.setShippingAddress(rs.getString("address"));
                 order.setPrice(rs.getDouble("total_amount"));
                 order.setStatus(rs.getString("status"));
                 order.setDate(rs.getString("order_date"));

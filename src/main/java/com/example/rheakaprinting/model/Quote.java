@@ -1,5 +1,6 @@
 package com.example.rheakaprinting.model;
 
+//model representing a custom printing quote request submitted by a customer
 public class Quote {
     private int quoteId;
     private int userId;

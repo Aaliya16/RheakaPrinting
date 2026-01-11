@@ -107,8 +107,8 @@
 
         .top-bar h1 { font-size: 24px; color: var(--text-main); margin: 0; line-height: 1.2; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
-        .admin-avatar {
+        admin-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--brand-color); color: white;
             display: flex; align-items: center; justify-content: center;
@@ -177,12 +177,18 @@
             <h1>Dashboard<br><span style="font-weight: 400; font-size: 22px;">Overview</span></h1>
         </div>
 
-        <div class="admin-profile">
-            <div style="text-align: right; margin-right: 10px;">
-                <span style="display:block; font-size: 10px; color: #b2bec3; text-transform: uppercase; font-weight: 800;">Administrator</span>
-                <strong style="font-size: 14px; color: var(--text-main);"><%= adminUser %></strong>
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
             </div>
-            <div class="admin-avatar"><%= avatarLetter %></div>
+
+            <%-- Avatar Circle --%>
+            <div class="avatar-circle">
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
+            </div>
         </div>
     </div>
 
@@ -234,6 +240,11 @@
             <div class="action-icon"><i class="fas fa-user-cog"></i></div>
             <div class="action-info"><h3>Manage Users</h3><p>Customer accounts</p></div>
         </a>
+
+            <a href="admin-quotes.jsp" class="action-card">
+                <div class="action-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="action-info"><h3>Quote Requests</h3><p>View custom inquiries</p></div>
+            </a>
 
         <a href="admin-contact-messages.jsp" class="action-card">
             <div class="action-icon"><i class="fas fa-envelope"></i></div>

@@ -1,9 +1,11 @@
 package com.example.rheakaprinting.model;
 
+//Cart model extending product to include session-specific data.
 public class Cart extends Product {
     private int stock;
     private String designImage;
 
+    //Constructor for basic cart item initialization.
     public Cart() {
     }
 
@@ -14,6 +16,7 @@ public class Cart extends Product {
         super.setPrice(price);
     }
 
+    // Getters and Setters
     public int getStock() { return stock; }
     public void setStock(int stock) { this.stock = stock; }
 

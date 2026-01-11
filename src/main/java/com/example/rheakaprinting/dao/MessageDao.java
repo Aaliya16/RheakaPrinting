@@ -4,13 +4,16 @@ import com.example.rheakaprinting.model.Message;
 import java.sql.*;
 import java.util.*;
 
+//Data Access Object for handling contact from messages.
 public class MessageDao {
     private Connection con;
 
+    //Constructor to inject the database connection
     public MessageDao(Connection con) {
         this.con = con;
     }
 
+    //Retrieves all contact messages from the database, newest first
     public List<Message> getAllMessages() {
         List<Message> list = new ArrayList<>();
         try {
@@ -39,8 +42,7 @@ public class MessageDao {
         }
         return list;
     }
-
-    // FUNGSI BARU: Untuk pelanggan simpan mesej
+    //Saves a new message into database
     public boolean insertMessage(Message msg) {
         boolean result = false;
         try {

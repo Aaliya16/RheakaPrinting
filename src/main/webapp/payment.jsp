@@ -2,56 +2,66 @@
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.example.rheakaprinting.model.Cart" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 
 <%
-    // 1. Check Cart
+    // 1. TANGKAP DATA DARI FORM (matching checkout.jsp field names)
+    request.setCharacterEncoding("UTF-8");
+    String fullName = request.getParameter("fullName");        // ✅ Match checkout.jsp
+    String email = request.getParameter("email");              // ✅ Match checkout.jsp
+    String phone = request.getParameter("phone");
+    String address = request.getParameter("address");
+    String city = request.getParameter("city");
+    String postcode = request.getParameter("postcode");
+    String state = request.getParameter("state");
+    String orderNotes = request.getParameter("notes");         // ✅ Match checkout.jsp
+
+    // Gabung alamat untuk paparan/database
+    String fullAddress = "";
+    if(address != null) {
+        fullAddress = address + ", " + postcode + " " + city + ", " + state;
+    }
+
+    // 2. CHECK CART
     ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
     if (cart_list == null || cart_list.isEmpty()) {
         response.sendRedirect("cart.jsp");
         return;
     }
 
-    // 2. Kira Total
+    // 3. KIRA SUBTOTAL
     double total = 0.0;
     for (Cart c : cart_list) {
         total += c.getPrice() * c.getQuantity();
     }
 
-    // RETRIEVE SHIPPING FROM DATABASE
-    double shipping = 10.0; // default
+    // 4. LOGIK SHIPPING
+    double shipping = 10.0; // Default base
+
     try {
         Connection conn = DbConnection.getConnection();
         String sql = "SELECT base_fee, free_threshold FROM shipping_settings WHERE id = 1";
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            shipping = rs.getDouble("base_fee");
+            double dbBaseFee = rs.getDouble("base_fee");
             double freeThreshold = rs.getDouble("free_threshold");
 
-            // Apply free shipping if threshold met
+            shipping = dbBaseFee;
+
             if (total >= freeThreshold) {
                 shipping = 0.0;
             }
         }
+        rs.close();
+        ps.close();
     } catch (Exception e) {
         e.printStackTrace();
     }
 
     double grandTotal = total + shipping;
-
     DecimalFormat dcf = new DecimalFormat("#,##0.00");
-
-    // 3. Tangkap data dari Checkout form tadi
-    request.setCharacterEncoding("UTF-8");
-    String fullName = request.getParameter("fullName");
-    String email = request.getParameter("email");
-    String phone = request.getParameter("phone");
-    String address = request.getParameter("address");
-    String city = request.getParameter("city");
-    String postcode = request.getParameter("postcode");
-    String state = request.getParameter("state");
-
-    String fullAddress = address + ", " + postcode + " " + city + ", " + state;
 %>
 
 <!DOCTYPE html>
@@ -181,24 +191,22 @@
 <div class="payment-container">
     <div class="payment-header">
         <h3>Complete Your Payment</h3>
-        <%
-            shipping = 10.0;
-            grandTotal = total + shipping;
-        %>
-
         <div class="total-amount">RM <%= dcf.format(grandTotal) %></div>
         <p>Order for: <strong><%= fullName %></strong></p>
     </div>
 
     <form action="place-order" method="post">
+        <!-- FIXED: Use same parameter names as PlaceOrderServlet expects -->
         <input type="hidden" name="fullName" value="<%= fullName %>">
         <input type="hidden" name="email" value="<%= email %>">
         <input type="hidden" name="phone" value="<%= phone %>">
         <input type="hidden" name="address" value="<%= fullAddress %>">
+        <input type="hidden" name="notes" value="<%= orderNotes != null ? orderNotes : "" %>">
 
         <div class="summary-details">
             <p style="margin-bottom: 5px;"><strong>Shipping to:</strong></p>
             <p style="margin-top: 0;"><%= fullAddress %></p>
+            <p>Shipping Fee included: RM <%= dcf.format(shipping) %></p>
         </div>
 
         <h4>Select Payment Method</h4>

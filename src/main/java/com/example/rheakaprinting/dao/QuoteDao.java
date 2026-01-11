@@ -4,6 +4,7 @@ import com.example.rheakaprinting.model.Quote;
 import java.sql.*;
 import java.util.*;
 
+//Data Access object for managing custom priting quote requests.
 public class QuoteDao {
     private Connection con;
 
@@ -35,6 +36,7 @@ public class QuoteDao {
         return result;
     }
 
+    //Retrieves all quote requests for the admin dashboard, ordered by newest first.
     public List<Quote> getAllQuotes() {
         List<Quote> list = new ArrayList<>();
         String query = "SELECT * FROM quotes ORDER BY created_at DESC";
@@ -59,6 +61,7 @@ public class QuoteDao {
         return list;
     }
 
+    //Updates the status of a quote (e.g., 'Pending', 'Sent', 'Approved').
     public boolean updateQuoteStatus(int quoteId, String newStatus) {
         String query = "UPDATE quotes SET status = ? WHERE quote_id = ?";
         try (PreparedStatement ps = this.con.prepareStatement(query)) {

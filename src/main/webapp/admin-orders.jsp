@@ -110,7 +110,7 @@
         }
         .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--brand-color); color: white;
@@ -190,10 +190,18 @@
             <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search orders...">
         </div>
 
-        <div class="admin-profile">
-            <strong style="font-size: 14px; margin-right: 10px;"><%= adminUser %></strong>
-            <div class="avatar-circle"><%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %></div>
-            <button onclick="window.print()" class="btn-action btn-edit" style="width: auto; padding: 0 15px; margin-left:10px;"><i class="fas fa-print"></i></button>
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
+            </div>
+
+            <%-- Avatar Circle --%>
+            <div class="avatar-circle">
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
+            </div>
         </div>
     </div>
 

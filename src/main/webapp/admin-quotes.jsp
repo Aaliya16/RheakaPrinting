@@ -82,7 +82,7 @@
         }
         .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--brand-color); color: white;
@@ -123,6 +123,14 @@
             background: white; color: var(--brand-color); border: 2px solid var(--brand-color);
             border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.3s;
         }
+        .btn-refresh {
+            margin-left: auto;
+            background: var(--brand-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -141,9 +149,17 @@
             <input type="text" id="quoteSearch" onkeyup="searchTable()" placeholder="Search by name or product...">
         </div>
 
-        <div class="admin-profile">
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
+            </div>
+
+            <%-- Avatar Circle --%>
             <div class="avatar-circle">
-                <%= (displayName != null && !displayName.isEmpty()) ? displayName.substring(0, 1).toUpperCase() : "A" %>
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
             </div>
         </div>
     </div>
@@ -153,6 +169,7 @@
             <button class="tab-btn active">All</button>
             <button class="tab-btn">Under Review</button>
             <button class="tab-btn">Completed</button>
+            <button onclick="location.reload()" class="tab-btn btn-refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
 
         <table class="message-table" id="quoteTable">
@@ -220,6 +237,8 @@
     // Tab Filtering Logic
     document.querySelectorAll('.tab-btn').forEach(tab => {
         tab.addEventListener('click', function() {
+            if(this.classList.contains('btn-refresh')) return;
+
             document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             const filter = this.innerText.trim().toLowerCase();
@@ -276,6 +295,7 @@
             fetch('UpdateQuoteStatusServlet?id=' + id + '&status=Completed');
         }
     }
+
 </script>
 </body>
 </html>

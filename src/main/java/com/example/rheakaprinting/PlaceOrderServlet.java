@@ -1,7 +1,7 @@
 package com.example.rheakaprinting;
 
 import com.example.rheakaprinting.dao.OrderDao;
-import com.example.rheakaprinting.dao.ProductDao; // Pastikan import ini ada
+import com.example.rheakaprinting.dao.ProductDao;
 import com.example.rheakaprinting.model.Cart;
 import com.example.rheakaprinting.model.User;
 import com.example.rheakaprinting.model.DbConnection;
@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 @WebServlet(name = "PlaceOrderServlet", value = "/place-order")
@@ -41,26 +44,48 @@ public class PlaceOrderServlet extends HttpServlet {
             return;
         }
 
-        // 3. Get form data
-        String fullName = request.getParameter("recipient_name");
-        String email = request.getParameter("recipient_email");
+        // 3. Get form data (matching payment.jsp hidden input names)
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         String paymentMethod = request.getParameter("paymentMethod");
-        if (paymentMethod == null || paymentMethod.isEmpty()) {
-            paymentMethod = "Cash / Online Banking";
-        }
-        // Get form data
-        String orderNotes = request.getParameter("orderNotes");
+
+        // Get order notes if exists
+        String orderNotes = request.getParameter("notes");
         if (orderNotes == null) orderNotes = "";
 
-        // 4. Calculate total
+        // 4. Calculate total with shipping logic
         double subtotal = 0.0;
-        double shippingFee = 10.0;
-
         for (Cart c : cart_list) {
             subtotal += c.getPrice() * c.getQuantity();
         }
+
+        // Get shipping fee from database with free shipping threshold
+        double shippingFee = 10.0; // default
+        try {
+            Connection conn = DbConnection.getConnection();
+            String sql = "SELECT base_fee, free_threshold FROM shipping_settings WHERE id = 1";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                double dbBaseFee = rs.getDouble("base_fee");
+                double freeThreshold = rs.getDouble("free_threshold");
+
+                shippingFee = dbBaseFee;
+
+                // Apply free shipping if threshold met
+                if (subtotal >= freeThreshold) {
+                    shippingFee = 0.0;
+                }
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("⚠️ Error fetching shipping: " + e.getMessage());
+            e.printStackTrace();
+        }
+
         double totalWithShipping = subtotal + shippingFee;
 
         try {

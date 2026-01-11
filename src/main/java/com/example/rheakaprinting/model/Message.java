@@ -1,5 +1,6 @@
 package com.example.rheakaprinting.model;
 
+//Model class representing a contact message from the websites inquiry form.
 public class Message {
     private int id;
     private String name;

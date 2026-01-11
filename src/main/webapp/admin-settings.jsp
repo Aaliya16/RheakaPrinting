@@ -54,7 +54,7 @@
 
         .top-bar h1 { font-size: 24px; color: var(--text-main); margin: 0; line-height: 1.2; }
 
-        .admin-profile { display: flex; align-items: center; gap: 12px; }
+        admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
             width: 40px; height: 40px; border-radius: 50%;
             background: var(--brand-color); color: white;
@@ -165,9 +165,17 @@
             <h1>System<br><span style="font-weight: 400; font-size: 22px;">Configuration</span></h1>
         </div>
 
-        <div class="admin-profile">
+        <div class="admin-profile" style="display: flex; align-items: center; gap: 15px;">
+            <%-- NEW: Welcome Greeting --%>
+            <div style="text-align: right;">
+        <span style="display:block; font-size: 14px; color: var(--text-main); font-weight: 600;">
+            Welcome, Administrator
+        </span>
+            </div>
+
+            <%-- Avatar Circle --%>
             <div class="avatar-circle">
-                <%= (displayName != null && !displayName.isEmpty()) ? displayName.substring(0, 1).toUpperCase() : "A" %>
+                <%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %>
             </div>
         </div>
     </div>
@@ -265,22 +273,6 @@
                 <button type="submit" class="btn btn-primary">Change Password</button>
 
             </form>
-        </div>
-
-        <%-- Maintenance --%>
-        <div class="settings-card">
-            <h2><i class="fas fa-database"></i> Maintenance</h2>
-            <p style="font-size: 13px; color: #636e72; margin-bottom: 25px; line-height: 1.6;">
-                Regular maintenance prevents data loss from unexpected server failures and keeps the system running fast.
-            </p>
-            <div class="maintenance-actions">
-                <button class="btn" style="background: var(--brand-light); color: var(--brand-color); margin-bottom: 12px; width: 100%;">
-                    <i class="fas fa-download" style="margin-right: 8px;"></i> Generate SQL Backup
-                </button>
-                <button class="btn" style="background: #fff5f5; color: var(--danger-red); border: 1px solid #ffe3e3; width: 100%;">
-                    <i class="fas fa-broom" style="margin-right: 8px;"></i> Clear Audit Logs
-                </button>
-            </div>
         </div>
 
         <div class="back-container">
