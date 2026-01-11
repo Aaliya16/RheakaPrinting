@@ -1,14 +1,15 @@
 <%--
-    Fail: quote-confirmation.jsp
+    File: quote-confirmation.jsp
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    // Retrieve submitted data from the session to display in the summary
     String quoteName = (String) session.getAttribute("quote_name");
     String quoteEmail = (String) session.getAttribute("quote_email");
     String quoteProduct = (String) session.getAttribute("quote_product");
     Integer quoteQuantity = (Integer) session.getAttribute("quote_quantity");
 
-    // Generate reference number
+    // Generate a unique reference number using the current timestamp
     String referenceNumber = "QT" + System.currentTimeMillis();
 %>
 
@@ -20,6 +21,7 @@
     <title>Quote Submitted - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* Base Styles using the brand's Steel Blue gradient */
         body {
             /* Tema gradient biru Steel Blue */
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
@@ -42,7 +44,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             text-align: center;
         }
-
+        /* Success Icon Animation */
         .success-icon {
             width: 80px;
             height: 80px;
@@ -83,7 +85,7 @@
             line-height: 1.6;
         }
 
-        /* --- KOTAK RUJUKAN (Steel Blue) --- */
+        /* Highlighted Reference Box */
         .reference-box {
             background: #4682B4;
             color: white;
@@ -126,7 +128,6 @@
             font-weight: 600;
         }
 
-        /* --- INFO BOX (Biru Muda) --- */
         .info-box {
             background: #e3f2fd;
             border-left: 5px solid #4682B4;
@@ -148,7 +149,7 @@
             line-height: 1.6;
         }
 
-        /* --- TIMELINE SECTION --- */
+        /* Timeline and Info UI */
         .timeline {
             margin: 40px 0;
             text-align: left;
@@ -197,7 +198,6 @@
             font-size: 14px;
         }
 
-        /* --- ACTION BUTTONS (Steel Blue Theme) --- */
         .action-buttons {
             display: flex;
             gap: 15px;

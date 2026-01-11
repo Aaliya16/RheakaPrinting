@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+//It handles both form data and file uploads for printing designs.
 @WebServlet(name = "SubmitQuoteServlet", value = "/submit-quote")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
@@ -25,6 +26,7 @@ import java.nio.file.Paths;
 )
 public class SubmitQuoteServlet extends HttpServlet {
 
+    // Relative path where uploaded artwork will be stored
     private static final String UPLOAD_DIR = "uploads/quotes";
 
     @Override

@@ -21,7 +21,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 @WebServlet(name = "AddToCartServlet", value = "/add-to-cart")
-@MultipartConfig
+@MultipartConfig // Required for handling design file uploads (images/PDFs)
 public class AddToCartServlet extends HttpServlet {
 
     @Override
@@ -33,6 +33,7 @@ public class AddToCartServlet extends HttpServlet {
 
         User auth = (User) session.getAttribute("currentUser");
 
+        // 1. SECURITY CHECK: Only logged-in users can add to cart
         if (auth == null) {
             System.out.println("❌ Unauthorized access: User must login to add to cart");
             response.sendRedirect("login.jsp?msg=notLoggedIn");
@@ -41,7 +42,7 @@ public class AddToCartServlet extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
 
-            // --- 1. GET BASIC DATA ---
+            // 2. RETRIEVE PRODUCT DATA
             String idParam = request.getParameter("id");
             String quantityParam = request.getParameter("quantity");
             String priceParam = request.getParameter("price");
@@ -61,7 +62,7 @@ public class AddToCartServlet extends HttpServlet {
             double totalPrice = Double.parseDouble(priceParam);
             double unitPrice = (quantity > 0) ? (totalPrice / quantity) : 0.0;
 
-            // --- 2. HANDLE FILE UPLOAD (GAMBAR DESIGN) ---
+            // --- 2. HANDLE FILE UPLOAD ---
             String imageFileName = null;
 
             try {
@@ -94,6 +95,7 @@ public class AddToCartServlet extends HttpServlet {
                 imageFileName = "no-design"; // Default value
             }
 
+            // 4. PROCESS VARIATIONS (Printing Types, Fabric, etc.)
             String finalVariation = request.getParameter("variation_name");
             String finalAddon = request.getParameter("addon_name");
             String pType = request.getParameter("printing_type");
@@ -118,7 +120,7 @@ public class AddToCartServlet extends HttpServlet {
             System.out.println("Final Variation: " + finalVariation);
             System.out.println("Final Addon: " + finalAddon);
 
-            // --- 3. CREATE CART OBJECT ---
+            // 5. DATABASE PERSISTENCE
             ProductDao pDao = new ProductDao(DbConnection.getConnection());
             Product product = pDao.getSingleProduct(id);
 
@@ -137,7 +139,6 @@ public class AddToCartServlet extends HttpServlet {
             cm.setStock(product.getStock());
             cm.setDesignImage(imageFileName);
 
-            // --- 4. DATABASE & SESSION LOGIC ---
 
             try {
                 com.example.rheakaprinting.dao.CartDao cartDao = new com.example.rheakaprinting.dao.CartDao(DbConnection.getConnection());
@@ -147,6 +148,7 @@ public class AddToCartServlet extends HttpServlet {
                 System.out.println("⚠️ Gagal simpan ke DB, tapi teruskan ke Session: " + e.getMessage());
             }
 
+            // 6. SESSION SYNC (For immediate UI updates)
             ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
 
             if (cart_list == null) {

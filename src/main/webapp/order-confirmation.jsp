@@ -57,7 +57,6 @@
         h1 { color: #333; margin-bottom: 10px; font-size: 32px; font-weight: 700; }
         .subtitle { color: #666; font-size: 16px; margin-bottom: 40px; }
 
-        /* --- KOTAK NOMBOR ORDER (Steel Blue) --- */
         .order-number-box {
             background: #4682B4;
             color: white;
@@ -87,7 +86,6 @@
         .order-detail-row span:first-child { color: #666; font-weight: 500; }
         .order-detail-row span:last-child { color: #333; font-weight: 600; text-align: right; max-width: 60%; }
 
-        /* --- GARISAN TOTAL (Steel Blue) --- */
         .order-detail-row:last-child {
             border-bottom: none;
             padding-top: 20px;
@@ -108,7 +106,6 @@
             margin-top: 40px;
         }
 
-        /* --- BUTANG UTAMA (Steel Blue Style) --- */
         .btn-blue {
             display: inline-block;
             padding: 12px 30px;
@@ -128,7 +125,6 @@
             color: white;
         }
 
-        /* --- BUTANG OUTLINE (Border Steel Blue) --- */
         .btn-outline-blue {
             display: inline-block;
             padding: 12px 30px;

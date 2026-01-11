@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+//Designed to be called via JavaScript fetch/AJAX for a seamless Admin UI.
 @WebServlet(name = "UpdateQuoteStatusServlet", value = "/UpdateQuoteStatusServlet")
 public class UpdateQuoteStatusServlet extends HttpServlet {
     @Override

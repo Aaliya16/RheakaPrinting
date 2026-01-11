@@ -6,7 +6,7 @@
 <%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 
 <%
-    // 1. TANGKAP DATA DARI FORM (matching checkout.jsp field names)
+    // 1. capture data from the checkout
     request.setCharacterEncoding("UTF-8");
     String fullName = request.getParameter("fullName");        // ✅ Match checkout.jsp
     String email = request.getParameter("email");              // ✅ Match checkout.jsp
@@ -17,7 +17,6 @@
     String state = request.getParameter("state");
     String orderNotes = request.getParameter("notes");         // ✅ Match checkout.jsp
 
-    // Gabung alamat untuk paparan/database
     String fullAddress = "";
     if(address != null) {
         fullAddress = address + ", " + postcode + " " + city + ", " + state;
@@ -30,13 +29,11 @@
         return;
     }
 
-    // 3. KIRA SUBTOTAL
     double total = 0.0;
     for (Cart c : cart_list) {
         total += c.getPrice() * c.getQuantity();
     }
 
-    // 4. LOGIK SHIPPING
     double shipping = 10.0; // Default base
 
     try {
@@ -97,7 +94,6 @@
 
         .payment-header h3 { color: #333; font-weight: 700; }
 
-        /* --- WARNA JUMLAH (Steel Blue) --- */
         .total-amount {
             font-size: 36px;
             color: #4682B4;
@@ -162,7 +158,6 @@
             box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.1);
         }
 
-        /* --- BUTANG BAYAR (Steel Blue Style) --- */
         .btn-pay {
             width: 100%;
             background: #4682B4;

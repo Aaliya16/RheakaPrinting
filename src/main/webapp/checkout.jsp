@@ -4,6 +4,7 @@
 <%@ page import="java.text.DecimalFormat" %>
 
 <%
+    // Format decimals for currency (RM)
     DecimalFormat dcf = new DecimalFormat("#.##");
     ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
     double total = 0.0;

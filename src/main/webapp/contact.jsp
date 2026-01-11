@@ -173,18 +173,16 @@
             resize: vertical;
         }
 
-        /* --- STYLE BUTANG BARU (Sama seperti view-btn) --- */
         .btn-submit {
             display: inline-block;
             padding: 12px 35px;
-            background: #4682B4; /* Warna Steel Blue */
+            background: #4682B4;
             color: white;
             text-decoration: none;
             border-radius: 25px;
             font-weight: 600;
             transition: all 0.3s ease;
 
-            /* Tambahan untuk tag <button> dalam form */
             width: 100%;
             border: none;
             cursor: pointer;
@@ -307,7 +305,7 @@
         var isLoggedIn = <%= (authContact != null) ? "true" : "false" %>;
 
         if (!isLoggedIn) {
-            alert("⚠️ MAAF! Sila LOGIN dahulu untuk menghantar mesej kepada kami.");
+            alert("⚠️ Please LOGIN first before sending us a message.");
             window.location.href = "login.jsp";
             return;
         }
@@ -321,6 +319,7 @@
     }
 </script>
 
+//secondary cliend-side for validation from integrity
 <script>
     // Form validation
     document.getElementById('contactForm').addEventListener('submit', function(e) {

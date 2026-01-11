@@ -9,7 +9,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-
+/*
+ * Servlet implementation for removing products from the inventory.
+ * Typically used within the Admin Panel.
+ */
 @WebServlet("/DeleteProductServlet")
     public class DeleteProductServlet extends HttpServlet {
         protected void doGet(HttpServletRequest request, HttpServletResponse response)

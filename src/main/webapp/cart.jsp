@@ -12,6 +12,7 @@
     List<Cart> cart_list = null;
     if (session_cart != null) {
         com.example.rheakaprinting.dao.ProductDao pDao = new com.example.rheakaprinting.dao.ProductDao(com.example.rheakaprinting.model.DbConnection.getConnection());
+        // Sync session data with DB (price, image, and available stock)
         cart_list = pDao.getCartProducts(session_cart);
         total = pDao.getTotalCartPrice(session_cart);
     }
@@ -29,13 +30,13 @@
         :root { --mongoose: #baa987; }
 
         body {
-            /* Latar belakang biru gradien sepadan dengan contact.jsp */
+            /* Blue gradient background matching the Contact page */
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Roboto', sans-serif; margin: 0; padding: 0;
             min-height: 100vh;
         }
 
-        /* Bagian Header (Gaya Kanan / Contact.jsp) */
+        /* Header animations and styles */
         .page-header {
             text-align: center;
             padding-top: 30px;
@@ -59,7 +60,6 @@
             color: #2c3e50;
         }
 
-        /* Kotak Putih Utama (Gaya Kanan / contact-form-card) */
         .small-container {
             max-width: 1200px; margin: 0 auto 50px auto; padding: 40px;
             background: #fff; border-radius: 20px;
@@ -90,6 +90,7 @@
 
         td:nth-child(2), td:nth-child(3), td:nth-child(4) { text-align: center; }
 
+        /* Product image and name container */
         .cart-info {
             display: flex; align-items: center; gap: 15px;
         }
@@ -116,7 +117,6 @@
         }
         .cart-info a:hover { text-decoration: underline; }
 
-        /* Style Butang Kuantiti ASAL (Bulat Biru) */
         .quantity-btn {
             display: flex; align-items: center;
             justify-content: center; gap: 5px;
@@ -196,7 +196,7 @@
         }
 
         .empty-icon-small {
-            font-size: 100px; /* Saiz ikon yang seimbang */
+            font-size: 100px;
             color: #4682B4;
             margin-bottom: 20px;
             opacity: 0.6;
@@ -213,19 +213,16 @@
             margin-bottom: 30px;
         }
 
-        /* 1. Sembunyikan spin-button default pelayar (Chrome, Safari, Edge, Opera) */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
 
-        /* 2. Sembunyikan spin-button default pelayar (Firefox) */
         input[type=number] {
             -moz-appearance: textfield;
         }
 
-        /* 3. Gaya kotak input kuantiti agar nampak kemas di tengah */
         .quantity-btn input {
             width: 50px;
             height: 35px;
@@ -233,10 +230,9 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
-            margin: 0; /* Jarak antara butang biru dan kotak putih */
+            margin: 0;
         }
 
-        /* 4. Pastikan butang + dan - kekal bulat dan biru */
         .btn-qty {
             background: #4682B4;
             color: white;
@@ -295,7 +291,6 @@
                         <p><%= c.getName() != null && !c.getName().isEmpty() ? c.getName() : "Product #" + c.getId() %></p>
                         <small>Product ID: <%= c.getId() %></small><br>
                         <small>Available stock: <%= c.getStock() %></small><br>
-                        <!-- GANTIKAN href dengan onclick -->
                         <a href="javascript:void(0)" onclick="removeFromCart('<%= c.getId() %>')">Remove</a>
                     </div>
                 </div>

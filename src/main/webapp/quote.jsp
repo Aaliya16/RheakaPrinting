@@ -1,7 +1,3 @@
-<%--
-  Fail: quote.jsp
-  Diubah suai untuk menyamai gaya contact.jsp
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.example.rheakaprinting.model.DbConnection" %>
 <%@ page import="com.example.rheakaprinting.model.*" %>
@@ -20,8 +16,8 @@
             --mongoose: #baa987;
         }
 
+        /* Steel Blue gradient background consistent with the site theme */
         body {
-            /* Gradient biru yang selaras */
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             min-height: 100vh;
             margin: 0;
@@ -29,14 +25,13 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Container selaras dengan contact.jsp */
+        /* Container for the quote request form */
         .quote-container {
             padding-top: 30px;
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        /* Header atas (Sama gaya macam contact.jsp) */
+        /* Header animations */
         .page-header {
             text-align: center;
             margin-bottom: 30px;
@@ -66,8 +61,7 @@
             margin-bottom: 40px;
             padding: 0 15px;
         }
-
-        /* Kotak putih borang (Sama gaya macam contact-form-card) */
+        /* Central white card for form fields */
         .quote-box {
             width: 100%;
             max-width: 700px;
@@ -112,16 +106,14 @@
             color: #e74c3c;
         }
 
-        /* Input selaras dengan contact.jsp */
         .form-control {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 14px;
-            box-sizing: border-box; /* Supaya padding tak kacau width */
+            box-sizing: border-box;
             font-family: inherit;
-            /* TAMBAH DUA BARIS INI */
             appearance: auto !important;
             -webkit-appearance: menulist !important;
         }
@@ -131,8 +123,7 @@
             border-color: #4682B4;
             box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.1);
         }
-
-        /* Kotak Upload Putus-Putus */
+        /* Specialized styling for the drag-and-drop file upload area */
         .file-upload-area {
             border: 2px dashed #ccc;
             padding: 30px;
@@ -148,8 +139,7 @@
             background: #f0f0f0;
             border-color: #4682B4;
         }
-
-        /* Butang Submit selaras dengan contact.jsp */
+        /* Primary action button styling */
         .btn-submit {
             display: inline-block;
             padding: 15px;

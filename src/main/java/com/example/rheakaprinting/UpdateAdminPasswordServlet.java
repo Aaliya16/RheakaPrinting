@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
+//This handles the secure password change workflow from the Admin Settings page.
 @WebServlet("/UpdateAdminPassword")
 public class UpdateAdminPasswordServlet extends HttpServlet {
 
@@ -19,6 +20,7 @@ public class UpdateAdminPasswordServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+        // Retrieve the admin email stored in the session during login
         String adminEmail = (String) session.getAttribute("adminEmail");
 
         // Get form parameters

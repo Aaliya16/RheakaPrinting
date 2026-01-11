@@ -14,7 +14,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/*
+ * Servlet to handle order cancellation requests from the user.
+ * It ensures only 'pending' orders can be cancelled by their rightful owners.
+ */
 @WebServlet(name = "CancelOrderServlet", value = "/CancelOrderServlet")
 public class CancelOrderServlet extends HttpServlet {
 
@@ -26,12 +29,14 @@ public class CancelOrderServlet extends HttpServlet {
 
         User authUser = (User) session.getAttribute("currentUser");
 
+        // 1. Security Check: Ensure the user is logged in
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
         }
 
         String orderIdParam = request.getParameter("id");
 
+        // 2. Validation: Ensure an order ID was provided
         if (orderIdParam == null) {
             response.sendRedirect("orders.jsp");
             return;
@@ -45,6 +50,7 @@ public class CancelOrderServlet extends HttpServlet {
             System.out.println("Order ID: " + orderId);
             System.out.println("User ID: " + userId);
 
+            // 3. Execution: Attempt to update order status in DB
             boolean cancelled = cancelOrder(orderId, userId);
 
             if (cancelled) {
@@ -60,7 +66,9 @@ public class CancelOrderServlet extends HttpServlet {
             response.sendRedirect("orders.jsp?msg=error");
         }
     }
-
+    /*
+     * Database logic to verify and cancel an order.
+     */
     private boolean cancelOrder(int orderId, int userId) {
         Connection conn = null;
         PreparedStatement checkStmt = null;
@@ -77,6 +85,8 @@ public class CancelOrderServlet extends HttpServlet {
 
             String checkQuery = "SELECT status FROM orders WHERE id = ? AND user_id = ?";
             checkStmt = conn.prepareStatement(checkQuery);
+
+            // Verify ownership and current status
             checkStmt.setInt(1, orderId);
             checkStmt.setInt(2, userId);
             rs = checkStmt.executeQuery();

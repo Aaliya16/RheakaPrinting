@@ -14,6 +14,7 @@
             box-sizing: border-box;
         }
 
+        /*global styles*/
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #b0c4de;
@@ -105,7 +106,6 @@
             display: block;
         }
 
-        /* Carousel Section - UPDATED */
         .carousel-section {
             padding: 80px 20px;
             background: linear-gradient(135deg, #b0c4de 0%, #87CEEB 100%);

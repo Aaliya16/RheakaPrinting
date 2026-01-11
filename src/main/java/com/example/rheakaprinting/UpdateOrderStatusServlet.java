@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+//This connects the Admin Dashboard to the OrderDao.
 @WebServlet(name = "UpdateOrderStatusServlet", value = "/UpdateOrderStatusServlet")
 public class UpdateOrderStatusServlet extends HttpServlet {
 
@@ -23,10 +24,12 @@ public class UpdateOrderStatusServlet extends HttpServlet {
 
         User authUser = (User) session.getAttribute("currentUser");
 
+        // 1. SECURITY CHECK: Ensure the user is logged in and is an Admin
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
         }
 
+        // 2. DATA CAPTURE: Retrieve the specific Order ID and the target status
         String orderIdParam = request.getParameter("orderId");
         String newStatus = request.getParameter("newStatus");
 
@@ -35,19 +38,22 @@ public class UpdateOrderStatusServlet extends HttpServlet {
         System.out.println("Order ID: " + orderIdParam);
         System.out.println("New Status: " + newStatus);
 
+        // Basic validation for null parameters
         if (orderIdParam == null || newStatus == null) {
             response.sendRedirect("admin-orders.jsp?msg=error");
             return;
         }
 
         try {
+            // 3. PARSING: Convert Order ID to integer
             int orderId = Integer.parseInt(orderIdParam);
 
-            // Use OrderDao to update status
+            //4. Use OrderDao to update status
             OrderDao orderDao = new OrderDao(DbConnection.getConnection());
             // orderId should be an int, newStatus should be a String
             boolean updated = orderDao.updateOrderStatus(orderId, newStatus);
 
+            // 5. REDIRECTION: Provide feedback to the Admin based on result
             if (updated) {
                 System.out.println("✅ Status updated successfully");
                 System.out.println("===========================");

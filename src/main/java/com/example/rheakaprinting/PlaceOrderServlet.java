@@ -18,7 +18,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
+/*
+ * Servlet implementation for finalizing and placing an order.
+ * This handles the transition from payment to order confirmation.
+ */
 @WebServlet(name = "PlaceOrderServlet", value = "/place-order")
 public class PlaceOrderServlet extends HttpServlet {
 
@@ -31,12 +34,13 @@ public class PlaceOrderServlet extends HttpServlet {
 
         User authUser = (User) session.getAttribute("currentUser");
 
+        // 1. SECURITY: Check if user is authenticated
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
             return;
         }
 
-        // 2. Get cart
+        // 2. VALIDATION: Check if cart exists and is not empty
         ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
         if (cart_list == null || cart_list.isEmpty()) {
             System.out.println("❌ Cart is empty");
@@ -44,7 +48,7 @@ public class PlaceOrderServlet extends HttpServlet {
             return;
         }
 
-        // 3. Get form data (matching payment.jsp hidden input names)
+        // 3. DATA EXTRACTION: Capture shipping and payment details from form
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -55,7 +59,7 @@ public class PlaceOrderServlet extends HttpServlet {
         String orderNotes = request.getParameter("notes");
         if (orderNotes == null) orderNotes = "";
 
-        // 4. Calculate total with shipping logic
+        // Calculate total with shipping logic
         double subtotal = 0.0;
         for (Cart c : cart_list) {
             subtotal += c.getPrice() * c.getQuantity();
@@ -89,7 +93,7 @@ public class PlaceOrderServlet extends HttpServlet {
         double totalWithShipping = subtotal + shippingFee;
 
         try {
-            // 5. Create Order via DAO
+            // Create Order via DAO
             OrderDao orderDao = new OrderDao(DbConnection.getConnection());
 
             int orderId = orderDao.createOrder(
@@ -125,7 +129,7 @@ public class PlaceOrderServlet extends HttpServlet {
                     System.out.println("⚠️ Gagal clear DB cart: " + e.getMessage());
                 }
 
-                // 8. Redirect
+                // Redirect
                 response.sendRedirect("order-confirmation.jsp");
 
             } else {

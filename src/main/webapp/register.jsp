@@ -6,22 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign Up - Rheaka Design</title>
     <style>
+        /* Base styling with the signature Steel Blue gradient */
         body {
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column; /* This stacks Header, Content, and Footer vertically */
+            flex-direction: column;
             min-height: 100vh;
         }
-
+        /* Flex container to keep the footer at the bottom */
         .signup-container {
-            flex: 1; /* This pushes the footer to the bottom of the page */
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 0; /* Ensures space between header and card */
+            padding: 40px 0;
         }
         .welcome-text {
             font-size: 32px;
@@ -29,6 +30,7 @@
             color: #333;
             margin-bottom: 20px;
         }
+        /* Centered white signup card */
         .signup-card {
             background: white;
             padding: 40px;
@@ -45,6 +47,7 @@
             margin-bottom: 8px;
             font-size: 14px;
         }
+        /* Input wrapper to hold the icon and the field together */
         .input-wrapper {
             position: relative;
             background: #f0f0f0;
@@ -60,6 +63,7 @@
             padding: 5px 10px;
             outline: none;
         }
+        /* Button styling matching the primary brand color */
         .signup-btn {
             background: #4682B4;
             color: white;
@@ -85,19 +89,19 @@
             text-decoration: none;
         }
         .field-icon {
-            width: 20px;          /* Specific width for the icon */
-            height: 20px;         /* Specific height for the icon */
-            object-fit: contain;  /* Keeps the icon from stretching */
-            flex-shrink: 0;       /* IMPORTANT: Prevents the "squishing" seen in your photo */
-            margin-right: 12px;   /* Space between icon and text input */
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            flex-shrink: 0;
+            margin-right: 12px;
         }
 
         .input-wrapper {
             background: #f0f0f0;
             border-radius: 12px;
-            padding: 8px 15px;    /* Adjusted padding for a cleaner look */
+            padding: 8px 15px;
             display: flex;
-            align-items: center;  /* Vertically centers icon and text */
+            align-items: center;
         }
     </style>
 </head>

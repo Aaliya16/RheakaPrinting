@@ -12,7 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-
+/*
+ * Servlet implementation for handling contact form submissions.
+ * It captures user inquiries and stores them in the database for admin review.
+ */
 @WebServlet("/ContactServlet")
 public class ContactServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -21,17 +24,20 @@ public class ContactServlet extends HttpServlet {
 
         User authUser = (User) session.getAttribute("currentUser");
 
+        // 1. Security Check: Ensure the user is logged in before processing the message
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
             return;
         }
 
+        // 2. Data Extraction: Capture form parameters from the request
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String subject = request.getParameter("subject");
         String messageText = request.getParameter("message");
 
+        // 3. Model Mapping: Populate the Message object
         Message msg = new Message();
         msg.setName(name);
         msg.setEmail(email);
@@ -40,6 +46,7 @@ public class ContactServlet extends HttpServlet {
         msg.setMessage(messageText);
 
         try {
+            // 4. Persistence: Initialize DAO and attempt to insert the record
             MessageDao dao = new MessageDao(DbConnection.getConnection());
             if (dao.insertMessage(msg)) {
                 response.sendRedirect("contact.jsp?msg=success");
@@ -47,6 +54,7 @@ public class ContactServlet extends HttpServlet {
                 response.sendRedirect("contact.jsp?msg=error");
             }
         } catch (Exception e) {
+            // Unexpected Exception: Log the error and notify the user
             e.printStackTrace();
             response.sendRedirect("contact.jsp?msg=error");
         }

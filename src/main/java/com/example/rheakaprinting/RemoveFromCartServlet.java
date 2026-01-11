@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+//Supports both traditional page refreshes and modern AJAX deletions
 @WebServlet(name = "RemoveFromCartServlet", value = "/remove-from-cart")
 public class RemoveFromCartServlet extends HttpServlet {
 
@@ -19,7 +20,9 @@ public class RemoveFromCartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // 1. Retrieve the Product ID to be removed
         String idParam = request.getParameter("id");
+        // Check if the request is an AJAX call for a seamless UI experience
         boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
         if (idParam != null) {
