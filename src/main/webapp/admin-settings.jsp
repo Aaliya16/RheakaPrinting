@@ -30,43 +30,8 @@
             color: var(--text-main);
         }
 
-        .main-content {
-            margin-left: 260px;
-            width: calc(100% - 260px);
-            padding: 30px;
-            opacity: 0; /* Starts hidden */
-            will-change: transform, opacity;
-            /* FIX: Changed animation name to match keyframes below */
-            animation: smoothSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
+        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
 
-        /* FIX: Keyframes must match the name used in the animation property above */
-        @keyframes smoothSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Staggered Row Animation - Makes the table rows "roll in" */
-        tbody tr {
-            opacity: 0;
-            animation: rowAppear 0.5s ease-out forwards;
-        }
-
-        tbody tr:nth-child(1) { animation-delay: 0.2s; }
-        tbody tr:nth-child(2) { animation-delay: 0.3s; }
-        tbody tr:nth-child(3) { animation-delay: 0.4s; }
-        tbody tr:nth-child(4) { animation-delay: 0.5s; }
-
-        @keyframes rowAppear {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
         .top-bar {
             background: white;
             padding: 20px 35px;
@@ -215,7 +180,7 @@
         %>
         <%-- Footer Contact Info Card --%>
         <div class="settings-card">
-            <h2><i class="fas fa-map-marker-alt"></i> Contact Info</h2>
+            <h2><i class="fas fa-map-marker-alt"></i> Footer Contact Info</h2>
             <form action="UpdateSettingsServlet" method="POST">
                 <div class="form-group">
                     <label>Business Address</label>
@@ -231,7 +196,7 @@
 
         <%-- Social Presence Card --%>
         <div class="settings-card">
-            <h2><i class="fas fa-share-alt"></i> Social Media Link</h2>
+            <h2><i class="fas fa-share-alt"></i> Social Presence</h2>
             <form action="UpdateSettingsServlet" method="POST">
                 <div class="form-group">
                     <label><i class="fab fa-facebook"></i> Facebook URL</label>
@@ -252,35 +217,55 @@
         <%-- Shipping Rules --%>
         <div class="settings-card">
             <h2><i class="fas fa-shipping-fast"></i> Shipping Rules</h2>
+            <%
+                Connection shipConn = DbConnection.getConnection();
+                String shipQuery = "SELECT * FROM shipping_settings WHERE id = 1";
+                PreparedStatement shipPs = shipConn.prepareStatement(shipQuery);
+                ResultSet shipRs = shipPs.executeQuery();
+
+                double baseFee = 10.00;
+                double freeThreshold = 200.00;
+                boolean selfPickupEnabled = true;
+
+                if (shipRs.next()) {
+                    baseFee = shipRs.getDouble("base_fee");
+                    freeThreshold = shipRs.getDouble("free_threshold");
+                    selfPickupEnabled = shipRs.getBoolean("self_pickup_enabled");
+                }
+            %>
             <form action="UpdateShippingSettings" method="POST">
                 <div class="form-group">
                     <label>Base Shipping Fee (RM)</label>
-                    <input type="number" name="baseShip" value="10.00" step="0.5">
+                    <input type="number" name="baseShip" value="<%= baseFee %>" step="0.01" required>
                 </div>
                 <div class="form-group">
                     <label>Free Shipping Threshold (RM)</label>
-                    <input type="number" name="freeShip" value="200.00">
+                    <input type="number" name="freeShip" value="<%= freeThreshold %>" step="0.01" required>
                 </div>
                 <div class="setting-item">
                     <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">Self-Pickup</span>
-                    <input type="checkbox" checked style="width: auto;">
+                    <input type="checkbox" name="selfPickup" <%= selfPickupEnabled ? "checked" : "" %> style="width: auto;">
                 </div>
                 <button type="submit" class="btn btn-primary">Save Logistics</button>
             </form>
         </div>
 
+        <%-- Security --%>
         <div class="settings-card">
             <h2><i class="fas fa-key"></i> Security</h2>
             <form action="UpdateAdminPassword" method="POST">
                 <div class="form-group">
-                    <label>Update Password</label>
-                    <input type="password" name="currentPassword" placeholder="Current Password" required>
-                    <input type="password" name="newPassword" placeholder="New Password" style="margin-top: 10px;" required>
+                    <label>Current Password</label>
+                    <input type="password" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" name="newPassword" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Change Password</button>
+
             </form>
         </div>
-
 
         <%-- Maintenance --%>
         <div class="settings-card">

@@ -272,6 +272,7 @@
                 <th>Category</th>
                 <th>Price</th>
                 <th>Status</th>
+                <th>Quantity</th>
                 <th style="text-align: right;">Actions</th>
             </tr>
             </thead>
@@ -287,6 +288,7 @@
                         <%= (p.getQuantity() > 0) ? "In Stock" : "Out of Stock" %>
                     </span>
                 </td>
+                <td style="font-weight: 700; color: var(--text-main);"><%= p.getQuantity() %> units</td>
                 <td style="text-align: right;">
                     <button class="btn-action btn-edit" title="Edit"
                             onclick="openEditModal('<%= p.getId() %>', '<%= p.getName().replace("'", "\\'") %>', '<%= p.getCategory() %>', '<%= p.getPrice() %>', '<%= p.getQuantity() %>')">

@@ -107,18 +107,63 @@ public class UserDAO {
         }
         return count;
     }
-    public boolean deleteUser(int id) {
-        boolean result = false;
-        try {
-            // Matches your database column 'id'
-            String query = "DELETE FROM users WHERE id = ?";
-            PreparedStatement ps = this.con.prepareStatement(query);
-            ps.setInt(1, id);
 
-            result = ps.executeUpdate() > 0;
-        } catch (Exception e) {
+    // --- ADMIN METHOD: DELETE USER ---
+    public boolean deleteUser(int userId) {
+        boolean result = false;
+        String query = "DELETE FROM users WHERE id = ?";
+
+        try {
+            PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setInt(1, userId);
+
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return result;
+    }
+
+    // Verify admin password
+    public boolean verifyAdminPassword(String email, String password) {
+        boolean isValid = false;
+        String query = "SELECT * FROM users WHERE email = ? AND password = ? AND role = 'admin'";
+
+        try {
+            PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            isValid = rs.next();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isValid;
+    }
+
+    // Update admin password
+    public boolean updateAdminPassword(String email, String newPassword) {
+        boolean result = false;
+        String query = "UPDATE users SET password = ? WHERE email = ? AND role = 'admin'";
+
+        try {
+            PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 }
