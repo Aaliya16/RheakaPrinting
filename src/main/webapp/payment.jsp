@@ -8,14 +8,14 @@
 <%
     // 1. capture data from the checkout
     request.setCharacterEncoding("UTF-8");
-    String fullName = request.getParameter("fullName");        // ✅ Match checkout.jsp
-    String email = request.getParameter("email");              // ✅ Match checkout.jsp
+    String fullName = request.getParameter("fullName");
+    String email = request.getParameter("email");
     String phone = request.getParameter("phone");
     String address = request.getParameter("address");
     String city = request.getParameter("city");
     String postcode = request.getParameter("postcode");
     String state = request.getParameter("state");
-    String orderNotes = request.getParameter("notes");         // ✅ Match checkout.jsp
+    String orderNotes = request.getParameter("notes");
 
     String fullAddress = "";
     if(address != null) {
@@ -111,7 +111,6 @@
             border: 1px solid #eee;
         }
 
-        /* Payment Options Styling */
         .payment-methods {
             display: flex;
             gap: 15px;

@@ -5,7 +5,6 @@
     // 1. Setup Formatter
     DecimalFormat dcf = new DecimalFormat("#,##0.00");
 
-    // 2. Ambil data dari Session
     String orderName = (String) session.getAttribute("order_name");
     Integer orderId = (Integer) session.getAttribute("order_id");
     Double orderTotal = (Double) session.getAttribute("order_total");
@@ -25,7 +24,6 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body {
-            /* Tema gradient biru Steel Blue */
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Roboto', sans-serif;
             min-height: 100vh;

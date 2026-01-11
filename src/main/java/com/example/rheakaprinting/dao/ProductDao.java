@@ -43,7 +43,7 @@ public class ProductDao {
     // Adds a new product to the catalog
     public boolean addProduct(Product p) {
         boolean result = false;
-        // Dibaiki: Guna COL_STOCK (stock_quantity)
+
         String query = "INSERT INTO products (name, category, price, " + COL_STOCK + ") VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = this.con.prepareStatement(query)) {
             ps.setString(1, p.getName());

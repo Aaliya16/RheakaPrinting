@@ -35,7 +35,7 @@ public class AddToCartServlet extends HttpServlet {
 
         // 1. SECURITY CHECK: Only logged-in users can add to cart
         if (auth == null) {
-            System.out.println("❌ Unauthorized access: User must login to add to cart");
+            System.out.println("Unauthorized access: User must login to add to cart");
             response.sendRedirect("login.jsp?msg=notLoggedIn");
             return;
         }
@@ -87,11 +87,11 @@ public class AddToCartServlet extends HttpServlet {
                         if (!uploadDir.exists()) uploadDir.mkdir();
 
                         part.write(uploadPath + File.separator + imageFileName);
-                        System.out.println("✅ File uploaded to: " + uploadPath + File.separator + imageFileName);
+                        System.out.println("File uploaded to: " + uploadPath + File.separator + imageFileName);
                     }
                 }
             } catch (Exception e) {
-                System.out.println("⚠️ No file uploaded or upload failed: " + e.getMessage());
+                System.out.println("No file uploaded or upload failed: " + e.getMessage());
                 imageFileName = "no-design"; // Default value
             }
 
@@ -125,7 +125,7 @@ public class AddToCartServlet extends HttpServlet {
             Product product = pDao.getSingleProduct(id);
 
             if (product == null) {
-                System.out.println("❌ Error: Product with ID " + id + " not found.");
+                System.out.println("Error: Product with ID " + id + " not found.");
                 response.sendRedirect("index.jsp?error=productNotFound");
                 return;
             }
@@ -143,9 +143,9 @@ public class AddToCartServlet extends HttpServlet {
             try {
                 com.example.rheakaprinting.dao.CartDao cartDao = new com.example.rheakaprinting.dao.CartDao(DbConnection.getConnection());
                 cartDao.insertCartItem(cm, auth.getUserId());
-                System.out.println("✅ Item disimpan ke Database untuk User: " + auth.getUserId());
+                System.out.println("Item disimpan ke Database untuk User: " + auth.getUserId());
             } catch (Exception e) {
-                System.out.println("⚠️ Gagal simpan ke DB, tapi teruskan ke Session: " + e.getMessage());
+                System.out.println("Gagal simpan ke DB, tapi teruskan ke Session: " + e.getMessage());
             }
 
             // 6. SESSION SYNC (For immediate UI updates)

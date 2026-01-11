@@ -4,14 +4,14 @@ package com.example.rheakaprinting.model;
 public class Order extends Product {
     private int orderId;
     private int uId;
-    private int quantity; // Specific quantity for this order.
+    private int quantity;
     private String date;
     private String status;
     private String shippingAddress;
     private double totalAmount;
     private String phoneNumber;
     private String paymentMethod;
-    private String email; // ✅ ADDED: Email field
+    private String email;
 
     public Order() {
     }
@@ -20,7 +20,7 @@ public class Order extends Product {
     public Order(int orderId, int uId, int quantity, String date, String status, String shippingAddress, double totalAmount, String paymentMethod) {
         this.orderId = orderId;
         this.uId = uId;
-        this.setQuantity(quantity); // Dari Product
+        this.setQuantity(quantity);
         this.date = date;
         this.status = status;
         this.shippingAddress = shippingAddress;
@@ -93,7 +93,6 @@ public class Order extends Product {
         this.status = status;
     }
 
-    // ✅ ADDED: Email getter and setter
     public String getEmail() {
         return email;
     }

@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS Variables for consistent branding */
         :root {
             --mongoose: #baa987;
             --steelblue: #b0c4de;
@@ -20,7 +19,6 @@
             box-sizing: border-box;
         }
 
-        /* Gradient background for a premium look */
         body {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,7 +43,6 @@
             z-index: 0;
         }
 
-        /* Page Header Styling */
         .header-section {
             text-align: center;
             padding: 80px 20px 60px;
@@ -89,7 +86,6 @@
             text-transform: uppercase;
         }
 
-        /* Product Grid Configuration */
         .product-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -101,7 +97,6 @@
             z-index: 1;
         }
 
-        /* Service Card Styling */
         .product-card {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-radius: 24px;
@@ -141,7 +136,6 @@
                     0 0 0 1px rgba(186, 169, 135, 0.3) inset;
         }
 
-        /* Circular Image Wrapper for Products */
         .icon-wrapper {
             width: 100px;
             height: 100px;
@@ -195,7 +189,6 @@
             margin-bottom: 25px;
         }
 
-        /* Action Button Styling */
         .btn-view {
             background: linear-gradient(135deg, var(--mongoose) 0%, var(--accent-gold) 100%);
             color: white;

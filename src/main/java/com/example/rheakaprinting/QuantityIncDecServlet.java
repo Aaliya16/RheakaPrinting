@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
 import com.google.gson.JsonObject;
 /*
  * Servlet to handle incrementing, decrementing, or manually updating

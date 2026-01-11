@@ -83,8 +83,8 @@
         }
         /* ADD THIS PART TO YOUR CSS */
         .field-icon {
-            width: 20px;          /* Specific width for the icon */
-            height: 20px;         /* Specific height for the icon */
+            width: 20px;
+            height: 20px;
             object-fit: contain;  /* Keeps the icon from stretching */
             flex-shrink: 0;       /* IMPORTANT: Prevents the "squishing" seen in your photo */
             margin-right: 12px;   /* Space between icon and text input */

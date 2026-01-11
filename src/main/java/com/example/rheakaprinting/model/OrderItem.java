@@ -30,11 +30,6 @@ public class OrderItem {
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
-    public String getVariation() { return variation; }
-    public void setVariation(String variation) { this.variation = variation; }
-
-    public String getAddon() { return addon; }
-    public void setAddon(String addon) { this.addon = addon; }
 
     public String getDesignImage() { return designImage; }
     public void setDesignImage(String designImage) { this.designImage = designImage; }

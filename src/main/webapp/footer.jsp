@@ -23,7 +23,6 @@
 %>
 
 <style>
-    /* Footer Styling */
     .footer {
         background-color: #ffffff;
         padding: 30px 50px;

@@ -16,7 +16,6 @@
             --mongoose: #baa987;
         }
 
-        /* Steel Blue gradient background consistent with the site theme */
         body {
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             min-height: 100vh;
@@ -25,13 +24,12 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Container for the quote request form */
         .quote-container {
             padding-top: 30px;
             max-width: 1200px;
             margin: 0 auto;
         }
-        /* Header animations */
+
         .page-header {
             text-align: center;
             margin-bottom: 30px;
@@ -61,7 +59,7 @@
             margin-bottom: 40px;
             padding: 0 15px;
         }
-        /* Central white card for form fields */
+
         .quote-box {
             width: 100%;
             max-width: 700px;
@@ -139,7 +137,7 @@
             background: #f0f0f0;
             border-color: #4682B4;
         }
-        /* Primary action button styling */
+
         .btn-submit {
             display: inline-block;
             padding: 15px;
@@ -263,24 +261,19 @@
         %>
         var isLoggedIn = <%= (auth != null) ? "true" : "false" %>;
 
-        // 1. Check Login Dahulu
         if (!isLoggedIn) {
             alert("⚠️ MAAF! Sila LOGIN dahulu untuk meminta sebut harga (quote).");
             window.location.href = "login.jsp";
             return;
         }
 
-        // 2. Jika sudah login, check validation borang secara manual
         var form = document.getElementById('quote-form');
         if (form.checkValidity()) {
-            form.submit(); // Hantar borang jika semua field 'required' sudah diisi
-        } else {
-            form.reportValidity(); // Tunjuk amaran 'Please fill out this field' jika kosong
+            form.submit();
+            form.reportValidity();
         }
     }
-</script>
 
-<script>
     function showFileName() {
         var input = document.getElementById('quote-file');
         var display = document.getElementById('file-name-display');

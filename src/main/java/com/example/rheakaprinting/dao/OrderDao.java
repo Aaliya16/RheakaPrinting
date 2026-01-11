@@ -66,12 +66,12 @@ public class OrderDao {
                 }
 
                 con.commit();
-                System.out.println("✅ Success: Order placed and stock updated.");
+                System.out.println("Success: Order placed and stock updated.");
             }
         } catch (SQLException e) {
             try {
                 if (con != null) con.rollback();
-                System.err.println("❌ Transaction Failed: Rollback executed. " + e.getMessage());
+                System.err.println("Transaction Failed: Rollback executed. " + e.getMessage());
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -114,7 +114,7 @@ public class OrderDao {
     public List<Order> getAllOrders() {
         List<Order> list = new ArrayList<>();
         try {
-            // Join dengan users table untuk dapat customer name & email
+
             String query = "SELECT orders.*, orders.recipient_name, orders.recipient_email FROM orders ORDER BY orders.id DESC";
             PreparedStatement ps = this.con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();

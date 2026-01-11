@@ -31,7 +31,7 @@ public class UpdateProductServlet extends HttpServlet {
 
         // Validation: Ensure the ID is present before attempting an update
         if (sId == null || sId.trim().isEmpty()) {
-            System.err.println("❌ CRITICAL ERROR: Parameter 'id' missing from request.");
+            System.err.println("CRITICAL ERROR: Parameter 'id' missing from request.");
             response.sendRedirect("admin-products.jsp?error=id_missing");
             return;
         }
@@ -61,7 +61,7 @@ public class UpdateProductServlet extends HttpServlet {
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ FORMAT ERROR: Failed to parse numeric values. ID:" + sId);
+            System.err.println("FORMAT ERROR: Failed to parse numeric values. ID:" + sId);
             response.sendRedirect("admin-products.jsp?error=invalid_format");
         }
     }

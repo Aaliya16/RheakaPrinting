@@ -54,15 +54,15 @@ public class CancelOrderServlet extends HttpServlet {
             boolean cancelled = cancelOrder(orderId, userId);
 
             if (cancelled) {
-                System.out.println("✅ Order cancelled successfully");
+                System.out.println("Order cancelled successfully");
                 response.sendRedirect("orders.jsp?msg=cancelled");
             } else {
-                System.out.println("❌ Failed to cancel order");
+                System.out.println("Failed to cancel order");
                 response.sendRedirect("orders.jsp?msg=error");
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ Invalid order ID: " + e.getMessage());
+            System.err.println("Invalid order ID: " + e.getMessage());
             response.sendRedirect("orders.jsp?msg=error");
         }
     }
@@ -79,7 +79,7 @@ public class CancelOrderServlet extends HttpServlet {
             conn = DbConnection.getConnection();
 
             if (conn == null) {
-                System.err.println("❌ Database connection is null");
+                System.err.println("Database connection is null");
                 return false;
             }
 
@@ -92,14 +92,14 @@ public class CancelOrderServlet extends HttpServlet {
             rs = checkStmt.executeQuery();
 
             if (!rs.next()) {
-                System.err.println("❌ Order not found or doesn't belong to user");
+                System.err.println("Order not found or doesn't belong to user");
                 return false;
             }
 
             String currentStatus = rs.getString("status");
 
             if (!"pending".equals(currentStatus)) {
-                System.err.println("❌ Order cannot be cancelled - current status: " + currentStatus);
+                System.err.println("Order cannot be cancelled - current status: " + currentStatus);
                 return false;
             }
 
@@ -112,7 +112,7 @@ public class CancelOrderServlet extends HttpServlet {
             return rowsAffected > 0;
 
         } catch (SQLException e) {
-            System.err.println("❌ SQL Error: " + e.getMessage());
+            System.err.println("SQL Error: " + e.getMessage());
             e.printStackTrace();
             return false;
 

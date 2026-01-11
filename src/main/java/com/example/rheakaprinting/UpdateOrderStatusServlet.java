@@ -55,20 +55,20 @@ public class UpdateOrderStatusServlet extends HttpServlet {
 
             // 5. REDIRECTION: Provide feedback to the Admin based on result
             if (updated) {
-                System.out.println("✅ Status updated successfully");
+                System.out.println("Status updated successfully");
                 System.out.println("===========================");
                 response.sendRedirect("admin-orders.jsp?msg=updated");
             } else {
-                System.out.println("❌ Failed to update status");
+                System.out.println("Failed to update status");
                 System.out.println("===========================");
                 response.sendRedirect("admin-orders.jsp?msg=error");
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ Invalid order ID: " + e.getMessage());
+            System.err.println("Invalid order ID: " + e.getMessage());
             response.sendRedirect("admin-orders.jsp?msg=error");
         } catch (Exception e) {
-            System.err.println("❌ Error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect("admin-orders.jsp?msg=error");
         }

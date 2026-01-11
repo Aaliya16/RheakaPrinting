@@ -27,7 +27,7 @@ public class CartDao {
             pst.executeUpdate();
             result = true;
         } catch (SQLException e) {
-            System.err.println("❌ Database Insert Error: " + e.getMessage());
+            System.err.println("Database Insert Error: " + e.getMessage());
             e.printStackTrace();
         }
         return result;

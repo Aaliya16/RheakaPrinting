@@ -30,13 +30,12 @@
         :root { --mongoose: #baa987; }
 
         body {
-            /* Blue gradient background matching the Contact page */
+
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Roboto', sans-serif; margin: 0; padding: 0;
             min-height: 100vh;
         }
 
-        /* Header animations and styles */
         .page-header {
             text-align: center;
             padding-top: 30px;
@@ -254,7 +253,6 @@
             background: #ccc !important;
             cursor: not-allowed !important;
         }
-
     </style>
 </head>
 <body>
@@ -298,12 +296,11 @@
             <td class="price-cell">RM <%= dcf.format(c.getPrice()) %></td>
             <td>
                 <div class="quantity-btn">
-                    <%-- Butang Kurang (-) - Selalu ada --%>
+
                     <button type="button" class="btn-qty <%= c.getQuantity() <= 1 ? "btn-disabled" : "" %>"
                             onclick="changeQty('<%= c.getId() %>', -1)"
                             <%= c.getQuantity() <= 1 ? "title='Min 1 reached'" : "" %>>−</button>
 
-                    <%-- Input Manual --%>
                     <input type="number"
                            id="qty-input-<%= c.getId() %>"
                            value="<%= c.getQuantity() %>"
@@ -311,7 +308,6 @@
                            max="<%= c.getStock() %>"
                            onchange="updateQuantity(this, '<%= c.getId() %>')">
 
-                    <%-- Butang Tambah (+) - Selalu ada --%>
                     <button type="button" class="btn-qty <%= c.getQuantity() >= c.getStock() ? "btn-disabled" : "" %>"
                             onclick="changeQty('<%= c.getId() %>', 1)"
                             <%= c.getQuantity() >= c.getStock() ? "title='Max Stock reached'" : "" %>>+</button>
@@ -349,12 +345,21 @@
         <a href="products.jsp" class="btn-blue-style">Start Shopping</a>
     </div>
     <% } %>
+    <% if (cart_list != null && !cart_list.isEmpty()) { %>
+    <!-- Persistence Controls -->
+    <div class="persistence-controls">
+        <h4>Cart Persistence Controls</h4>
+        <button onclick="saveCartToFile()" class="btn-persist">Save Cart</button>
+        <button onclick="loadCartFromFile()" class="btn-persist load">Load Cart</button>
+        <button onclick="clearCartFile()" class="btn-persist clear">Clear Saved Cart</button>
+        <button onclick="checkCartFile()" class="btn-persist" style="background: #6c757d;">Check Status</button>
+
+        <div id="persist-status" class="persist-status"></div>
+    </div>
+    <% } %>
 </div>
 
 <script>
-    // ============================================
-    // DYNAMIC CART UPDATE (NO PAGE RELOAD)
-    // ============================================
 
     // 1. UPDATE QUANTITY
     function updateQuantity(input, id) {
@@ -461,11 +466,6 @@
         }
     }
 
-    // ============================================
-    // HELPER FUNCTIONS
-    // ============================================
-
-    // Update subtotal untuk satu item
     function updateItemSubtotal(id, subtotal) {
         const row = document.getElementById('qty-input-' + id).closest('tr');
         const subtotalCell = row.querySelector('.subtotal-cell');

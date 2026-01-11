@@ -84,7 +84,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        /* Color Variables for Consistency */
         :root { --mongoose: #baa987; --steelblue: #b0c4de; }
 
         body {
@@ -92,7 +91,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Card and UI Styling */
         .card {
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -122,7 +120,7 @@
         }
 
         .btn-add {
-            background: #4682B4; /* Steel blue - matches View Details */
+            background: #4682B4;
             color: white;
             border: none;
             width: 100%;
@@ -134,7 +132,7 @@
         }
 
         .btn-add:hover {
-            background: #357ABD; /* Darker blue on hover */
+            background: #357ABD;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
         }

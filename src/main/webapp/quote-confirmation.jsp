@@ -21,9 +21,8 @@
     <title>Quote Submitted - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Base Styles using the brand's Steel Blue gradient */
+
         body {
-            /* Tema gradient biru Steel Blue */
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Roboto', sans-serif;
             min-height: 100vh;
@@ -44,11 +43,11 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             text-align: center;
         }
-        /* Success Icon Animation */
+
         .success-icon {
             width: 80px;
             height: 80px;
-            background: #4CAF50; /* Kekalkan hijau untuk simbol kejayaan */
+            background: #4CAF50;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -85,7 +84,6 @@
             line-height: 1.6;
         }
 
-        /* Highlighted Reference Box */
         .reference-box {
             background: #4682B4;
             color: white;
@@ -149,7 +147,6 @@
             line-height: 1.6;
         }
 
-        /* Timeline and Info UI */
         .timeline {
             margin: 40px 0;
             text-align: left;

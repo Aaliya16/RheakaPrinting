@@ -11,7 +11,6 @@ public class Message {
     private String createdAt;
     private boolean read;
     private boolean important;
-    private boolean archived;
 
     // Getters and Setters
     // Check this in your Message.java model
@@ -44,6 +43,4 @@ public class Message {
     public boolean isImportant() { return important; }
     public void setImportant(boolean important) { this.important = important; }
 
-    public boolean isArchived() { return archived; }
-    public void setArchived(boolean archived) { this.archived = archived; }
 }

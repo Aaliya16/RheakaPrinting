@@ -7,7 +7,6 @@
     <title>Forgot Password - Rheaka Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Shared visual theme: Steel Blue gradient background */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
@@ -65,7 +64,7 @@
             box-sizing: border-box;
             outline: none;
         }
-        /* Standardized button style matching the site's primary color */
+
         .btn-reset {
             background: #4682B4;
             color: white;

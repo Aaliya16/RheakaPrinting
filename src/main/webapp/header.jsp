@@ -14,7 +14,6 @@
         box-sizing: border-box;
     }
 
-    /* Navbar Styling */
     .navbar {
         background-color: #ffffff;
         padding: 15px 50px;
@@ -45,7 +44,6 @@
         margin: 0;
     }
 
-    /* Navigation Links  */
     .nav-links {
         display: flex;
         align-items: center;
@@ -68,7 +66,6 @@
         color: #000;
     }
 
-    /* Dropdown Styling */
     .dropdown {
         position: relative;
         display: inline-block;
@@ -101,7 +98,6 @@
         transform: rotate(180deg);
     }
 
-    /* Dropdown Menu - Updated */
     .dropdown-menu {
         position: absolute;
         top: 100%;

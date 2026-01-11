@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign Up - Rheaka Design</title>
     <style>
-        /* Base styling with the signature Steel Blue gradient */
         body {
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,7 +14,7 @@
             flex-direction: column;
             min-height: 100vh;
         }
-        /* Flex container to keep the footer at the bottom */
+
         .signup-container {
             flex: 1;
             display: flex;
@@ -24,13 +23,14 @@
             justify-content: center;
             padding: 40px 0;
         }
+
         .welcome-text {
             font-size: 32px;
             font-weight: bold;
             color: #333;
             margin-bottom: 20px;
         }
-        /* Centered white signup card */
+
         .signup-card {
             background: white;
             padding: 40px;
@@ -47,7 +47,7 @@
             margin-bottom: 8px;
             font-size: 14px;
         }
-        /* Input wrapper to hold the icon and the field together */
+
         .input-wrapper {
             position: relative;
             background: #f0f0f0;
@@ -63,7 +63,7 @@
             padding: 5px 10px;
             outline: none;
         }
-        /* Button styling matching the primary brand color */
+
         .signup-btn {
             background: #4682B4;
             color: white;
@@ -116,11 +116,11 @@
             if (error != null) {
                 if (error.equals("1")) {
         %>
-        <div class="error-message">❌ Registration failed. Please try again.</div>
+        <div class="error-message">Registration failed. Please try again.</div>
         <%
         } else if (error.equals("server")) {
         %>
-        <div class="error-message">❌ Server error. Please contact support.</div>
+        <div class="error-message">Server error. Please contact support.</div>
         <%
                 }
             }

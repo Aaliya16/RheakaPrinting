@@ -43,7 +43,7 @@ public class PlaceOrderServlet extends HttpServlet {
         // 2. VALIDATION: Check if cart exists and is not empty
         ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
         if (cart_list == null || cart_list.isEmpty()) {
-            System.out.println("❌ Cart is empty");
+            System.out.println("Cart is empty");
             response.sendRedirect("cart.jsp");
             return;
         }
@@ -86,7 +86,7 @@ public class PlaceOrderServlet extends HttpServlet {
             rs.close();
             ps.close();
         } catch (Exception e) {
-            System.out.println("⚠️ Error fetching shipping: " + e.getMessage());
+            System.out.println("Error fetching shipping: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -109,7 +109,7 @@ public class PlaceOrderServlet extends HttpServlet {
             );
 
             if (orderId > 0) {
-                System.out.println("✅ Order created successfully! ID: " + orderId);
+                System.out.println("Order created successfully! ID: " + orderId);
 
                 session.setAttribute("order_name", fullName);
                 session.setAttribute("order_email", email);
@@ -124,9 +124,9 @@ public class PlaceOrderServlet extends HttpServlet {
                 try {
                     com.example.rheakaprinting.dao.CartDao dbCart = new com.example.rheakaprinting.dao.CartDao(DbConnection.getConnection());
                     dbCart.clearCartByUserId(authUser.getUserId());
-                    System.out.println("🧹 Database cart cleared");
+                    System.out.println("Database cart cleared");
                 } catch (Exception e) {
-                    System.out.println("⚠️ Gagal clear DB cart: " + e.getMessage());
+                    System.out.println("Gagal clear DB cart: " + e.getMessage());
                 }
 
                 // Redirect

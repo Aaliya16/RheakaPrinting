@@ -35,7 +35,6 @@
 
     int userId = authUser.getUserId();
     int orderId = Integer.parseInt(orderIdParam);
-%>
 
     DecimalFormat dcf = new DecimalFormat("#,##0.00");
     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, hh:mm a");
@@ -51,7 +50,6 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body {
-            /* Tema gradient biru Steel Blue */
             background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', sans-serif;
             padding: 20px 0;
@@ -72,7 +70,6 @@
             margin-bottom: 20px;
         }
 
-        /* --- HEADER (Tukar ke Steel Blue) --- */
         .order-header {
             background: #4682B4;
             color: white;
@@ -116,7 +113,6 @@
             margin-bottom: 30px;
         }
 
-        /* --- TAJUK SEKSYEN (Guna Steel Blue) --- */
         .section-title {
             font-size: 18px;
             font-weight: 600;
@@ -189,7 +185,7 @@
             text-align: right;
         }
 
-        /* --- HARGA ITEM (Steel Blue) --- */
+
         .item-price .price {
             font-size: 18px;
             font-weight: 700;
@@ -227,7 +223,6 @@
             color: #4682B4;
         }
 
-        /* --- BUTANG-BUTANG (Tema Blue & Outline) --- */
         .btn-blue {
             display: inline-block;
             padding: 12px 24px;
@@ -290,7 +285,6 @@
 <div class="container" style="margin-top: 100px;"> <%
 
     try {
-
         String queryOrder = "SELECT * FROM orders WHERE id = ? AND user_id = ?";
 
         PreparedStatement ps = conn.prepareStatement(queryOrder);
@@ -302,7 +296,7 @@
 %>
 
     <div class="order-detail-card" style="padding: 50px; text-align: center;">
-        <h3>Order Not Found ❌</h3>
+        <h3>Order Not Found</h3>
         <p>This order does not exist or does not belong to you.</p>
         <a href="orders.jsp" class="btn btn-outline">Back to My Orders</a>
     </div>
@@ -414,11 +408,24 @@
 
                 <div class="order-summary">
                     <%
-                        double grandTotal = totalAmount + shipping;
+                        double totalProductPrice = 0;
+
+                        psItems = conn.prepareStatement("SELECT quantity, price FROM order_details WHERE order_id = ?");
+                        psItems.setInt(1, orderId);
+                        rsItems = psItems.executeQuery();
+
+                        while (rsItems.next()) {
+                            int qty = rsItems.getInt("quantity");
+                            double price = rsItems.getDouble("price");
+                            totalProductPrice += (price * qty);
+                        }
+
+                        double grandTotal = totalAmount;
                     %>
+
                     <div class="summary-row">
                         <span>Subtotal</span>
-                        <span>RM <%= dcf.format(totalAmount) %></span>
+                        <span>RM <%= dcf.format(totalProductPrice) %></span>
                     </div>
 
                     <div class="summary-row">

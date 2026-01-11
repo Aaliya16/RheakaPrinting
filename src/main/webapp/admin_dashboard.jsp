@@ -36,7 +36,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --brand-color: #6c5ce7; /* Professional Purple */
+            --brand-color: #6c5ce7;
             --brand-light: rgba(108, 92, 231, 0.1);
             --text-main: #2d3436;
         }
@@ -48,7 +48,6 @@
             color: var(--text-main);
         }
 
-        /* Animation for the dashboard entry */
         .main-content {
             margin-left: 260px;
             width: calc(100% - 260px);
