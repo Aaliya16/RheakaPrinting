@@ -6,6 +6,7 @@
         background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
         color: white; z-index: 1000; overflow-y: auto;
         box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
     }
 
     /* Entrance Animation - Only applied via JavaScript on first load */
@@ -67,7 +68,53 @@
         color: white; font-weight: 600;
     }
     .nav-icon { font-size: 18px; width: 25px; text-align: center; }
+
+    /* RESPONSIVE LOGIC */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 240px;
+            left: -240px;
+            position: fixed;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar.animate-in {
+            animation: none;
+            opacity: 1;
+            left: -240px;
+        }
+    }
+
+    .mobile-toggle {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: #1e3c72;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        z-index: 1001;
+        cursor: pointer;
+        border: none;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-toggle {
+            display: block;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+    }
 </style>
+<button class="mobile-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
 
 <div class="sidebar" id="adminSidebar">
     <div class="sidebar-header">
@@ -95,6 +142,19 @@
 </div>
 
 <script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById("adminSidebar");
+        sidebar.classList.toggle("active");
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                document.getElementById("adminSidebar").classList.remove("active");
+            }
+        });
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
         const sidebar = document.getElementById("adminSidebar");
 
