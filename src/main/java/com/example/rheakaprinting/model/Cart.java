@@ -1,11 +1,7 @@
 package com.example.rheakaprinting.model;
 
 public class Cart extends Product {
-    // Variable 'id', 'name', 'price', 'quantity' dah ada dalam Product (Parent).
-    // JANGAN declare semula di sini.
-
-    private String variation; // Untuk simpan Product Type/Size
-    private String addon;
+    private int stock;
     private String designImage;
 
     public Cart() {
@@ -18,14 +14,8 @@ public class Cart extends Product {
         super.setPrice(price);
     }
 
-    // --- GETTERS & SETTERS (Hanya untuk variable baru) ---
-    // Getter Setter untuk ID, Name, Price tak perlu tulis sini sebab Product dah ada.
-
-    public String getVariation() { return variation; }
-    public void setVariation(String variation) { this.variation = variation; }
-
-    public String getAddon() { return addon; }
-    public void setAddon(String addon) { this.addon = addon; }
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
 
     public String getDesignImage() { return designImage; }
     public void setDesignImage(String designImage) { this.designImage = designImage; }
@@ -37,8 +27,6 @@ public class Cart extends Product {
                 ", name='" + getName() + '\'' +
                 ", price=" + getPrice() +
                 ", quantity=" + getQuantity() +
-                ", variation='" + variation + '\'' + // ✅ Penting untuk debug
-                ", addon='" + addon + '\'' +         // ✅ Penting untuk debug
                 '}';
     }
 }

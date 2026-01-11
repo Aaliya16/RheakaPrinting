@@ -28,7 +28,6 @@
     String postcode = request.getParameter("postcode");
     String state = request.getParameter("state");
 
-    // Gabung alamat penuh untuk disimpan ke DB nanti
     String fullAddress = address + ", " + postcode + " " + city + ", " + state;
 %>
 
@@ -39,93 +38,182 @@
     <title>Payment - Rheaka Design</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        body { background: #f5f5f5; font-family: 'Roboto', sans-serif; }
-        .payment-container { max-width: 600px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .payment-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .total-amount { font-size: 32px; color: #baa987; font-weight: bold; margin: 10px 0; }
+        body {
+            /* Tema gradient biru Steel Blue */
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .payment-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+
+        .payment-header h3 { color: #333; font-weight: 700; }
+
+        /* --- WARNA JUMLAH (Steel Blue) --- */
+        .total-amount {
+            font-size: 36px;
+            color: #4682B4;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .summary-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #555;
+            border: 1px solid #eee;
+        }
 
         /* Payment Options Styling */
-        .payment-methods { display: flex; gap: 15px; margin-bottom: 20px; }
-        .method-card { flex: 1; border: 2px solid #eee; border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .method-card:hover, .method-card.active { border-color: #baa987; background: #faf8f5; }
-        .method-icon { font-size: 24px; margin-bottom: 5px; display: block; }
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            margin-top: 15px;
+        }
+
+        .method-card {
+            flex: 1;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
         /* Hide Radio Buttons */
         input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .method-card { border-color: #baa987; background: #baa987; color: white; }
 
-        .btn-pay { width: 100%; background: #baa987; color: white; border: none; padding: 15px; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        .btn-pay:hover { background: #a49374; }
+        /* Style bila Radio dipilih */
+        input[type="radio"]:checked + .method-card {
+            border-color: #4682B4;
+            background: rgba(70, 130, 180, 0.1);
+            color: #4682B4;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.2);
+        }
 
-        .summary-details { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px; font-size: 14px; color: #555; }
+        .method-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+
+        .form-input-simulasi {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .form-input-simulasi:focus {
+            outline: none;
+            border-color: #4682B4;
+            box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.1);
+        }
+
+        /* --- BUTANG BAYAR (Steel Blue Style) --- */
+        .btn-pay {
+            width: 100%;
+            background: #4682B4;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-pay:hover {
+            background: #357ABD;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+        }
+
+        h4 { color: #333; font-weight: 600; margin-top: 0; }
     </style>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 <div class="payment-container">
     <div class="payment-header">
         <h3>Complete Your Payment</h3>
-        <div class="total-amount">RM <%= dcf.format(total) %></div>
-        <p>Order for: <%= fullName %></p>
+        <%
+            double shipping = 10.0;
+            double grandTotal = total + shipping;
+        %>
+
+        <div class="total-amount">RM <%= dcf.format(grandTotal) %></div>
+        <p>Order for: <strong><%= fullName %></strong></p>
     </div>
 
     <form action="place-order" method="post">
-
         <input type="hidden" name="fullName" value="<%= fullName %>">
         <input type="hidden" name="email" value="<%= email %>">
         <input type="hidden" name="phone" value="<%= phone %>">
         <input type="hidden" name="address" value="<%= fullAddress %>">
 
         <div class="summary-details">
-            <p><strong>Shipping to:</strong><br> <%= fullAddress %></p>
+            <p style="margin-bottom: 5px;"><strong>Shipping to:</strong></p>
+            <p style="margin-top: 0;"><%= fullAddress %></p>
         </div>
 
         <h4>Select Payment Method</h4>
         <div class="payment-methods">
-            <label>
+            <label style="flex: 1;">
                 <input type="radio" name="paymentMethod" value="Credit Card" checked>
                 <div class="method-card">
                     <span class="method-icon">💳</span>
-                    <span>Card</span>
+                    <span style="font-weight: 600;">Card</span>
                 </div>
             </label>
 
-            <label>
+            <label style="flex: 1;">
                 <input type="radio" name="paymentMethod" value="Online Banking">
                 <div class="method-card">
                     <span class="method-icon">🏛️</span>
-                    <span>FPX</span>
+                    <span style="font-weight: 600;">FPX</span>
                 </div>
             </label>
 
-            <label>
+            <label style="flex: 1;">
                 <input type="radio" name="paymentMethod" value="E-Wallet">
                 <div class="method-card">
                     <span class="method-icon">📱</span>
-                    <span>E-Wallet</span>
+                    <span style="font-weight: 600;">E-Wallet</span>
                 </div>
             </label>
         </div>
 
-        <div id="card-details" style="margin-top: 15px;">
-            <label>Card Number (Simulasi)</label>
-            <input type="text" placeholder="0000 0000 0000 0000" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
+        <div id="card-details-area" style="margin-top: 20px;">
+            <label style="font-weight: 600; color: #333; font-size: 14px;">Card Number (Simulation)</label>
+            <input type="text" placeholder="0000 0000 0000 0000" class="form-input-simulasi">
         </div>
 
         <button type="submit" class="btn-pay">Pay RM <%= dcf.format(total) %></button>
     </form>
 </div>
 
-<script>
-    // Script simple untuk highlight selection
-    const cards = document.querySelectorAll('.method-card');
-    cards.forEach(card => {
-        card.addEventListener('click', function() {
-            cards.forEach(c => {
-                c.style.background = '';
-                c.style.color = '';
-            });
-        });
-    });
-</script>
+<%@ include file="footer.jsp" %>
 </body>
 </html>

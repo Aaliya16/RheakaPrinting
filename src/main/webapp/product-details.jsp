@@ -9,10 +9,9 @@
     String pName = "Printing Service";
     String pDesc = "High-quality custom printing solutions.";
     String pImage = "product_single_10.jpg";
-    String pCategory = ""; // Kita tambah category untuk logic include file nanti
+    String pCategory = "";
 
     // 2. DATABASE CONNECTION & QUERY
-    // Kita cari info produk berdasarkan ID yang user klik
     if (id != null) {
         try {
             Connection conn = DbConnection.getConnection();
@@ -25,7 +24,7 @@
                 pName = rs.getString("name");
                 pDesc = rs.getString("description");
                 pImage = rs.getString("image");
-                pCategory = rs.getString("category"); // Penting untuk tentukan file mana nak load
+                pCategory = rs.getString("category");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,14 +81,14 @@
 <html lang="en">
 <head>
     <title>Rheaka Design - <%= pName %></title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
         /* Color Variables for Consistency */
         :root { --mongoose: #baa987; --steelblue: #b0c4de; }
 
         body {
-            background-color: var(--steelblue) !important;
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -113,32 +112,54 @@
         .price-box {
             font-size: 26px;
             font-weight: bold;
-            color: var(--mongoose);
+            color: #4682B4;
             margin: 20px 0;
             padding: 15px;
             background: #fff;
-            border: 2px dashed var(--mongoose);
+            border: 2px dashed #4682B4;
             text-align: center;
             border-radius: 10px;
         }
 
         .btn-add {
-            background: var(--mongoose);
+            background: #4682B4; /* Steel blue - matches View Details */
             color: white;
             border: none;
             width: 100%;
             padding: 15px;
             border-radius: 10px;
             font-weight: bold;
-            transition: 0.3s;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .btn-add:hover { background: #a39375; }
+        .btn-add:hover {
+            background: #357ABD; /* Darker blue on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
+        }
 
         .product-img {
             max-width: 100%;
             height: auto;
             border-radius: 15px;
+        }
+
+        /* Force the custom dropdown to be visible over Bootstrap defaults */
+        .dropdown:hover .dropdown-menu {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Ensure the navbar remains the top-most element on this specific page */
+        .navbar {
+            z-index: 99999 !important;
+        }
+
+        .dropdown-menu {
+            z-index: 100000 !important;
         }
     </style>
 </head>
@@ -198,7 +219,7 @@
                                         sectionFile = "stickers.jsp";
                                         break;
                                     default:
-                                        // Kalau ID baru masuk (contoh ID 9), dia akan load default
+
                                         sectionFile = "default_options.jsp";
                                         break;
                                 }
@@ -225,43 +246,40 @@
                 </form>
             </div>
         </div>
-    </div>z
+    </div>
 </section>
 
 <script>
-    // Fungsi ini akan jalan bila user tukar pilihan
     function updateHiddenInputs() {
-        // 1. Dapatkan element dropdown
         var baseSelect = document.getElementById("base_item");
         var addonSelect = document.getElementById("addon_service");
 
-        // 2. Dapatkan TEKS pilihan (Contoh: "Banner 2' x 1'")
-        // Kalau tak buat ni, dia akan hantar harga (6.00) je
         if (baseSelect) {
             var textVariation = baseSelect.options[baseSelect.selectedIndex].text;
-            // MASUKKAN KE DALAM HIDDEN INPUT (Ikut ID dalam screenshot awak)
+
             document.getElementById("hiddenVariationName").value = textVariation;
         }
 
         if (addonSelect) {
             var textAddon = addonSelect.options[addonSelect.selectedIndex].text;
-            // MASUKKAN KE DALAM HIDDEN INPUT (Ikut ID dalam screenshot awak)
+
             document.getElementById("hiddenAddonName").value = textAddon;
         }
     }
 
-    // Jalankan script ini bila dropdown berubah
+
     var drop1 = document.getElementById("base_item");
     var drop2 = document.getElementById("addon_service");
 
     if(drop1) drop1.addEventListener("change", updateHiddenInputs);
     if(drop2) drop2.addEventListener("change", updateHiddenInputs);
 
-    // Jalankan sekali masa page baru load (supaya default value masuk)
     window.addEventListener("load", updateHiddenInputs);
 </script>
 <script src="js/priceCalculator.js"></script>
 
 <%@ include file="footer.jsp" %>
+<section class="container py-5">
+</section>
 </body>
 </html>

@@ -5,18 +5,20 @@
 <%@ page import="java.util.*" %>
 <%@ include file="admin-auth-check.jsp" %>
 <%
-    // Logic remains exactly the same
     MessageDao msgDao = new MessageDao(DbConnection.getConnection());
     List<Message> allMessages = msgDao.getAllMessages();
-
-    if (allMessages == null) {
-        allMessages = new ArrayList<>();
-    }
 
     int totalCount = allMessages.size();
     int unreadCount = 0;
     int repliedCount = 0;
-    int thisWeekCount = 0;
+
+    for(Message m : allMessages) {
+        if(!m.isRead()) {
+            unreadCount++;
+        } else {
+            repliedCount++;
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -216,13 +218,6 @@
                 <div class="stat-label">Replied</div>
             </div>
             <div class="stat-icon-mini"><i class="fas fa-check-double"></i></div>
-        </div>
-        <div class="stat-card">
-            <div>
-                <div class="stat-val"><%= thisWeekCount %></div>
-                <div class="stat-label">This Week</div>
-            </div>
-            <div class="stat-icon-mini"><i class="fas fa-calendar-alt"></i></div>
         </div>
     </div>
 

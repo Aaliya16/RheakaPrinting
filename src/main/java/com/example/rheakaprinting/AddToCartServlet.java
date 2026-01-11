@@ -1,5 +1,9 @@
 package com.example.rheakaprinting;
 
+import com.example.rheakaprinting.dao.ProductDao;
+import com.example.rheakaprinting.model.DbConnection;
+import com.example.rheakaprinting.model.Product;
+import com.example.rheakaprinting.model.User;
 import com.example.rheakaprinting.model.Cart;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -24,6 +28,16 @@ public class AddToCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
+        HttpSession session = request.getSession();
+
+        User auth = (User) session.getAttribute("currentUser");
+
+        if (auth == null) {
+            System.out.println("❌ Unauthorized access: User must login to add to cart");
+            response.sendRedirect("login.jsp?msg=notLoggedIn");
+            return;
+        }
 
         try (PrintWriter out = response.getWriter()) {
 
@@ -51,11 +65,10 @@ public class AddToCartServlet extends HttpServlet {
             String imageFileName = null;
 
             try {
-                // Ambil file dari form (pastikan name="design_image" di HTML)
                 Part part = request.getPart("design_image");
 
                 if (part != null && part.getSize() > 0) {
-                    // Dapatkan nama file asal
+
                     String contentDisp = part.getHeader("content-disposition");
                     String[] items = contentDisp.split(";");
                     for (String s : items) {
@@ -64,20 +77,14 @@ public class AddToCartServlet extends HttpServlet {
                         }
                     }
 
-                    // Generate nama unik (supaya tak replace gambar orang lain)
-                    // Contoh: design_123456789.jpg
                     if (imageFileName != null && !imageFileName.isEmpty()) {
                         imageFileName = "design_" + System.currentTimeMillis() + "_" + imageFileName;
 
-                        // Tentukan lokasi simpan (Folder assets/img/uploads)
-                        // Nota: Ini akan simpan dalam folder build server
                         String uploadPath = getServletContext().getRealPath("") + File.separator + "assets" + File.separator + "img" + File.separator + "uploads";
 
-                        // Buat folder kalau belum wujud
                         File uploadDir = new File(uploadPath);
                         if (!uploadDir.exists()) uploadDir.mkdir();
 
-                        // Simpan file
                         part.write(uploadPath + File.separator + imageFileName);
                         System.out.println("✅ File uploaded to: " + uploadPath + File.separator + imageFileName);
                     }
@@ -87,33 +94,24 @@ public class AddToCartServlet extends HttpServlet {
                 imageFileName = "no-design"; // Default value
             }
 
-            // A. Ambil value default (dari hidden input produk biasa - Banner, Sticker)
             String finalVariation = request.getParameter("variation_name");
             String finalAddon = request.getParameter("addon_name");
-
-            // B. Logic Khas untuk APPAREL (Baju) - Check kalau parameter wujud
-            // Sebab form baju tak guna hidden input 'variation_name', dia guna dropdown berasingan
             String pType = request.getParameter("printing_type");
 
             if (pType != null && !pType.isEmpty()) {
-                // Ambil semua detail baju
+
                 String fabric = request.getParameter("fabric_type");
-                String apparel = request.getParameter("apparel_type"); // Ini biasanya pegang saiz/jenis
+                String apparel = request.getParameter("apparel_type");
                 String nametag = request.getParameter("nametag");
 
-                // GABUNGKAN jadi satu string untuk variation
-                // Format: "Sublimation | Eyelet | Round Neck Size L"
                 finalVariation = pType + " | " + (fabric != null ? fabric : "-") + " | " + (apparel != null ? apparel : "-");
 
-                // Handle Nametag (Masuk ke Addon)
                 if (nametag != null && !nametag.trim().isEmpty() && !nametag.equals("No Nametag")) {
                     String nametagText = "Nametag: " + nametag;
-                    // Kalau addon dah ada isi, tambah koma. Kalau tak, terus letak nametag.
                     finalAddon = (finalAddon != null && !finalAddon.isEmpty()) ? finalAddon + ", " + nametagText : nametagText;
                 }
             }
 
-            // C. Null Safety (Supaya tak error masa save database)
             if (finalVariation == null || finalVariation.trim().isEmpty()) finalVariation = "Standard";
             if (finalAddon == null || finalAddon.trim().isEmpty()) finalAddon = "None";
 
@@ -121,46 +119,55 @@ public class AddToCartServlet extends HttpServlet {
             System.out.println("Final Addon: " + finalAddon);
 
             // --- 3. CREATE CART OBJECT ---
+            ProductDao pDao = new ProductDao(DbConnection.getConnection());
+            Product product = pDao.getSingleProduct(id);
+
+            if (product == null) {
+                System.out.println("❌ Error: Product with ID " + id + " not found.");
+                response.sendRedirect("index.jsp?error=productNotFound");
+                return;
+            }
+
             Cart cm = new Cart();
             cm.setId(id);
+            cm.setName(product.getName());
+            cm.setImage(product.getImage());
             cm.setQuantity(quantity);
             cm.setPrice(unitPrice);
+            cm.setStock(product.getStock());
+            cm.setDesignImage(imageFileName);
 
-            // ✅ PENTING: Set Variation & Addon masuk ke object
-            cm.setVariation(finalVariation);
-            cm.setAddon(finalAddon);
+            // --- 4. DATABASE & SESSION LOGIC ---
 
-            // --- 4. SESSION CART LOGIC ---
-            HttpSession session = request.getSession();
+            try {
+                com.example.rheakaprinting.dao.CartDao cartDao = new com.example.rheakaprinting.dao.CartDao(DbConnection.getConnection());
+                cartDao.insertCartItem(cm, auth.getUserId());
+                System.out.println("✅ Item disimpan ke Database untuk User: " + auth.getUserId());
+            } catch (Exception e) {
+                System.out.println("⚠️ Gagal simpan ke DB, tapi teruskan ke Session: " + e.getMessage());
+            }
+
             ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
 
             if (cart_list == null) {
                 cart_list = new ArrayList<>();
                 cart_list.add(cm);
-                session.setAttribute("cart-list", cart_list);
-                System.out.println("✅ New cart created");
             } else {
                 boolean exist = false;
-
                 for (Cart c : cart_list) {
-                    if (c.getId() == id && c.getVariation().equals(finalVariation)) {
+                    // DIBAIKI: Hanya semak ID sahaja
+                    if (c.getId() == id) {
                         exist = true;
                         c.setQuantity(c.getQuantity() + quantity);
-                        System.out.println("✅ Quantity updated for existing item");
                         break;
                     }
                 }
-
                 if (!exist) {
                     cart_list.add(cm);
-                    System.out.println("✅ Added new unique item to cart");
                 }
             }
 
-            // Update session
             session.setAttribute("cart-list", cart_list);
-
-            // Redirect to cart page
             response.sendRedirect("cart.jsp");
 
         } catch (NumberFormatException e) {
@@ -178,4 +185,5 @@ public class AddToCartServlet extends HttpServlet {
         response.sendRedirect("products.jsp");
     }
 }
+
 

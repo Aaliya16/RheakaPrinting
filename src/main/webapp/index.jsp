@@ -22,7 +22,7 @@
 
         /* Hero Section - Lightsteelblue Gradient */
         .hero-section {
-            background: linear-gradient(135deg, #b0c4de 0%, #87CEEB 50%, #4682B4 100%);
+            background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;
@@ -105,7 +105,7 @@
             display: block;
         }
 
-        /* Carousel Section */
+        /* Carousel Section - UPDATED */
         .carousel-section {
             padding: 80px 20px;
             background: linear-gradient(135deg, #b0c4de 0%, #87CEEB 100%);
@@ -133,7 +133,7 @@
             max-width: 1300px;
             margin: 0 auto;
             position: relative;
-            padding: 0 60px;
+            padding: 0 20px;
         }
 
         .carousel-wrapper {
@@ -143,12 +143,12 @@
 
         .carousel-track {
             display: flex;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             gap: 25px;
         }
 
         .category-card {
-            min-width: calc(25% - 19px);
+            min-width: calc(25% - 18.75px); /* Exactly 4 cards visible */
             background: white;
             border-radius: 20px;
             padding: 40px 25px;
@@ -162,6 +162,32 @@
         .category-card:hover {
             transform: translateY(-15px) scale(1.02);
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .category-card .image-wrapper {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #4682B4 0%, #87CEEB 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(70, 130, 180, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .category-card:hover .image-wrapper {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(70, 130, 180, 0.5);
+        }
+
+        .category-card .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .category-card i {
@@ -189,21 +215,7 @@
         }
 
         .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: white;
-            border: none;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            z-index: 10;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: none;
         }
 
         .carousel-btn:hover {
@@ -223,6 +235,37 @@
 
         .carousel-btn.next {
             right: 0;
+        }
+
+        /* Carousel Dots Navigation */
+        .carousel-dots {
+            display: none;
+        }
+
+        .see-all-btn {
+            display: inline-block;
+            margin: 40px auto 0;
+            padding: 15px 50px;
+            background: white;
+            color: #4682B4;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .see-all-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+            background: #f8f9fa;
+        }
+
+        .see-all-container {
+            text-align: center;
+            margin-top: 50px;
         }
 
         /* Featured Services */
@@ -276,6 +319,14 @@
             color: white;
             font-size: 2.5rem;
             transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .service-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .service-card:hover .service-icon {
@@ -506,15 +557,16 @@
             }
         }
 
+        /* Responsive */
         @media (max-width: 1200px) {
             .category-card {
-                min-width: calc(33.333% - 17px);
+                min-width: calc(33.333% - 16.67px);
             }
         }
 
         @media (max-width: 900px) {
             .category-card {
-                min-width: calc(50% - 13px);
+                min-width: calc(50% - 12.5px);
             }
         }
 
@@ -576,43 +628,74 @@
 
         <div class="carousel-wrapper">
             <div class="carousel-track" id="carouselTrack">
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-gem"></i>
+                <!-- Product 1: Acrylic Clear -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=1'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/acrylic-sticker.jpg" alt="Acrylic Clear">
+                    </div>
                     <h3>Acrylic Clear</h3>
                     <p>Premium quality acrylic printing</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-utensils"></i>
+
+                <!-- Product 2: Apron Custom -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=2'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/apron-sticker.png" alt="Apron Custom">
+                    </div>
                     <h3>Apron Custom</h3>
                     <p>Personalized aprons for business</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-industry"></i>
+
+                <!-- Product 3: Industrial Signage -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=3'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/signage.jpg" alt="Industrial Signage">
+                    </div>
                     <h3>Industrial Signage</h3>
                     <p>Durable signs for your company</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-address-card"></i>
+
+                <!-- Product 4: Business Card -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=4'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/business-sticker.jpg" alt="Business Card">
+                    </div>
                     <h3>Business Card</h3>
                     <p>Professional business cards</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-tshirt"></i>
+
+                <!-- Product 5: Apparel Printing -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=5'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/apparel.jpg" alt="Apparel Printing">
+                    </div>
                     <h3>Apparel Printing</h3>
                     <p>Custom t-shirts and clothing</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-scroll"></i>
+
+                <!-- Product 6: Banner & Bunting -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=6'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/banner-sticker.jpg" alt="Banner & Bunting">
+                    </div>
                     <h3>Banner & Bunting</h3>
                     <p>Eye-catching banners for events</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-flag"></i>
+
+                <!-- Product 7: Flags & Backdrop -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=7'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/flag-printing.jpg" alt="Flags & Backdrop">
+                    </div>
                     <h3>Flags & Backdrop</h3>
                     <p>Custom flags and backdrops</p>
                 </div>
-                <div class="category-card" onclick="window.location.href='products.jsp'">
-                    <i class="fas fa-award"></i>
+
+                <!-- Product 8: Stickers & Plaque -->
+                <div class="category-card" onclick="window.location.href='product-details.jsp?id=8'">
+                    <div class="image-wrapper">
+                        <img src="assets/img/plaque.jpg" alt="Stickers & Plaque">
+                    </div>
                     <h3>Stickers & Plaque</h3>
                     <p>High-quality stickers and plaques</p>
                 </div>
@@ -622,6 +705,11 @@
         <button class="carousel-btn next" onclick="moveCarousel(1)">
             <i class="fas fa-chevron-right"></i>
         </button>
+    </div>
+
+    <!-- See All Services Button -->
+    <div class="see-all-container">
+        <a href="products.jsp" class="see-all-btn">See All Services</a>
     </div>
 </section>
 
@@ -635,74 +723,74 @@
     <div class="services-grid">
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-gem"></i>
+                <img src="assets/img/acrylic-sticker.jpg" alt="Acrylic Clear">
             </div>
             <h3>Acrylic Clear</h3>
             <p>Crystal-clear acrylic prints perfect for displaying photos, signage, and artwork.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=1" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-utensils"></i>
+                <img src="assets/img/apron-sticker.png" alt="Apron Custom">
             </div>
             <h3>Apron Custom</h3>
             <p>Customized aprons for restaurants, cafes, and businesses with vibrant printing.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=2" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-industry"></i>
+                <img src="assets/img/signage.jpg" alt="Industrial Signage">
             </div>
             <h3>Industrial Signage</h3>
             <p>Weather-resistant signage built to last in harsh industrial conditions.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=3" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-address-card"></i>
+                <img src="assets/img/business-sticker.jpg" alt="Business Card">
             </div>
             <h3>Business Card</h3>
             <p>Make a lasting impression with premium business cards in multiple finishes.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=4" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-tshirt"></i>
+                <img src="assets/img/apparel.jpg" alt="Apparel Printing">
             </div>
             <h3>Apparel Printing</h3>
             <p>Custom t-shirt printing for teams, events, and businesses with DTG technology.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=5" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-scroll"></i>
+                <img src="assets/img/banner-sticker.jpg" alt="Banner & Bunting">
             </div>
             <h3>Banner & Bunting</h3>
             <p>Large-format banners perfect for events, promotions, and grand openings.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=6" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-flag"></i>
+                <img src="assets/img/flag-printing.jpg" alt="Flags & Backdrop">
             </div>
             <h3>Flags & Backdrop</h3>
             <p>Custom flags and backdrops for exhibitions and special events.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=7" class="view-btn">View Details</a>
         </div>
 
         <div class="service-card">
             <div class="service-icon">
-                <i class="fas fa-award"></i>
+                <img src="assets/img/plaque.jpg" alt="Stickers & Plaque">
             </div>
             <h3>Stickers & Plaque</h3>
             <p>High-quality stickers and commemorative plaques for branding and awards.</p>
-            <a href="products.jsp" class="view-btn">View Details</a>
+            <a href="product-details.jsp?id=8" class="view-btn">View Details</a>
         </div>
     </div>
 </section>
@@ -822,7 +910,9 @@
     const track = document.getElementById('carouselTrack');
     const cards = document.querySelectorAll('.category-card');
     const totalCards = cards.length;
+    const dotsContainer = document.getElementById('carouselDots');
 
+    // Get number of cards to show based on screen size
     function getCardsToShow() {
         if (window.innerWidth >= 1200) return 4;
         if (window.innerWidth >= 900) return 3;
@@ -830,34 +920,106 @@
         return 1;
     }
 
-    function moveCarousel(direction) {
+    // Calculate number of pages
+    function getNumPages() {
         const cardsToShow = getCardsToShow();
-        const maxIndex = totalCards - cardsToShow;
+        return Math.ceil(totalCards / cardsToShow);
+    }
 
+    // Create dots for navigation
+    function createDots() {
+        const numPages = getNumPages();
+        dotsContainer.innerHTML = '';
+
+        for (let i = 0; i < numPages; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            if (i === 0) dot.classList.add('active');
+            dot.onclick = () => goToPage(i);
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    // Update active dot
+    function updateDots() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Go to specific page
+    function goToPage(pageIndex) {
+        currentIndex = pageIndex;
+        updateCarouselPosition();
+        updateDots();
+    }
+
+    // Move carousel by one page
+    function moveCarousel(direction) {
+        const numPages = getNumPages();
+
+        // Move by ONE PAGE (not one card)
         currentIndex += direction;
 
+        // Loop around
         if (currentIndex < 0) {
-            currentIndex = maxIndex;
-        } else if (currentIndex > maxIndex) {
+            currentIndex = numPages - 1;
+        } else if (currentIndex >= numPages) {
             currentIndex = 0;
         }
 
+        updateCarouselPosition();
+        updateDots();
+    }
+
+    // Update carousel position
+    function updateCarouselPosition() {
+        const cardsToShow = getCardsToShow();
         const cardWidth = cards[0].offsetWidth;
         const gap = 25;
-        const offset = currentIndex * (cardWidth + gap);
+
+        // Move by FULL PAGE (cardsToShow * card width)
+        const offset = currentIndex * cardsToShow * (cardWidth + gap);
 
         track.style.transform = `translateX(-${offset}px)`;
     }
 
-    setInterval(() => {
+    // Auto-play carousel
+    let autoPlayInterval = setInterval(() => {
         moveCarousel(1);
     }, 5000);
 
-    window.addEventListener('resize', () => {
-        currentIndex = 0;
-        track.style.transform = 'translateX(0)';
+    // Pause auto-play on hover
+    const carouselContainer = document.querySelector('.carousel-container');
+    carouselContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoPlayInterval);
     });
+
+    carouselContainer.addEventListener('mouseleave', () => {
+        autoPlayInterval = setInterval(() => {
+            moveCarousel(1);
+        }, 5000);
+    });
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            currentIndex = 0;
+            track.style.transform = 'translateX(0)';
+            createDots();
+            updateDots();
+        }, 250);
+    });
+
+    // Initialize dots
+    createDots();
+    updateDots();
 </script>
 
 </body>
 </html>
+
+

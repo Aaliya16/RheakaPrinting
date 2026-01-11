@@ -317,7 +317,7 @@
             <h2 id="modalTitle" style="color: var(--brand-color);">Add New Product</h2>
             <span onclick="closeModal()" style="cursor: pointer; font-size: 24px; color: #b2bec3;">&times;</span>
         </div>
-        <form action="AddProductServlet" method="POST" id="productForm">
+        <form id="productForm" action="UpdateProductServlet" method="POST">
             <input type="hidden" name="id" id="prodId">
             <div class="form-group">
                 <label>Product Name</label>
@@ -329,7 +329,9 @@
                     <option value="Apparel">Apparel</option>
                     <option value="Printing">Printing</option>
                     <option value="Signage">Signage</option>
-                    <option value="Stationery">Stationery</option>
+                    <option value="Sticker">Large Format</option>
+                    <option value="Large Format">Large Format</option>
+                    <option value="Others">Others</option>
                 </select>
             </div>
             <div class="form-group">

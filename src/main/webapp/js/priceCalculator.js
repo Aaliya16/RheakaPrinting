@@ -60,8 +60,7 @@ function updatePrice() {
     const nametagPrice = parseFloat(nametagEl?.value) || 0; // Now safely defined
     const quantity = parseInt(qtyInput?.value) || 1;
 
-    // 5. Final Calculation Formula
-    // Total = ((Base Item + Size + Nametag) * Qty) + Fixed Setup Fee
+    // Total = ((Base Item + Size + Nametag) * Qty) + Setup Fee
     const total = ((unitPrice + sizeUpgrade + nametagPrice) * quantity) + setupFee;
 
     // 6. Update UI Elements

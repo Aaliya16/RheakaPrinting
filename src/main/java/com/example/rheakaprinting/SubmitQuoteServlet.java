@@ -1,5 +1,9 @@
 package com.example.rheakaprinting;
 
+import com.example.rheakaprinting.dao.QuoteDao;
+import com.example.rheakaprinting.model.DbConnection;
+import com.example.rheakaprinting.model.Quote;
+import com.example.rheakaprinting.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +25,20 @@ import java.nio.file.Paths;
 )
 public class SubmitQuoteServlet extends HttpServlet {
 
-    // Directory to save uploaded files
     private static final String UPLOAD_DIR = "uploads/quotes";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Get form parameters
+        HttpSession session = request.getSession();
+
+        User authUser = (User) session.getAttribute("currentUser");
+
+        if (authUser == null) {
+            response.sendRedirect("login.jsp?msg=notLoggedIn");
+        }
+
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -35,7 +46,6 @@ public class SubmitQuoteServlet extends HttpServlet {
         String quantityStr = request.getParameter("quantity");
         String note = request.getParameter("note");
 
-        // Validate required fields
         if (name == null || email == null || phone == null ||
                 product == null || quantityStr == null ||
                 name.isEmpty() || email.isEmpty() || phone.isEmpty() ||
@@ -57,16 +67,13 @@ public class SubmitQuoteServlet extends HttpServlet {
             return;
         }
 
-        // Handle file upload
         String fileName = null;
         String filePath = null;
 
         Part filePart = request.getPart("file");
         if (filePart != null && filePart.getSize() > 0) {
-            // Get filename
             fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
-            // Create upload directory if it doesn't exist
             String applicationPath = request.getServletContext().getRealPath("");
             String uploadPath = applicationPath + File.separator + UPLOAD_DIR;
 
@@ -75,7 +82,6 @@ public class SubmitQuoteServlet extends HttpServlet {
                 uploadDir.mkdirs();
             }
 
-            // Generate unique filename to avoid overwriting
             String fileExtension = "";
             int dotIndex = fileName.lastIndexOf('.');
             if (dotIndex > 0) {
@@ -84,12 +90,12 @@ public class SubmitQuoteServlet extends HttpServlet {
             }
 
             String uniqueFileName = fileName + "_" + System.currentTimeMillis() + fileExtension;
-            filePath = uploadPath + File.separator + uniqueFileName;
+            filePath = UPLOAD_DIR + File.separator + uniqueFileName;
+            String fullPath = uploadPath + File.separator + uniqueFileName;
 
-            // Save file
             try {
-                filePart.write(filePath);
-                fileName = uniqueFileName; // Store the unique filename
+                filePart.write(fullPath);
+                fileName = uniqueFileName;
             } catch (IOException e) {
                 e.printStackTrace();
                 response.sendRedirect("quote.jsp?error=file_upload_failed");
@@ -97,46 +103,43 @@ public class SubmitQuoteServlet extends HttpServlet {
             }
         }
 
-        // TODO: Save quote to database
-        /*
-        Quote quote = new Quote();
-        quote.setName(name);
-        quote.setEmail(email);
-        quote.setPhone(phone);
-        quote.setProduct(product);
-        quote.setQuantity(quantity);
-        quote.setNote(note);
-        quote.setFileName(fileName);
-        quote.setFilePath(filePath);
-        quote.setCreatedAt(new java.util.Date());
+        // 4. Simpan ke Pangkalan Data
+        try {
+            authUser = (User) session.getAttribute("currentUser");
 
-        QuoteDao quoteDao = new QuoteDao(DbConnection.getConnection());
-        boolean saved = quoteDao.saveQuote(quote);
+            if (authUser == null) {
+                response.sendRedirect("login.jsp?msg=notLoggedIn");
+            }
+            int userId = (authUser != null) ? authUser.getUserId() : 0;
 
-        if (!saved) {
-            response.sendRedirect("quote.jsp?error=save_failed");
-            return;
+            Quote quote = new Quote();
+            quote.setUserId(userId);
+            quote.setName(name);
+            quote.setEmail(email);
+            quote.setPhone(phone);
+            quote.setProduct(product);
+            quote.setQuantity(quantity);
+            quote.setNote(note);
+            quote.setFileName(fileName);
+            quote.setFilePath(filePath);
+
+            QuoteDao quoteDao = new QuoteDao(DbConnection.getConnection());
+            boolean saved = quoteDao.saveQuote(quote);
+
+            if (saved) {
+                // 5. Simpan info ke session untuk confirmation page
+                session.setAttribute("quote_name", name);
+                session.setAttribute("quote_email", email);
+                session.setAttribute("quote_product", product);
+                session.setAttribute("quote_quantity", quantity);
+
+                response.sendRedirect("quote-confirmation.jsp");
+            } else {
+                response.sendRedirect("quote.jsp?error=save_failed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("quote.jsp?error=db_error");
         }
-        */
-
-        // TODO: Send email notification to admin
-        /*
-        EmailService emailService = new EmailService();
-        emailService.sendQuoteNotification(quote);
-        */
-
-        // TODO: Send confirmation email to customer
-        /*
-        emailService.sendQuoteConfirmation(email, name);
-        */
-
-        // Store quote info in session for confirmation page
-        request.getSession().setAttribute("quote_name", name);
-        request.getSession().setAttribute("quote_email", email);
-        request.getSession().setAttribute("quote_product", product);
-        request.getSession().setAttribute("quote_quantity", quantity);
-
-        // Redirect to confirmation page
-        response.sendRedirect("quote-confirmation.jsp");
     }
 }

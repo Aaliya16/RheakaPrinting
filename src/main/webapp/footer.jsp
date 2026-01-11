@@ -10,16 +10,16 @@
     Map<String, String> liveSettings = footerDao.getAllSettings();
 
     // Updated keys to match your UpdateSettingsServlet and Admin Panel names
-    String address = liveSettings.getOrDefault("footer_address", "Gerai No.12, Tapak Pauh Lama, Pauh 02600 Arau Perlis");
-    String phone = liveSettings.getOrDefault("whatsapp_num", "011-7078-7469");
-    String email = liveSettings.getOrDefault("footer_email", "rheakadesign@gmail.com");
+    String f_address = liveSettings.getOrDefault("footer_address", "Gerai No.12, Tapak Pauh Lama, Pauh 02600 Arau Perlis");
+    String f_phone = liveSettings.getOrDefault("whatsapp_num", "011-7078-7469");
+    String f_email = liveSettings.getOrDefault("footer_email", "rheakadesign@gmail.com");
 
     // Social keys updated to match your admin-settings.jsp input names
     String fbUrl = liveSettings.getOrDefault("facebook_url", "https://www.facebook.com/matuzair06/");
     String ttUrl = liveSettings.getOrDefault("tiktok_url", "https://www.tiktok.com/@rheakadesign");
 
     // Generates the WhatsApp link dynamically from the phone number
-    String waUrl = "https://wa.me/6" + phone.replace("-", "");
+    String waUrl = "https://wa.me/6" + f_phone.replace("-", "");
 %>
 
 <style>
@@ -51,13 +51,13 @@
         <p><strong>Rheaka Design Services</strong>. All Rights Reserved.</p>
 
         <%-- Dynamic Address and Phone --%>
-        <p><%= address %> |
-            <a href="tel:<%= phone %>"><%= phone %></a>
+        <p><%=f_address %> |
+            <a href="tel:<%= f_phone %>"><%= f_phone %></a>
         </p>
 
         <%-- Dynamic Email --%>
         <p>Email:
-            <a href="mailto:<%= email %>"><%= email %></a>
+            <a href="mailto:<%= f_email %>"><%= f_email %></a>
         </p>
 
         <div class="social-links">

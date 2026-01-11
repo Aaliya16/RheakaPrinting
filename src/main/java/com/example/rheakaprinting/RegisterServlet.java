@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-@WebServlet("/RegisterServlet") // This MUST match your form action exactly
+@WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Get data from your register.jsp form fields
+
         String email = request.getParameter("email");
         String name = request.getParameter("name");
         String password = request.getParameter("password");
@@ -24,7 +24,6 @@ public class RegisterServlet extends HttpServlet {
             pst.setString(2, name);
             pst.setString(3, password);
 
-            // Debugging - check what we received
             System.out.println("=== REGISTRATION ATTEMPT ===");
             System.out.println("Email: " + email);
             System.out.println("Full Name: " + name);
@@ -32,7 +31,6 @@ public class RegisterServlet extends HttpServlet {
 
             int result = pst.executeUpdate();
             if (result > 0) {
-                // Registration success, go to login
                 response.sendRedirect("login.jsp");
             } else {
                 response.sendRedirect("register.jsp?error=1");
