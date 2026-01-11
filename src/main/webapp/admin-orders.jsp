@@ -219,7 +219,7 @@
                 <td><strong>#<%= order.getOrderId() %></strong></td>
                 <td><div style="font-weight: 700; color: var(--text-main);"><%= order.getName() %></div></td>
                 <td><%= order.getDate() %></td>
-                <td><strong>RM <%= order.getTotalAmount() %></strong></td>
+                <td><strong>RM <%= order.getPrice() %></strong></td>
                 <td><span class="status-badge <%= order.getStatus().toLowerCase() %>"><%= order.getStatus() %></span></td>
                 <td style="text-align: right;">
                     <button class="btn-action btn-view" title="View Details" onclick="viewOrder(<%= order.getOrderId() %>)"><i class="fas fa-eye"></i></button>

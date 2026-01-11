@@ -30,6 +30,7 @@ public class PlaceOrderServlet extends HttpServlet {
 
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
+            return;
         }
 
         // 2. Get cart
@@ -41,14 +42,17 @@ public class PlaceOrderServlet extends HttpServlet {
         }
 
         // 3. Get form data
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
+        String fullName = request.getParameter("recipient_name");
+        String email = request.getParameter("recipient_email");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         String paymentMethod = request.getParameter("paymentMethod");
         if (paymentMethod == null || paymentMethod.isEmpty()) {
             paymentMethod = "Cash / Online Banking";
         }
+        // Get form data
+        String orderNotes = request.getParameter("orderNotes");
+        if (orderNotes == null) orderNotes = "";
 
         // 4. Calculate total
         double subtotal = 0.0;
@@ -71,7 +75,8 @@ public class PlaceOrderServlet extends HttpServlet {
                     phone,
                     paymentMethod,
                     fullName,
-                    email
+                    email,
+                    orderNotes
             );
 
             if (orderId > 0) {

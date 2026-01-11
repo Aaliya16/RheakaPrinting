@@ -200,7 +200,7 @@
                 <input type="radio" name="paymentMethod" value="E-Wallet">
                 <div class="method-card">
                     <span class="method-icon">📱</span>
-                    <span style="font-weight: 600;">Wallet</span>
+                    <span style="font-weight: 600;">E-Wallet</span>
                 </div>
             </label>
         </div>
