@@ -32,13 +32,15 @@ public class SubmitQuoteServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-
         User authUser = (User) session.getAttribute("currentUser");
 
+        // 1. Authenticate User
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
+            return;
         }
 
+        // 2. Capture and Validate Parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -55,7 +57,7 @@ public class SubmitQuoteServlet extends HttpServlet {
             return;
         }
 
-        int quantity = 0;
+        int quantity;
         try {
             quantity = Integer.parseInt(quantityStr);
             if (quantity <= 0) {
@@ -67,12 +69,13 @@ public class SubmitQuoteServlet extends HttpServlet {
             return;
         }
 
+        // 3. Handle File Upload
         String fileName = null;
         String filePath = null;
 
         Part filePart = request.getPart("file");
         if (filePart != null && filePart.getSize() > 0) {
-            fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
             String applicationPath = request.getServletContext().getRealPath("");
             String uploadPath = applicationPath + File.separator + UPLOAD_DIR;
@@ -83,18 +86,20 @@ public class SubmitQuoteServlet extends HttpServlet {
             }
 
             String fileExtension = "";
-            int dotIndex = fileName.lastIndexOf('.');
+            int dotIndex = originalFileName.lastIndexOf('.');
             if (dotIndex > 0) {
-                fileExtension = fileName.substring(dotIndex);
-                fileName = fileName.substring(0, dotIndex);
+                fileExtension = originalFileName.substring(dotIndex);
             }
 
-            String uniqueFileName = fileName + "_" + System.currentTimeMillis() + fileExtension;
-            filePath = UPLOAD_DIR + File.separator + uniqueFileName;
-            String fullPath = uploadPath + File.separator + uniqueFileName;
+            // Generate unique filename to avoid overwriting
+            String uniqueFileName = "quote_" + System.currentTimeMillis() + fileExtension;
+
+            // FIX: Always use "/" for the web-accessible path stored in DB
+            filePath = UPLOAD_DIR + "/" + uniqueFileName;
+            String fullSavePath = uploadPath + File.separator + uniqueFileName;
 
             try {
-                filePart.write(fullPath);
+                filePart.write(fullSavePath);
                 fileName = uniqueFileName;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -103,17 +108,10 @@ public class SubmitQuoteServlet extends HttpServlet {
             }
         }
 
-        // 4. Simpan ke Pangkalan Data
+        // 4. Save Quote to Database
         try {
-            authUser = (User) session.getAttribute("currentUser");
-
-            if (authUser == null) {
-                response.sendRedirect("login.jsp?msg=notLoggedIn");
-            }
-            int userId = (authUser != null) ? authUser.getUserId() : 0;
-
             Quote quote = new Quote();
-            quote.setUserId(userId);
+            quote.setUserId(authUser.getUserId());
             quote.setName(name);
             quote.setEmail(email);
             quote.setPhone(phone);
@@ -122,12 +120,13 @@ public class SubmitQuoteServlet extends HttpServlet {
             quote.setNote(note);
             quote.setFileName(fileName);
             quote.setFilePath(filePath);
+            quote.setStatus("Under Review"); // Sets default status for admin filter
 
             QuoteDao quoteDao = new QuoteDao(DbConnection.getConnection());
             boolean saved = quoteDao.saveQuote(quote);
 
             if (saved) {
-                // 5. Simpan info ke session untuk confirmation page
+                // Store info in session for the confirmation page
                 session.setAttribute("quote_name", name);
                 session.setAttribute("quote_email", email);
                 session.setAttribute("quote_product", product);

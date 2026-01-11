@@ -30,6 +30,12 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("userRole", role);
             session.setAttribute("userName", validUser.getName());
 
+            // ✅ TAMBAH NI - Set admin email untuk change password feature
+            if (role != null && role.equalsIgnoreCase("admin")) {
+                session.setAttribute("adminEmail", validUser.getEmail());
+                System.out.println("Admin email set to: " + validUser.getEmail());
+            }
+
             // Verify session attributes immediately
             System.out.println("Session userRole set to: " + session.getAttribute("userRole"));
             System.out.println("Session currentUser: " + ((User)session.getAttribute("currentUser")).getName());

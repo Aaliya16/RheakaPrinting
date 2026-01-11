@@ -118,7 +118,8 @@ public class OrderDao {
             while (rs.next()) {
                 Order order = new Order();
                 order.setOrderId(rs.getInt("id"));
-                order.setName(rs.getString("name")); // Customer name dari users table
+                order.setName(rs.getString("name"));
+                order.setShippingAddress(rs.getString("address")); // Customer name dari users table
                 order.setPrice(rs.getDouble("total_amount"));
                 order.setStatus(rs.getString("status"));
                 order.setDate(rs.getString("order_date"));

@@ -6,7 +6,6 @@
 <%@ page import="java.util.*" %>
 <%@ include file="admin-auth-check.jsp" %>
 <%
-    // Logic remains exactly the same
     UserDAO uDao = new UserDAO(DbConnection.getConnection());
     List<User> allUsers = uDao.getAllUsers();
     if (allUsers == null) allUsers = new ArrayList<>();
@@ -27,7 +26,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --brand-color: #6c5ce7; /* Professional Purple */
+            --brand-color: #6c5ce7;
             --brand-light: rgba(108, 92, 231, 0.1);
             --bg-body: #f1f2f6;
             --text-main: #2d3436;
@@ -40,9 +39,29 @@
             color: var(--text-main);
         }
 
-        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 30px;
+            opacity: 0;
+            animation: smoothSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
 
-        /* Standardized Top Bar */
+        @keyframes smoothSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        tbody tr { opacity: 0; animation: rowAppear 0.5s ease-out forwards; }
+        tbody tr:nth-child(1) { animation-delay: 0.2s; }
+        tbody tr:nth-child(2) { animation-delay: 0.3s; }
+        tbody tr:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes rowAppear {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
         .top-bar {
             background: white;
             padding: 20px 35px;
@@ -55,8 +74,6 @@
         }
 
         .header-left { display: flex; align-items: center; gap: 20px; }
-
-        /* Standardized Icon Box size */
         .header-icon-box {
             width: 50px; height: 50px; min-width: 50px;
             background: var(--brand-color);
@@ -81,7 +98,6 @@
             font-weight: bold; font-size: 14px;
         }
 
-        /* Monochrome Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 30px; }
         .stat-card {
             background: white; padding: 25px; border-radius: 20px;
@@ -109,13 +125,18 @@
         td { padding: 20px 15px; border-bottom: 1px solid #f1f2f6; font-size: 14px; }
 
         .role-badge { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+
+        /* Highlight for Admin role */
         .role-badge.admin { background: #d1e7dd; color: #0f5132; }
+
+        /* Highlight for Customer role */
+        .role-badge.customer { background: #e1f5fe; color: #0288d1; }
+
         .role-badge.user { background: #f1f2f6; color: #636e72; }
 
         .btn-delete { width: 38px; height: 38px; border-radius: 10px; border: none; cursor: pointer; background: #fff5f5; color: #ee5253; transition: 0.2s; }
         .btn-delete:hover { transform: scale(1.1); background: #ee5253; color: white; }
 
-        /* Back Button */
         .back-container { display: flex; justify-content: flex-end; margin-top: 30px; }
         .btn-back {
             display: flex; align-items: center; gap: 8px; padding: 12px 25px;
@@ -130,7 +151,6 @@
 <%@ include file="admin-sidebar.jsp" %>
 
 <div class="main-content">
-    <%-- Standardized Top Bar --%>
     <div class="top-bar">
         <div class="header-left">
             <div class="header-icon-box"><i class="fas fa-users"></i></div>
@@ -150,7 +170,6 @@
         </div>
     </div>
 
-    <%-- 4-Column Stats Grid --%>
     <div class="stats-grid">
         <div class="stat-card">
             <div>
@@ -202,6 +221,7 @@
                     <div style="font-size: 12px; color: var(--brand-color);"><%= user.getEmail() %></div>
                 </td>
                 <td>
+                    <%-- Fixed: Added role class dynamically --%>
                     <span class="role-badge <%= user.getRole().toLowerCase() %>">
                         <%= user.getRole() %>
                     </span>
@@ -224,7 +244,6 @@
             </tbody>
         </table>
 
-        <%-- Standardized Back Button --%>
         <div class="back-container">
             <button onclick="window.history.back()" class="btn-back">
                 <i class="fas fa-arrow-left"></i> Go Back
