@@ -1,0 +1,1 @@
+SELECT * FROM rheaka_db.users;

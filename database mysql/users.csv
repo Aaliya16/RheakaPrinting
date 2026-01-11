@@ -1,0 +1,5 @@
+id,name,email,password,role
+1,Admin,admin@gmail.com,admin,admin
+4,dam,damia@gmail.com,0510,customer
+5,aaliya,aaliya@gmail.com,aaliya,customer
+6,andiyana,andiyana@gmail.com,andi,customer

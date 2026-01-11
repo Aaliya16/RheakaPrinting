@@ -1,0 +1,9 @@
+id,name,category,price,image,description,stock_quantity,created_at
+1,"Acrylic Clear",Signage,47.00,Arcylic-03-768x768.jpg,"Premium 3mm laser-cut acrylic with various finishing options.",97,"2026-01-10 00:57:47"
+2,"Apron Custom",Apparel,16.00,apron.jpg,"Professional kitchen wear with optional DTF printing.",50,"2026-01-10 00:57:47"
+3,"Industrial Signage",Signage,24.00,page-industry-signs-construction.jpg,"Composite and safety boards with installation options.",99,"2026-01-10 00:57:47"
+4,"Business Card",Printing,30.00,business_cards.jpg,"Premium name cards (100 pcs) with design services.",198,"2026-01-10 00:57:47"
+5,"Apparel Printing",Apparel,33.00,Tshirt.jpg,"Custom T-Shirts (XS - 7XL) with Sublimation or Silkscreen.",94,"2026-01-10 00:57:47"
+6,"Banner & Bunting","Large Format",6.00,Banner.jpg,"Large format event printing with weight bag options.",100,"2026-01-10 00:57:47"
+7,"Flags & Backdrop","Large Format",48.00,Beach_Flags.jpg,"Custom flags and backdrops for events.",100,"2026-01-10 00:57:47"
+8,"Stickers & Plaque",Stickers,1.50,Custom-Sheet-Stickers.jpg,"Vinyl stickers cutting diecut and trophies.",498,"2026-01-10 00:57:47"

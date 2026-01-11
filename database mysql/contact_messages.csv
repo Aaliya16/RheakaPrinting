@@ -1,0 +1,7 @@
+id,name,email,phone,subject,message,created_at,is_read,is_important,is_archived
+1,0176740354,nuraaliya166@student.usm.my,NULL,"General Inquiry",BB,"2026-01-11 00:19:29",0,0,0
+2,"NUR AALIYA",nuraaliya166@student.usm.my,0176740354,"General Inquiry",kk,"2026-01-11 03:19:18",0,0,0
+3,"NUR AALIYA",nuraaliya166@student.usm.my,0176740354,Other,huaa,"2026-01-11 03:45:49",0,0,0
+4,"NUR AALIYA",nuraaliya166@student.usm.my,0176740354,"Quote Request",hi,"2026-01-11 09:17:17",0,1,0
+5,dam,damia@gmail.com,0176740354,"Quote Request",faster,"2026-01-11 10:14:06",1,0,0
+6,"NUR AALIYA",nuraaliya166@student.usm.my,0176740354,"General Inquiry",okay,"2026-01-11 21:41:26",1,0,0
