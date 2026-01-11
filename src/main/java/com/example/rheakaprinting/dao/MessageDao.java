@@ -17,6 +17,7 @@ public class MessageDao {
             String query = "SELECT * FROM contact_messages ORDER BY id DESC";
             PreparedStatement ps = this.con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
+            // Replace the while loop in your MessageDao.java with this:
             while (rs.next()) {
                 Message msg = new Message();
                 msg.setId(rs.getInt("id"));
@@ -27,10 +28,9 @@ public class MessageDao {
                 msg.setMessage(rs.getString("message"));
                 msg.setCreatedAt(rs.getString("created_at"));
 
-                // PEMBETULAN: Ambil data status dari database
+                // Only fetch what you need
                 msg.setRead(rs.getBoolean("is_read"));
                 msg.setImportant(rs.getBoolean("is_important"));
-                msg.setArchived(rs.getBoolean("is_archived"));
 
                 list.add(msg);
             }

@@ -48,8 +48,43 @@
             color: var(--text-main);
         }
 
-        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 30px;
+            opacity: 0; /* Starts hidden */
+            will-change: transform, opacity;
+            /* FIX: Changed animation name to match keyframes below */
+            animation: smoothSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
 
+        /* FIX: Keyframes must match the name used in the animation property above */
+        @keyframes smoothSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered Row Animation - Makes the table rows "roll in" */
+        tbody tr {
+            opacity: 0;
+            animation: rowAppear 0.5s ease-out forwards;
+        }
+
+        tbody tr:nth-child(1) { animation-delay: 0.2s; }
+        tbody tr:nth-child(2) { animation-delay: 0.3s; }
+        tbody tr:nth-child(3) { animation-delay: 0.4s; }
+        tbody tr:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes rowAppear {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
         /* Fixed Icon Sizes to match Dashboard exactly */
         .top-bar {
             background: white;
