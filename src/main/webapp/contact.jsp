@@ -317,10 +317,7 @@
             form.reportValidity();
         }
     }
-</script>
 
-//secondary cliend-side for validation from integrity
-<script>
     // Form validation
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         const name = document.getElementById('name').value.trim();
