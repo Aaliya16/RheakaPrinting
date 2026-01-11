@@ -16,20 +16,16 @@ import java.io.IOException;
 @WebServlet("/ContactServlet")
 public class ContactServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 1. Ambil session
+
         HttpSession session = request.getSession();
 
-        // 2. Semak Login (Pagar Keselamatan)
-        User auth = (User) session.getAttribute("auth");
-        if (auth == null) {
-            auth = (User) session.getAttribute("currentUser");
+        User authUser = (User) session.getAttribute("currentUser");
+
+        if (authUser == null) {
+            response.sendRedirect("login.jsp?msg=notLoggedIn");
+            return;
         }
 
-        // Jika tiada user dalam session, halau ke login.jsp
-        if (auth == null) {
-            response.sendRedirect("login.jsp?msg=notLoggedIn");
-            return; // Penting: supaya kod di bawah tidak berjalan
-        }
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -39,7 +35,7 @@ public class ContactServlet extends HttpServlet {
         Message msg = new Message();
         msg.setName(name);
         msg.setEmail(email);
-        msg.setName(phone);
+        msg.setPhone(phone);
         msg.setSubject(subject);
         msg.setMessage(messageText);
 

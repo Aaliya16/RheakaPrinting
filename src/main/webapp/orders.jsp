@@ -229,8 +229,44 @@
         .empty-orders {
             background: #fff;
             padding: 80px 30px;
-            border-radius: 10px;
+            border-radius: 20px;
             text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeInLeft 0.8s ease;
+        }
+
+        .empty-icon-small {
+            font-size: 100px;
+            color: #4682B4;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+
+        .empty-orders h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .empty-orders p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .empty-orders .btn-blue {
+            display: inline-block;
+            padding: 12px 35px;
+            background: #4682B4;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .empty-orders .btn-blue:hover {
+            background: #357ABD;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -296,15 +332,14 @@
     </div>
     <% } else { %>
     <div class="empty-orders">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-        </svg>
+        <div class="empty-icon-small">
+            <i class="fas fa-shopping-bag"></i>
+        </div>
 
         <h3>No Orders Yet</h3>
         <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
-        <a href="index.jsp" class="btn btn-primary">Start Shopping</a>
+
+        <a href="index.jsp" class="btn-blue">Start Shopping</a>
 
     </div>
     <% } %>

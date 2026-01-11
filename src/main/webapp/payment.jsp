@@ -28,7 +28,6 @@
     String postcode = request.getParameter("postcode");
     String state = request.getParameter("state");
 
-    // Gabung alamat penuh untuk disimpan ke DB nanti
     String fullAddress = address + ", " + postcode + " " + city + ", " + state;
 %>
 
@@ -159,12 +158,16 @@
 <div class="payment-container">
     <div class="payment-header">
         <h3>Complete Your Payment</h3>
-        <div class="total-amount">RM <%= dcf.format(total) %></div>
+        <%
+            double shipping = 10.0;
+            double grandTotal = total + shipping;
+        %>
+
+        <div class="total-amount">RM <%= dcf.format(grandTotal) %></div>
         <p>Order for: <strong><%= fullName %></strong></p>
     </div>
 
     <form action="place-order" method="post">
-        <%-- Simpan data dari checkout sebagai hidden input untuk dihantar ke PlaceOrderServlet --%>
         <input type="hidden" name="fullName" value="<%= fullName %>">
         <input type="hidden" name="email" value="<%= email %>">
         <input type="hidden" name="phone" value="<%= phone %>">

@@ -326,7 +326,7 @@
 
         <p style="margin-top: 30px; color: #777; font-size: 14px;">
             Need urgent assistance? <br>
-            Contact us at <a href="tel:+60123456789" style="color: #4682B4; font-weight: 600; text-decoration:none;">+60 12-345 6789</a>
+            Contact us at <a href="tel:+6011-7078-7469" style="color: #4682B4; font-weight: 600; text-decoration:none;">+60 12-345 6789</a>
         </p>
     </div>
 </div>

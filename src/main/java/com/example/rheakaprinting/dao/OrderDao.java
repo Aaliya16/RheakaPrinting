@@ -14,37 +14,70 @@ public class OrderDao {
     }
 
     // --- METHOD 1: CREATE ORDER (Customer Checkout) ---
-    public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone) {
+    public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone, String paymentMethod, String fullName, String email) {
         int orderId = 0;
         try {
-            // INSERT INTO ORDERS
-            String query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date) VALUES (?, ?, ?, ?, 'Pending', NOW())";
+            // A. MULAKAN TRANSAKSI
+            con.setAutoCommit(false);
+
+            // 1. Masukkan ke table 'orders'
+            String query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date, payment_method, full_name, email) VALUES (?, ?, ?, ?, 'Pending', NOW(), ?, ?, ?)";
             PreparedStatement pst = this.con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pst.setInt(1, userId);
             pst.setDouble(2, totalAmount);
             pst.setString(3, address);
             pst.setString(4, phone);
+            pst.setString(5, paymentMethod);
+            pst.setString(6, fullName);
+            pst.setString(7, email);
 
             if (pst.executeUpdate() > 0) {
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) orderId = rs.getInt(1);
 
-                // INSERT INTO ORDER_DETAILS
-                String query2 = "INSERT INTO order_details (order_id, product_id, quantity, price, variation, addon, design_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement pst2 = this.con.prepareStatement(query2);
+                // 2. Masukkan item ke 'order_details' DAN tolak stok
+                String queryDetails = "INSERT INTO order_details (order_id, product_id, quantity, price, variation, addon) VALUES (?, ?, ?, ?, ?, ?)";
+                String queryStock = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
+
+                PreparedStatement pstDetails = this.con.prepareStatement(queryDetails);
+                PreparedStatement pstStock = this.con.prepareStatement(queryStock);
+
                 for (Cart c : cartList) {
-                    pst2.setInt(1, orderId);
-                    pst2.setInt(2, c.getId());
-                    pst2.setInt(3, c.getQuantity());
-                    pst2.setDouble(4, c.getPrice() * c.getQuantity());
-                    pst2.setString(5, c.getVariation());
-                    pst2.setString(6, c.getAddon());
-                    pst2.setString(7, c.getDesignImage());
-                    pst2.executeUpdate();
+                    // Simpan Detail
+                    pstDetails.setInt(1, orderId);
+                    pstDetails.setInt(2, c.getId());
+                    pstDetails.setInt(3, c.getQuantity());
+                    pstDetails.setDouble(4, c.getPrice());
+                    pstDetails.executeUpdate();
+
+
+                    pstStock.setInt(1, c.getQuantity());
+                    pstStock.setInt(2, c.getId());
+                    pstStock.setInt(3, c.getQuantity());
+
+                    int stockCheck = pstStock.executeUpdate();
+                    if (stockCheck == 0) {
+                        throw new SQLException("Stok tidak mencukupi untuk Produk ID: " + c.getId());
+                    }
                 }
+
+                con.commit();
+                System.out.println("✅ Transaksi Berjaya: Order disimpan & Stok ditolak.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            try {
+                if (con != null) con.rollback();
+                System.err.println("❌ Transaksi Gagal: Rollback dilakukan. " + e.getMessage());
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            orderId = 0;
+        } finally {
+            try {
+                con.setAutoCommit(true); // Kembalikan ke asal
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return orderId;
     }
@@ -109,45 +142,5 @@ public class OrderDao {
             e.printStackTrace();
         }
         return result;
-    }
-    // Update this in your OrderDao.java
-    public int createOrder(int userId, List<Cart> cartList, double totalAmount, String address, String phone, String paymentMethod, String fullName, String email) {
-        int orderId = 0;
-        try {
-            // 1. Masukkan ke table 'orders'
-            // Pastikan table 'orders' anda mempunyai column: payment_method, full_name, email
-            String query = "INSERT INTO orders (user_id, total_amount, address, phone_number, status, order_date, payment_method, full_name, email) VALUES (?, ?, ?, ?, 'Pending', NOW(), ?, ?, ?)";
-
-            PreparedStatement pst = this.con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pst.setInt(1, userId);
-            pst.setDouble(2, totalAmount);
-            pst.setString(3, address);
-            pst.setString(4, phone);
-            pst.setString(5, paymentMethod);
-            pst.setString(6, fullName);
-            pst.setString(7, email);
-
-            if (pst.executeUpdate() > 0) {
-                ResultSet rs = pst.getGeneratedKeys();
-                if (rs.next()) orderId = rs.getInt(1);
-
-                // 2. Masukkan item ke table 'order_details'
-                String query2 = "INSERT INTO order_details (order_id, product_id, quantity, price, variation, addon, design_image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement pst2 = this.con.prepareStatement(query2);
-                for (Cart c : cartList) {
-                    pst2.setInt(1, orderId);
-                    pst2.setInt(2, c.getId());
-                    pst2.setInt(3, c.getQuantity());
-                    pst2.setDouble(4, c.getPrice() * c.getQuantity());
-                    pst2.setString(5, c.getVariation());
-                    pst2.setString(6, c.getAddon());
-                    pst2.setString(7, c.getDesignImage());
-                    pst2.executeUpdate();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return orderId;
     }
 }

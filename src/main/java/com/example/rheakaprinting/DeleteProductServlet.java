@@ -18,12 +18,10 @@ import java.io.IOException;
             int productId = Integer.parseInt(request.getParameter("id"));
 
             try {
-                // Using your existing DbConnection and a Delete method in ProductDao
                 ProductDao pdao = new ProductDao(DbConnection.getConnection());
                 boolean deleted = pdao.deleteProduct(productId);
 
                 if (deleted) {
-                    // Success - redirect back to products list
                     response.sendRedirect("admin-products.jsp?msg=deleted");
                 } else {
                     response.sendRedirect("admin-products.jsp?error=failed");

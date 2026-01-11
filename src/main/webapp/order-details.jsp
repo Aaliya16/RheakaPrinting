@@ -4,15 +4,12 @@
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
-    // 1. Check Login
-    User authUser = (User) session.getAttribute("auth");
-    if (authUser == null) {
-        authUser = (User) session.getAttribute("currentUser");
-    }
+    session = request.getSession();
+
+    User authUser = (User) session.getAttribute("currentUser");
 
     if (authUser == null) {
         response.sendRedirect("login.jsp?msg=notLoggedIn");
-        return;
     }
 
     // 2. Get Order ID from URL
@@ -385,12 +382,11 @@
                     %>
 
                     <div class="item">
+                        <img src="assets/img/<%= pImage != null ? pImage : "default.jpg" %>" alt="<%= pName %>">
 
-                        <img src="product-images/<%= pImage %>"
-                             alt="<%= pName %>"
-                             onerror="this.src='images/default-product.png'"> <div class="item-info">
-                        <h4><%= pName %></h4>
-                    </div>
+                        <div class="item-info">
+                            <h4><%= pName %></h4>
+                        </div>
 
                         <div class="item-price">
                             <div class="price">RM <%= dcf.format(subtotal) %></div>
@@ -404,7 +400,9 @@
                 </div>
 
                 <div class="order-summary">
-
+                    <%
+                        double grandTotal = totalAmount + shipping;
+                    %>
                     <div class="summary-row">
                         <span>Subtotal</span>
                         <span>RM <%= dcf.format(totalAmount) %></span>
@@ -417,7 +415,7 @@
 
                     <div class="summary-row total">
                         <span>Grand Total</span>
-                        <span class="amount">RM <%= dcf.format(totalAmount) %></span>
+                        <span class="amount">RM <%= dcf.format(grandTotal) %></span>
                     </div>
                 </div>
             </div>

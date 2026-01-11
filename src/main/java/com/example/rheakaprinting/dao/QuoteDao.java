@@ -12,13 +12,17 @@ public class QuoteDao {
 
     public boolean saveQuote(Quote quote) {
         boolean result = false;
-        try {
-            String query = "INSERT INTO quotes (user_id, name, email, phone, product, quantity, note, file_name, file_path) VALUES (?,?,?,?,?,?,?,?,?)";
-            PreparedStatement pst = this.con.prepareStatement(query);
+        // DIBAIKI: Tukar 'user_id' kepada 'u_id' mengikut skema database anda
+        String query = "INSERT INTO quotes (u_id, name, email, phone, product, quantity, note, file_name, file_path) VALUES (?,?,?,?,?,?,?,?,?)";
 
-            // Set userId ke 0 atau null jika tidak login
-            if(quote.getUserId() > 0) pst.setInt(1, quote.getUserId());
-            else pst.setNull(1, Types.INTEGER);
+        try (PreparedStatement pst = this.con.prepareStatement(query)) {
+
+            // Set u_id ke null jika user tidak login (Guest Quote)
+            if (quote.getUserId() > 0) {
+                pst.setInt(1, quote.getUserId());
+            } else {
+                pst.setNull(1, java.sql.Types.INTEGER);
+            }
 
             pst.setString(2, quote.getName());
             pst.setString(3, quote.getEmail());
@@ -29,9 +33,13 @@ public class QuoteDao {
             pst.setString(8, quote.getFileName());
             pst.setString(9, quote.getFilePath());
 
-            pst.executeUpdate();
-            result = true;
+            int rowAffected = pst.executeUpdate();
+            if (rowAffected > 0) {
+                result = true;
+                System.out.println("✅ Quote saved successfully for: " + quote.getName());
+            }
         } catch (SQLException e) {
+            System.err.println("❌ SQL Error in saveQuote: " + e.getMessage());
             e.printStackTrace();
         }
         return result;

@@ -266,7 +266,8 @@
                     <label for="phone">Phone Number <span class="required">*</span></label>
                     <input type="tel"
                            id="phone"
-                           name="phone"  placeholder="+60 12-345 6789"
+                           name="phone"
+                           placeholder="+60 12-345 6789"
                            required>
                 </div>
 
@@ -324,11 +325,11 @@
     // Form validation
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
         const subject = document.getElementById('subject').value;
         const message = document.getElementById('message').value.trim();
 
-        if (!name || !email || !subject || !message) {
+        if (!name || !phone || !subject || !message) {
             e.preventDefault();
             alert('Please fill in all required fields');
             return false;

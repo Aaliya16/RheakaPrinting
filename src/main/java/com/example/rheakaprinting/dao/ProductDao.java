@@ -15,13 +15,14 @@ public class ProductDao {
         this.con = con;
     }
 
+    // PENTING: Gunakan nama kolum 'stock_quantity' secara konsisten jika itu yang ada di DB
+    private static final String COL_STOCK = "stock_quantity";
+
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        try {
-            query = "SELECT * FROM products";
-            pst = this.con.prepareStatement(query);
-            rs = pst.executeQuery();
-
+        String query = "SELECT * FROM products";
+        try (PreparedStatement pst = this.con.prepareStatement(query);
+             ResultSet rs = pst.executeQuery()) {
             while (rs.next()) {
                 Product row = new Product();
                 row.setId(rs.getInt("id"));
@@ -29,25 +30,51 @@ public class ProductDao {
                 row.setCategory(rs.getString("category"));
                 row.setPrice(rs.getDouble("price"));
                 row.setImage(rs.getString("image"));
-
+                row.setQuantity(rs.getInt(COL_STOCK));
                 products.add(row);
             }
         } catch (SQLException e) {
-            System.err.println("Error in getAllProducts: " + e.getMessage());
             e.printStackTrace();
         }
         return products;
     }
 
-    /**
-     * Get cart products with details from database
-     * ✅ FIXED: Tidak multiply price dengan quantity di sini
-     */
+    public boolean addProduct(Product p) {
+        boolean result = false;
+        // Dibaiki: Guna COL_STOCK (stock_quantity)
+        String query = "INSERT INTO products (name, category, price, " + COL_STOCK + ") VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = this.con.prepareStatement(query)) {
+            ps.setString(1, p.getName());
+            ps.setString(2, p.getCategory());
+            ps.setDouble(3, p.getPrice());
+            ps.setInt(4, p.getQuantity());
+            result = ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public boolean reduceStock(int productId, int quantityPurchased) {
+        boolean result = false;
+        String query = "UPDATE products SET " + COL_STOCK + " = " + COL_STOCK + " - ? WHERE id = ? AND " + COL_STOCK + " >= ?";
+        try (PreparedStatement pst = this.con.prepareStatement(query)) {
+            pst.setInt(1, quantityPurchased);
+            pst.setInt(2, productId);
+            pst.setInt(3, quantityPurchased);
+            result = pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public List<Cart> getCartProducts(ArrayList<Cart> cartList) {
         List<Cart> cartProducts = new ArrayList<>();
         try {
             if (cartList != null && cartList.size() > 0) {
                 for (Cart item : cartList) {
+                    // Pastikan SELECT * atau pilih kolum stok secara spesifik
                     query = "SELECT * FROM products WHERE id=?";
                     pst = this.con.prepareStatement(query);
                     pst.setInt(1, item.getId());
@@ -58,11 +85,9 @@ public class ProductDao {
                         row.setId(rs.getInt("id"));
                         row.setName(rs.getString("name"));
                         row.setImage(rs.getString("image"));
-
-                        // ✅ PENTING: Guna price dari item (yang dah customize),
-                        // BUKAN dari database (base price sahaja)
-                        row.setPrice(item.getPrice()); // Unit price dari cart
+                        row.setPrice(item.getPrice());
                         row.setQuantity(item.getQuantity());
+                        row.setStock(rs.getInt(COL_STOCK));
 
                         cartProducts.add(row);
                     }
@@ -75,17 +100,11 @@ public class ProductDao {
         return cartProducts;
     }
 
-    /**
-     * Calculate total cart price
-     * ✅ FIXED: Tidak multiply price dengan quantity di database query
-     */
     public double getTotalCartPrice(ArrayList<Cart> cartList) {
         double sum = 0;
         try {
             if (cartList != null && cartList.size() > 0) {
                 for (Cart item : cartList) {
-                    // ✅ Guna price dari cart item terus
-                    // (dah include addons & customization)
                     sum += item.getPrice() * item.getQuantity();
                 }
             }
@@ -96,48 +115,6 @@ public class ProductDao {
         return sum;
     }
 
-    /**
-     * Get single product by ID
-     */
-    public Product getProductById(int id) {
-        Product product = null;
-        try {
-            query = "SELECT * FROM products WHERE id=?";
-            pst = this.con.prepareStatement(query);
-            pst.setInt(1, id);
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                product = new Product();
-                product.setId(rs.getInt("id"));
-                product.setName(rs.getString("name"));
-                product.setCategory(rs.getString("category"));
-                product.setPrice(rs.getDouble("price"));
-                product.setImage(rs.getString("image"));
-            }
-        } catch (SQLException e) {
-            System.err.println("Error in getProductById: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return product;
-    }
-    public boolean addProduct(Product p) {
-        boolean result = false;
-        try {
-            String query = "INSERT INTO products (name, category, price, quantity) VALUES (?, ?, ?, ?)";
-            java.sql.PreparedStatement ps = this.con.prepareStatement(query);
-            ps.setString(1, p.getName());
-            ps.setString(2, p.getCategory());
-            ps.setDouble(3, p.getPrice());
-            ps.setInt(4, p.getQuantity());
-
-            int rows = ps.executeUpdate();
-            if (rows > 0) result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
     public boolean deleteProduct(int id) {
         boolean result = false;
         try {
@@ -152,25 +129,6 @@ public class ProductDao {
         return result;
     }
 
-    public boolean reduceStock(int productId, int quantityPurchased) {
-        boolean result = false;
-        try {
-            // Guna 'stock_quantity' mengikut column database anda
-            String query = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
-            PreparedStatement pst = this.con.prepareStatement(query);
-            pst.setInt(1, quantityPurchased);
-            pst.setInt(2, productId);
-            pst.setInt(3, quantityPurchased); // Pastikan stok cukup sebelum ditolak
-
-            int row = pst.executeUpdate();
-            if (row > 0) result = true;
-        } catch (SQLException e) {
-            System.err.println("Error in reduceStock: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return result;
-    }
-    // Fetch one product by ID
     public Product getSingleProduct(int id) {
         Product p = null;
         try {
@@ -192,11 +150,10 @@ public class ProductDao {
         return p;
     }
 
-    // Update the database
     public boolean updateProduct(Product p) {
         boolean result = false;
         try {
-            String query = "UPDATE products SET name=?, price=?, quantity=?, category=? WHERE id=?";
+            String query = "UPDATE products SET name=?, price=?, stock_quantity=?, category=? WHERE id=?";
             PreparedStatement ps = this.con.prepareStatement(query);
             ps.setString(1, p.getName());
             ps.setDouble(2, p.getPrice());

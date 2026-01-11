@@ -7,7 +7,7 @@ public class DbConnection {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rheaka_db","root","1234");
             return con;
         }catch(Exception e){
-            System.out.print(e);
+            System.err.println("❌ Ralat Sambungan Database: " + e.getMessage());
             return null;
         }
     }

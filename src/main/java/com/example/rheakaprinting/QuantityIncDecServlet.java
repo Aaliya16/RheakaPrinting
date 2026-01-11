@@ -9,7 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+
+import com.google.gson.JsonObject;
 
 @WebServlet(name = "QuantityIncDecServlet", value = "/quantity-inc-dec")
 public class QuantityIncDecServlet extends HttpServlet {
@@ -20,15 +23,9 @@ public class QuantityIncDecServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         String idParam = request.getParameter("id");
-        String variationParam = request.getParameter("variation");
+        String qtyParam = request.getParameter("quantity");
 
-        if (variationParam == null) variationParam = "";
-
-        boolean success = false;
-        String message = "";
-        int newQuantity = 0;
-        double itemSubtotal = 0.0;
-        double cartTotal = 0.0;
+        boolean isAjax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
         if (action != null && idParam != null) {
             try {
@@ -37,39 +34,52 @@ public class QuantityIncDecServlet extends HttpServlet {
                 ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
 
                 if (cart_list != null) {
+                    double itemSubtotal = 0;
+                    double cartTotal = 0;
+
+                    // 1. Kemaskini kuantiti dahulu
                     for (Cart c : cart_list) {
-                        String cartVariation = (c.getVariation() != null) ? c.getVariation() : "";
-
-                        if (c.getId() == id && cartVariation.equals(variationParam)) {
-
-                            if (action.equals("inc")) {
-                                if (c.getQuantity() < c.getStock()) {
-                                    c.setQuantity(c.getQuantity() + 1);
-                                    success = true;
-                                    message = "Quantity increased";
-                                } else {
-                                    System.out.println("Had stok dicapai untuk ID: " + c.getId());
-                                    message = "Maximum stock reached";
-                                }
-                            } else if (action.equals("dec")) {
-                                if (c.getQuantity() > 1) {
-                                    c.setQuantity(c.getQuantity() - 1);
-                                    success = true;
-                                    message = "Quantity decreased";
-                                } else {
-                                    message = "Minimum quantity is 1";
-                                }
+                        if (c.getId() == id) {
+                            if (action.equals("inc") && c.getQuantity() < c.getStock()) {
+                                c.setQuantity(c.getQuantity() + 1);
+                            } else if (action.equals("dec") && c.getQuantity() > 1) {
+                                c.setQuantity(c.getQuantity() - 1);
+                            } else if (action.equals("update") && qtyParam != null) {
+                                int n = Integer.parseInt(qtyParam);
+                                if (n >= 1 && n <= c.getStock()) c.setQuantity(n);
                             }
-                            break;
+                            itemSubtotal = c.getPrice() * c.getQuantity();
                         }
                     }
-                    session.setAttribute("cart-list", cart_list);
+
+                    // 2. Kira SEMULA jumlah keseluruhan (Wajib di luar loop ID tadi)
+                    for (Cart c : cart_list) {
+                        cartTotal += (c.getPrice() * c.getQuantity());
+                    }
+
+                    if (isAjax) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+
+                        // Format dengan 2 decimal places
+                        DecimalFormat dcf = new DecimalFormat("0.00");
+
+                        String json = String.format(
+                                "{\"success\":true, \"itemSubtotal\":\"%s\", \"cartTotal\":\"%s\"}",
+                                dcf.format(itemSubtotal),
+                                dcf.format(cartTotal)
+                        );
+
+                        response.getWriter().write(json);
+                        return;
+                    }
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
+
+        // Redirect back to cart page
         response.sendRedirect("cart.jsp");
     }
 }
-

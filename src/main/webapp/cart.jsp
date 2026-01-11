@@ -8,13 +8,12 @@
     request.setAttribute("dcf", dcf);
     double total = 0.0;
 
-    // ✅ AMBIL CART DARI SESSION
-    ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
-
-    if (cart_list != null && !cart_list.isEmpty()) {
-        for (Cart c : cart_list) {
-            total += c.getPrice() * c.getQuantity();
-        }
+    ArrayList<Cart> session_cart = (ArrayList<Cart>) session.getAttribute("cart-list");
+    List<Cart> cart_list = null;
+    if (session_cart != null) {
+        com.example.rheakaprinting.dao.ProductDao pDao = new com.example.rheakaprinting.dao.ProductDao(com.example.rheakaprinting.model.DbConnection.getConnection());
+        cart_list = pDao.getCartProducts(session_cart);
+        total = pDao.getTotalCartPrice(session_cart);
     }
 %>
 
@@ -189,7 +188,76 @@
             box-shadow: 0 5px 15px rgba(70, 130, 180, 0.4);
         }
 
-        .empty-cart-msg { text-align: center; padding: 80px 20px; }
+        .empty-cart-msg {
+            background: #fff;
+            padding: 80px 30px;
+            text-align: center;
+            animation: fadeInLeft 0.8s ease;
+        }
+
+        .empty-icon-small {
+            font-size: 100px; /* Saiz ikon yang seimbang */
+            color: #4682B4;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+
+        .empty-cart-msg h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .empty-cart-msg p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* 1. Sembunyikan spin-button default pelayar (Chrome, Safari, Edge, Opera) */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* 2. Sembunyikan spin-button default pelayar (Firefox) */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* 3. Gaya kotak input kuantiti agar nampak kemas di tengah */
+        .quantity-btn input {
+            width: 50px;
+            height: 35px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 0; /* Jarak antara butang biru dan kotak putih */
+        }
+
+        /* 4. Pastikan butang + dan - kekal bulat dan biru */
+        .btn-qty {
+            background: #4682B4;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-qty:hover {
+            background: #357ABD;
+            transform: scale(1.1);
+        }
+
+        .btn-disabled {
+            background: #ccc !important;
+            cursor: not-allowed !important;
+        }
 
     </style>
 </head>
@@ -217,7 +285,8 @@
             for (Cart c : cart_list) {
                 double itemSubtotal = c.getPrice() * c.getQuantity();
         %>
-        <tr>
+
+        <tr id="cart-row-<%= c.getId() %>">
             <td>
                 <div class="cart-info">
                     <img src="assets/img/<%= c.getImage() != null ? c.getImage() : "default.jpg" %>"
@@ -226,28 +295,31 @@
                         <p><%= c.getName() != null && !c.getName().isEmpty() ? c.getName() : "Product #" + c.getId() %></p>
                         <small>Product ID: <%= c.getId() %></small><br>
                         <small>Available stock: <%= c.getStock() %></small><br>
-                        <a href="remove-from-cart?id=<%= c.getId() %>&variation=<%= c.getVariation() %>">Remove</a>
+                        <!-- GANTIKAN href dengan onclick -->
+                        <a href="javascript:void(0)" onclick="removeFromCart('<%= c.getId() %>')">Remove</a>
                     </div>
                 </div>
             </td>
             <td class="price-cell">RM <%= dcf.format(c.getPrice()) %></td>
             <td>
                 <div class="quantity-btn">
-                    <%-- LOGIK GAYA KIRI (MINIMUM 1) --%>
-                    <% if (c.getQuantity() > 1) { %>
-                    <a href="quantity-inc-dec?action=dec&id=<%= c.getId() %>&variation=<%= c.getVariation() %>">−</a>
-                    <% } else { %>
-                    <a href="javascript:void(0)" style="background: #ccc; cursor: not-allowed;" title="Min 1 reached">−</a>
-                    <% } %>
+                    <%-- Butang Kurang (-) - Selalu ada --%>
+                    <button type="button" class="btn-qty <%= c.getQuantity() <= 1 ? "btn-disabled" : "" %>"
+                            onclick="changeQty('<%= c.getId() %>', -1)"
+                            <%= c.getQuantity() <= 1 ? "title='Min 1 reached'" : "" %>>−</button>
 
-                    <input type="text" name="quantity" value="<%= c.getQuantity() %>" readonly>
+                    <%-- Input Manual --%>
+                    <input type="number"
+                           id="qty-input-<%= c.getId() %>"
+                           value="<%= c.getQuantity() %>"
+                           min="1"
+                           max="<%= c.getStock() %>"
+                           onchange="updateQuantity(this, '<%= c.getId() %>')">
 
-                    <%-- LOGIK GAYA KIRI (MAKSIMUM STOK) --%>
-                    <% if (c.getQuantity() < c.getStock()) { %>
-                    <a href="quantity-inc-dec?action=inc&id=<%= c.getId() %>&variation=<%= c.getVariation() %>">+</a>
-                    <% } else { %>
-                    <a href="javascript:void(0)" style="background: #ccc; cursor: not-allowed;" title="Max Stock reached">max</a>
-                    <% } %>
+                    <%-- Butang Tambah (+) - Selalu ada --%>
+                    <button type="button" class="btn-qty <%= c.getQuantity() >= c.getStock() ? "btn-disabled" : "" %>"
+                            onclick="changeQty('<%= c.getId() %>', 1)"
+                            <%= c.getQuantity() >= c.getStock() ? "title='Max Stock reached'" : "" %>>+</button>
                 </div>
             </td>
             <td class="subtotal-cell">RM <%= dcf.format(itemSubtotal) %></td>
@@ -272,12 +344,181 @@
 
     <% } else { %>
     <div class="empty-cart-msg">
+        <div class="empty-icon-small">
+            <i class="fas fa-shopping-bag"></i>
+        </div>
+
         <h3>Your cart is empty!</h3>
         <p>Browse our products and add items to your cart.</p>
+
         <a href="products.jsp" class="btn-blue-style">Start Shopping</a>
     </div>
     <% } %>
 </div>
+
+<script>
+    // ============================================
+    // DYNAMIC CART UPDATE (NO PAGE RELOAD)
+    // ============================================
+
+    // 1. UPDATE QUANTITY
+    function updateQuantity(input, id) {
+        let newQty = parseInt(input.value);
+        const maxStock = parseInt(input.getAttribute("max"));
+
+        // Validate input
+        if (isNaN(newQty) || newQty < 1) {
+            newQty = 1;
+            input.value = 1;
+        } else if (newQty > maxStock) {
+            newQty = maxStock;
+            input.value = maxStock;
+        }
+
+        // Send AJAX request
+        fetch('quantity-inc-dec?action=update&id=' + id + '&quantity=' + newQty, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update subtotal untuk item ini
+                    updateItemSubtotal(id, data.itemSubtotal);
+
+                    // Update total keseluruhan cart
+                    updateCartTotal(data.cartTotal);
+
+                    // Update button states (enable/disable)
+                    updateButtonStates(id, newQty, maxStock);
+                }
+            })
+            .catch(err => console.error("Error updating cart:", err));
+    }
+
+    // 2. INCREASE/DECREASE QUANTITY
+    function changeQty(id, delta) {
+        const input = document.getElementById('qty-input-' + id);
+        if (!input) return;
+
+        let newVal = parseInt(input.value) + delta;
+        const max = parseInt(input.getAttribute("max"));
+
+        if (newVal >= 1 && newVal <= max) {
+            input.value = newVal;
+            updateQuantity(input, id);
+        }
+    }
+
+    // 3. REMOVE ITEM FROM CART (NEW!)
+    function removeFromCart(id) {
+        // Confirm before removing
+        if (!confirm('Remove this item from cart?')) {
+            return;
+        }
+
+        // Send AJAX request
+        fetch('remove-from-cart?id=' + id, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the row from table
+                    const row = document.getElementById('cart-row-' + id);
+                    if (row) {
+                        // Add fade-out animation
+                        row.style.transition = 'opacity 0.3s ease';
+                        row.style.opacity = '0';
+
+                        setTimeout(() => {
+                            row.remove();
+
+                            // Update total cart
+                            updateCartTotal(data.cartTotal);
+
+                            // Check if cart is empty
+                            if (data.isEmpty) {
+                                showEmptyCartMessage();
+                            }
+                        }, 300);
+                    }
+                }
+            })
+            .catch(err => console.error("Error removing item:", err));
+    }
+
+    // 4. SHOW EMPTY CART MESSAGE
+    function showEmptyCartMessage() {
+        const container = document.querySelector('.small-container');
+        if (container) {
+            container.innerHTML = `
+            <div class="empty-cart-msg">
+                <div class="empty-icon-small">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>Your cart is empty!</h3>
+                <p>Browse our products and add items to your cart.</p>
+                <a href="products.jsp" class="btn-blue-style">Start Shopping</a>
+            </div>
+        `;
+        }
+    }
+
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+
+    // Update subtotal untuk satu item
+    function updateItemSubtotal(id, subtotal) {
+        const row = document.getElementById('qty-input-' + id).closest('tr');
+        const subtotalCell = row.querySelector('.subtotal-cell');
+        if (subtotalCell) {
+            subtotalCell.textContent = 'RM ' + subtotal;
+        }
+    }
+
+    // Update total cart
+    function updateCartTotal(total) {
+        const totalCell = document.querySelector('.total-price td:last-child');
+        if (totalCell) {
+            totalCell.textContent = 'RM ' + total;
+        }
+    }
+
+    // Enable/disable buttons based on quantity
+    function updateButtonStates(id, currentQty, maxStock) {
+        const row = document.getElementById('qty-input-' + id).closest('tr');
+        const buttons = row.querySelectorAll('.btn-qty');
+
+        // Button decrease (index 0)
+        if (buttons[0]) {
+            if (currentQty <= 1) {
+                buttons[0].classList.add('btn-disabled');
+                buttons[0].setAttribute('title', 'Min 1 reached');
+                buttons[0].style.cursor = 'not-allowed';
+            } else {
+                buttons[0].classList.remove('btn-disabled');
+                buttons[0].removeAttribute('title');
+                buttons[0].style.cursor = 'pointer';
+            }
+        }
+
+        // Button increase (index 1)
+        if (buttons[1]) {
+            if (currentQty >= maxStock) {
+                buttons[1].classList.add('btn-disabled');
+                buttons[1].setAttribute('title', 'Max Stock reached');
+                buttons[1].style.cursor = 'not-allowed';
+            } else {
+                buttons[1].classList.remove('btn-disabled');
+                buttons[1].removeAttribute('title');
+                buttons[1].style.cursor = 'pointer';
+            }
+        }
+    }
+</script>
 
 <%@ include file="footer.jsp" %>
 </body>

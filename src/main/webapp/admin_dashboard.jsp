@@ -16,7 +16,7 @@
 
     if (orderList != null) {
         for(com.example.rheakaprinting.model.Order o : orderList) {
-            totalRevenue += (o.getPrice() * o.getQuantity());
+            totalRevenue += o.getPrice();
             if("pending".equalsIgnoreCase(o.getStatus())) {
                 pendingOrders++;
             }

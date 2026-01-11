@@ -20,18 +20,15 @@ public class UpdateSettingsServlet extends HttpServlet {
         Connection conn = DbConnection.getConnection();
         SettingsDao sDao = new SettingsDao(conn);
 
-        // 1. Capture all possible parameters from your forms
         Map<String, String[]> paramMap = request.getParameterMap();
 
         for (String key : paramMap.keySet()) {
             String value = request.getParameter(key);
-            // Ignore the submit button itself
             if (value != null && !key.equals("submit")) {
                 sDao.updateSetting(key, value);
             }
         }
 
-        // 2. Redirect back to the settings page with a success message
         response.sendRedirect("admin-settings.jsp?status=success");
     }
 }

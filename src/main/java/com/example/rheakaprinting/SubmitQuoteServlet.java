@@ -30,21 +30,15 @@ public class SubmitQuoteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // --- 1. SEKATAN LOGIN (TAMBAH DI SINI) ---
+
         HttpSession session = request.getSession();
-        User auth = (User) session.getAttribute("auth");
-        if (auth == null) {
-            auth = (User) session.getAttribute("currentUser");
-        }
 
-        // Jika user belum login, terus tendang ke login.jsp
-        if (auth == null) {
-            System.out.println("❌ Cubaan submit quote tanpa login.");
+        User authUser = (User) session.getAttribute("currentUser");
+
+        if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
-            return; // Penting: supaya kod di bawah (muat naik fail/DB) tidak berjalan
         }
 
-        // 1. Ambil form parameters
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -52,7 +46,6 @@ public class SubmitQuoteServlet extends HttpServlet {
         String quantityStr = request.getParameter("quantity");
         String note = request.getParameter("note");
 
-        // 2. Validasi field wajib
         if (name == null || email == null || phone == null ||
                 product == null || quantityStr == null ||
                 name.isEmpty() || email.isEmpty() || phone.isEmpty() ||
@@ -74,7 +67,6 @@ public class SubmitQuoteServlet extends HttpServlet {
             return;
         }
 
-        // 3. Kendalikan muat naik fail
         String fileName = null;
         String filePath = null;
 
@@ -98,7 +90,7 @@ public class SubmitQuoteServlet extends HttpServlet {
             }
 
             String uniqueFileName = fileName + "_" + System.currentTimeMillis() + fileExtension;
-            filePath = UPLOAD_DIR + File.separator + uniqueFileName; // Simpan path relatif untuk DB
+            filePath = UPLOAD_DIR + File.separator + uniqueFileName;
             String fullPath = uploadPath + File.separator + uniqueFileName;
 
             try {
@@ -113,11 +105,12 @@ public class SubmitQuoteServlet extends HttpServlet {
 
         // 4. Simpan ke Pangkalan Data
         try {
-            auth = (User) session.getAttribute("auth");
-            if (auth == null) {
-                auth = (User) session.getAttribute("currentUser");
+            authUser = (User) session.getAttribute("currentUser");
+
+            if (authUser == null) {
+                response.sendRedirect("login.jsp?msg=notLoggedIn");
             }
-            int userId = (auth != null) ? auth.getUserId() : 0;
+            int userId = (authUser != null) ? authUser.getUserId() : 0;
 
             Quote quote = new Quote();
             quote.setUserId(userId);

@@ -11,7 +11,6 @@ public class MessageDao {
         this.con = con;
     }
 
-    // Fungsi untuk Admin baca mesej
     public List<Message> getAllMessages() {
         List<Message> list = new ArrayList<>();
         try {
@@ -27,6 +26,12 @@ public class MessageDao {
                 msg.setSubject(rs.getString("subject"));
                 msg.setMessage(rs.getString("message"));
                 msg.setCreatedAt(rs.getString("created_at"));
+
+                // PEMBETULAN: Ambil data status dari database
+                msg.setRead(rs.getBoolean("is_read"));
+                msg.setImportant(rs.getBoolean("is_important"));
+                msg.setArchived(rs.getBoolean("is_archived"));
+
                 list.add(msg);
             }
         } catch (SQLException e) {

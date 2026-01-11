@@ -22,13 +22,12 @@ public class CancelOrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Check if user is logged in
         HttpSession session = request.getSession();
+
         User authUser = (User) session.getAttribute("currentUser");
 
         if (authUser == null) {
             response.sendRedirect("login.jsp?msg=notLoggedIn");
-            return;
         }
 
         String orderIdParam = request.getParameter("id");
@@ -62,9 +61,6 @@ public class CancelOrderServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Cancel order - only if status is 'pending'
-     */
     private boolean cancelOrder(int orderId, int userId) {
         Connection conn = null;
         PreparedStatement checkStmt = null;
@@ -79,7 +75,6 @@ public class CancelOrderServlet extends HttpServlet {
                 return false;
             }
 
-            // Check if order belongs to user and is cancellable
             String checkQuery = "SELECT status FROM orders WHERE id = ? AND user_id = ?";
             checkStmt = conn.prepareStatement(checkQuery);
             checkStmt.setInt(1, orderId);
@@ -93,13 +88,11 @@ public class CancelOrderServlet extends HttpServlet {
 
             String currentStatus = rs.getString("status");
 
-            // Only allow cancellation if order is pending
             if (!"pending".equals(currentStatus)) {
                 System.err.println("❌ Order cannot be cancelled - current status: " + currentStatus);
                 return false;
             }
 
-            // Update order status to cancelled
             String updateQuery = "UPDATE orders SET status = 'cancelled' WHERE id = ? AND user_id = ?";
             updateStmt = conn.prepareStatement(updateQuery);
             updateStmt.setInt(1, orderId);

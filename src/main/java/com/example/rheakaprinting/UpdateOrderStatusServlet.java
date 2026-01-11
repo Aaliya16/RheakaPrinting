@@ -2,6 +2,7 @@ package com.example.rheakaprinting;
 
 import com.example.rheakaprinting.dao.OrderDao;
 import com.example.rheakaprinting.model.DbConnection;
+import com.example.rheakaprinting.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,20 +19,19 @@ public class UpdateOrderStatusServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Check admin authentication
         HttpSession session = request.getSession();
-        String adminUser = (String) session.getAttribute("adminUsername");
 
-        if (adminUser == null) {
-            response.sendRedirect("admin-login.jsp?msg=unauthorized");
-            return;
+        User authUser = (User) session.getAttribute("currentUser");
+
+        if (authUser == null) {
+            response.sendRedirect("login.jsp?msg=notLoggedIn");
         }
 
         String orderIdParam = request.getParameter("orderId");
         String newStatus = request.getParameter("newStatus");
 
         System.out.println("=== UPDATE ORDER STATUS ===");
-        System.out.println("Admin: " + adminUser);
+        System.out.println("Admin: " + authUser);
         System.out.println("Order ID: " + orderIdParam);
         System.out.println("New Status: " + newStatus);
 
