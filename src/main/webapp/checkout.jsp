@@ -7,12 +7,32 @@
     DecimalFormat dcf = new DecimalFormat("#.##");
     ArrayList<Cart> cart_list = (ArrayList<Cart>) session.getAttribute("cart-list");
     double total = 0.0;
-    double shipping = 10.0;
 
-    if (cart_list != null) {
-        for (Cart c : cart_list) {
-            total += c.getPrice() * c.getQuantity();
+    // RETRIEVE SHIPPING FROM DATABASE
+    double shipping = 10.0; // default
+    try {
+        Connection conn = DbConnection.getConnection();
+        String sql = "SELECT base_fee, free_threshold FROM shipping_settings WHERE id = 1";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            shipping = rs.getDouble("base_fee");
+            double freeThreshold = rs.getDouble("free_threshold");
+
+            // Calculate cart total
+            if (cart_list != null) {
+                for (Cart c : cart_list) {
+                    total += c.getPrice() * c.getQuantity();
+                }
+            }
+
+            // Apply free shipping if threshold met
+            if (total >= freeThreshold) {
+                shipping = 0.0;
+            }
         }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 
     double grandTotal = total + shipping;
@@ -319,4 +339,5 @@
 <%@ include file="footer.jsp" %>
 </body>
 </html>
+
 

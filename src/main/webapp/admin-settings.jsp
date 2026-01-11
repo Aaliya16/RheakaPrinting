@@ -217,18 +217,34 @@
         <%-- Shipping Rules --%>
         <div class="settings-card">
             <h2><i class="fas fa-shipping-fast"></i> Shipping Rules</h2>
+            <%
+                Connection shipConn = DbConnection.getConnection();
+                String shipQuery = "SELECT * FROM shipping_settings WHERE id = 1";
+                PreparedStatement shipPs = shipConn.prepareStatement(shipQuery);
+                ResultSet shipRs = shipPs.executeQuery();
+
+                double baseFee = 10.00;
+                double freeThreshold = 200.00;
+                boolean selfPickupEnabled = true;
+
+                if (shipRs.next()) {
+                    baseFee = shipRs.getDouble("base_fee");
+                    freeThreshold = shipRs.getDouble("free_threshold");
+                    selfPickupEnabled = shipRs.getBoolean("self_pickup_enabled");
+                }
+            %>
             <form action="UpdateShippingSettings" method="POST">
                 <div class="form-group">
                     <label>Base Shipping Fee (RM)</label>
-                    <input type="number" name="baseShip" value="10.00" step="0.5">
+                    <input type="number" name="baseShip" value="<%= baseFee %>" step="0.01" required>
                 </div>
                 <div class="form-group">
                     <label>Free Shipping Threshold (RM)</label>
-                    <input type="number" name="freeShip" value="200.00">
+                    <input type="number" name="freeShip" value="<%= freeThreshold %>" step="0.01" required>
                 </div>
                 <div class="setting-item">
                     <span style="font-size: 13px; font-weight: 700; color: var(--text-main);">Self-Pickup</span>
-                    <input type="checkbox" checked style="width: auto;">
+                    <input type="checkbox" name="selfPickup" <%= selfPickupEnabled ? "checked" : "" %> style="width: auto;">
                 </div>
                 <button type="submit" class="btn btn-primary">Save Logistics</button>
             </form>
@@ -239,11 +255,15 @@
             <h2><i class="fas fa-key"></i> Security</h2>
             <form action="UpdateAdminPassword" method="POST">
                 <div class="form-group">
-                    <label>Update Password</label>
-                    <input type="password" placeholder="Current Password">
-                    <input type="password" placeholder="New Password" style="margin-top: 10px;">
+                    <label>Current Password</label>
+                    <input type="password" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" name="newPassword" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Change Password</button>
+
             </form>
         </div>
 

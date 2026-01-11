@@ -118,10 +118,10 @@
         .status-badge.pending { background: #fff3cd; color: #856404; }
         .status-badge.processing { background: #cfe2ff; color: #084298; }
         .status-badge.completed { background: #d1e7dd; color: #0f5132; }
+        .status-badge.shipped { background: #e0e0e0; color: #424242; }
 
         .btn-action { width: 35px; height: 35px; border-radius: 8px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
-        .btn-view { background: var(--brand-light); color: var(--brand-color); }
-        .btn-edit { background: #fff8e1; color: #ff8f00; margin-left: 5px; }
+        .btn-edit { background: #fff8e1; color: #ff8f00; }
         .btn-action:hover { transform: scale(1.1); }
 
         /* Modal styling aligned with monochrome theme */
@@ -157,7 +157,7 @@
         <div class="admin-profile">
             <strong style="font-size: 14px; margin-right: 10px;"><%= adminUser %></strong>
             <div class="avatar-circle"><%= (adminUser != null && !adminUser.isEmpty()) ? adminUser.substring(0, 1).toUpperCase() : "A" %></div>
-            <button onclick="window.print()" class="btn-action btn-view" style="width: auto; padding: 0 15px; margin-left:10px;"><i class="fas fa-print"></i></button>
+            <button onclick="window.print()" class="btn-action btn-edit" style="width: auto; padding: 0 15px; margin-left:10px;"><i class="fas fa-print"></i></button>
         </div>
     </div>
 
@@ -199,6 +199,7 @@
                 <option value="pending">Pending</option>
                 <option value="processing">Processing</option>
                 <option value="completed">Completed</option>
+                <option value="shipped">Shipped</option>
             </select>
         </div>
 
@@ -206,7 +207,8 @@
             <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Customer Details</th>
+                <th>Name</th>
+                <th>Address</th>
                 <th>Date</th>
                 <th>Total</th>
                 <th>Status</th>
@@ -218,11 +220,11 @@
             <tr data-status="<%= order.getStatus() %>">
                 <td><strong>#<%= order.getOrderId() %></strong></td>
                 <td><div style="font-weight: 700; color: var(--text-main);"><%= order.getName() %></div></td>
+                <td><%= order.getShippingAddress() != null ? order.getShippingAddress() : "N/A" %></td>
                 <td><%= order.getDate() %></td>
                 <td><strong>RM <%= order.getPrice() %></strong></td>
                 <td><span class="status-badge <%= order.getStatus().toLowerCase() %>"><%= order.getStatus() %></span></td>
                 <td style="text-align: right;">
-                    <button class="btn-action btn-view" title="View Details" onclick="viewOrder(<%= order.getOrderId() %>)"><i class="fas fa-eye"></i></button>
                     <button class="btn-action btn-edit" title="Update Status" onclick="openStatusModal(<%= order.getOrderId() %>, '<%= order.getStatus() %>', '<%= order.getOrderId() %>')"><i class="fas fa-edit"></i></button>
                 </td>
             </tr>
@@ -290,7 +292,6 @@
 
     function closeModal() { document.getElementById('statusModal').style.display = 'none'; }
     window.onclick = function(e) { if (e.target == document.getElementById('statusModal')) closeModal(); }
-    function viewOrder(id) { window.location.href = 'order-details.jsp?id=' + id; }
 </script>
 
 </body>

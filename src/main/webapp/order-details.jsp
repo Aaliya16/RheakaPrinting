@@ -19,10 +19,23 @@
         return;
     }
 
-    double shipping = 10.0;
+    // RETRIEVE SHIPPING FROM DATABASE
+    double shipping = 10.0; // default
+    try {
+        Connection connShip = DbConnection.getConnection();
+        String sqlShip = "SELECT base_fee FROM shipping_settings WHERE id = 1";
+        PreparedStatement psShip = connShip.prepareStatement(sqlShip);
+        ResultSet rsShip = psShip.executeQuery();
+        if (rsShip.next()) {
+            shipping = rsShip.getDouble("base_fee");
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
 
     int userId = authUser.getUserId();
     int orderId = Integer.parseInt(orderIdParam);
+%>
 
     DecimalFormat dcf = new DecimalFormat("#,##0.00");
     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy, hh:mm a");

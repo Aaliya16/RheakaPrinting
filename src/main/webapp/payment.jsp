@@ -16,6 +16,29 @@
     for (Cart c : cart_list) {
         total += c.getPrice() * c.getQuantity();
     }
+
+    // RETRIEVE SHIPPING FROM DATABASE
+    double shipping = 10.0; // default
+    try {
+        Connection conn = DbConnection.getConnection();
+        String sql = "SELECT base_fee, free_threshold FROM shipping_settings WHERE id = 1";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            shipping = rs.getDouble("base_fee");
+            double freeThreshold = rs.getDouble("free_threshold");
+
+            // Apply free shipping if threshold met
+            if (total >= freeThreshold) {
+                shipping = 0.0;
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    double grandTotal = total + shipping;
+
     DecimalFormat dcf = new DecimalFormat("#,##0.00");
 
     // 3. Tangkap data dari Checkout form tadi
@@ -159,8 +182,8 @@
     <div class="payment-header">
         <h3>Complete Your Payment</h3>
         <%
-            double shipping = 10.0;
-            double grandTotal = total + shipping;
+            shipping = 10.0;
+            grandTotal = total + shipping;
         %>
 
         <div class="total-amount">RM <%= dcf.format(grandTotal) %></div>
@@ -210,7 +233,7 @@
             <input type="text" placeholder="0000 0000 0000 0000" class="form-input-simulasi">
         </div>
 
-        <button type="submit" class="btn-pay">Pay RM <%= dcf.format(total) %></button>
+        <button type="submit" class="btn-pay">Pay RM <%= dcf.format(grandTotal) %></button>
     </form>
 </div>
 
