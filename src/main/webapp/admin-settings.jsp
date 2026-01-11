@@ -30,8 +30,43 @@
             color: var(--text-main);
         }
 
-        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 30px;
+            opacity: 0; /* Starts hidden */
+            will-change: transform, opacity;
+            /* FIX: Changed animation name to match keyframes below */
+            animation: smoothSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
 
+        /* FIX: Keyframes must match the name used in the animation property above */
+        @keyframes smoothSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered Row Animation - Makes the table rows "roll in" */
+        tbody tr {
+            opacity: 0;
+            animation: rowAppear 0.5s ease-out forwards;
+        }
+
+        tbody tr:nth-child(1) { animation-delay: 0.2s; }
+        tbody tr:nth-child(2) { animation-delay: 0.3s; }
+        tbody tr:nth-child(3) { animation-delay: 0.4s; }
+        tbody tr:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes rowAppear {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
         .top-bar {
             background: white;
             padding: 20px 35px;
@@ -180,7 +215,7 @@
         %>
         <%-- Footer Contact Info Card --%>
         <div class="settings-card">
-            <h2><i class="fas fa-map-marker-alt"></i> Footer Contact Info</h2>
+            <h2><i class="fas fa-map-marker-alt"></i> Contact Info</h2>
             <form action="UpdateSettingsServlet" method="POST">
                 <div class="form-group">
                     <label>Business Address</label>
@@ -196,7 +231,7 @@
 
         <%-- Social Presence Card --%>
         <div class="settings-card">
-            <h2><i class="fas fa-share-alt"></i> Social Presence</h2>
+            <h2><i class="fas fa-share-alt"></i> Social Media Link</h2>
             <form action="UpdateSettingsServlet" method="POST">
                 <div class="form-group">
                     <label><i class="fab fa-facebook"></i> Facebook URL</label>
@@ -234,18 +269,18 @@
             </form>
         </div>
 
-        <%-- Security --%>
         <div class="settings-card">
             <h2><i class="fas fa-key"></i> Security</h2>
             <form action="UpdateAdminPassword" method="POST">
                 <div class="form-group">
                     <label>Update Password</label>
-                    <input type="password" placeholder="Current Password">
-                    <input type="password" placeholder="New Password" style="margin-top: 10px;">
+                    <input type="password" name="currentPassword" placeholder="Current Password" required>
+                    <input type="password" name="newPassword" placeholder="New Password" style="margin-top: 10px;" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Change Password</button>
             </form>
         </div>
+
 
         <%-- Maintenance --%>
         <div class="settings-card">

@@ -107,4 +107,18 @@ public class UserDAO {
         }
         return count;
     }
+    public boolean deleteUser(int id) {
+        boolean result = false;
+        try {
+            // Matches your database column 'id'
+            String query = "DELETE FROM users WHERE id = ?";
+            PreparedStatement ps = this.con.prepareStatement(query);
+            ps.setInt(1, id);
+
+            result = ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
