@@ -157,12 +157,84 @@
         color: #ff4d4d !important;
         font-weight: 700 !important;
     }
+
+    /* HAMBURGER MENU (Default Hidden on Desktop) */
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+    }
+
+    .hamburger div {
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        transition: all 0.3s ease;
+    }
+
+    /* RESPONSIVE: TABLET & MOBILE */
+    @media (max-width: 992px) {
+        .navbar {
+            padding: 15px 30px;
+        }
+        .nav-links {
+            gap: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .navbar {
+            padding: 15px 20px;
+            /* Keep logo and hamburger in same row */
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        /* Show Hamburger on Mobile */
+        .hamburger {
+            display: flex;
+        }
+
+        /* Hide Menu by default on Mobile */
+        .nav-links {
+            display: none; /* Hidden */
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+
+        /* This class added by JavaScript when user clicks hamburger */
+        .nav-links.active {
+            display: flex; /* Visible */
+        }
+
+        /* Animate Hamburger into 'X' when active */
+        .hamburger.active .bar1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active .bar2 {
+            opacity: 0;
+        }
+        .hamburger.active .bar3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+    }
 </style>
 
 <nav class="navbar">
     <div class="logo-section">
         <img src="${pageContext.request.contextPath}/assets/img/logo_rheaka.png" alt="Rheaka Design Logo">
         <h1>Rheaka Design</h1>
+    </div>
+
+    <div class="hamburger" id="hamburger-btn">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
     </div>
 
     <div class="nav-links" id="nav-menu">
@@ -199,3 +271,14 @@
         <% } %>
     </div>
 </nav>
+
+<script>
+    const hamburger = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+        // Toggle 'active' class on menu and button
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+</script>
