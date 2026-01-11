@@ -8,6 +8,10 @@
     MessageDao msgDao = new MessageDao(DbConnection.getConnection());
     List<Message> allMessages = msgDao.getAllMessages();
 
+    if (allMessages == null) {
+        allMessages = new ArrayList<>();
+    }
+
     int totalCount = allMessages.size();
     int unreadCount = 0;
     int repliedCount = 0;
@@ -30,7 +34,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --brand-color: #6c5ce7; /* Single professional purple theme */
+            --brand-color: #6c5ce7;
             --brand-light: rgba(108, 92, 231, 0.1);
             --bg-body: #f1f2f6;
             --text-main: #2d3436;
@@ -47,59 +51,35 @@
             margin-left: 260px;
             width: calc(100% - 260px);
             padding: 30px;
-            opacity: 0; /* Starts hidden */
-            will-change: transform, opacity;
-            /* FIX: Changed animation name to match keyframes below */
+            opacity: 0;
             animation: smoothSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        /* FIX: Keyframes must match the name used in the animation property above */
         @keyframes smoothSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Staggered Row Animation - Makes the table rows "roll in" */
-        tbody tr {
-            opacity: 0;
-            animation: rowAppear 0.5s ease-out forwards;
-        }
-
+        tbody tr { opacity: 0; animation: rowAppear 0.5s ease-out forwards; }
         tbody tr:nth-child(1) { animation-delay: 0.2s; }
         tbody tr:nth-child(2) { animation-delay: 0.3s; }
         tbody tr:nth-child(3) { animation-delay: 0.4s; }
-        tbody tr:nth-child(4) { animation-delay: 0.5s; }
 
         @keyframes rowAppear {
             from { opacity: 0; transform: translateX(-10px); }
             to { opacity: 1; transform: translateX(0); }
         }
-        /* Standardized Top Bar */
+
         .top-bar {
-            background: white;
-            padding: 20px 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: white; padding: 20px 35px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .header-left { display: flex; align-items: center; gap: 20px; }
-
-        /* Fixed Icon Sizes to match Dashboard exactly */
         .header-icon-box {
-            width: 50px; height: 50px; min-width: 50px;
-            background: var(--brand-color);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            color: white;
+            width: 50px; height: 50px; min-width: 50px; background: var(--brand-color);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white;
         }
         .header-icon-box i { font-size: 22px; }
 
@@ -111,8 +91,7 @@
         }
         .search-container input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
 
-        /* Monochrome Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 30px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px; }
         .stat-card {
             background: white; padding: 25px; border-radius: 20px;
             display: flex; justify-content: space-between; align-items: center;
@@ -124,8 +103,7 @@
 
         .stat-icon-mini {
             width: 45px; height: 45px; border-radius: 12px;
-            background: var(--brand-light);
-            display: flex; align-items: center; justify-content: center;
+            background: var(--brand-light); display: flex; align-items: center; justify-content: center;
             color: var(--brand-color); font-size: 18px;
         }
 
@@ -134,7 +112,6 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.04); min-height: 400px;
         }
 
-        /* Tab buttons */
         .tab-bar { display: flex; gap: 10px; margin-bottom: 25px; align-items: center; }
         .tab-btn {
             padding: 8px 20px; border-radius: 10px; border: none; font-weight: 600;
@@ -143,18 +120,32 @@
         .tab-btn.active { background: var(--brand-color); color: white; }
         .btn-refresh { margin-left: auto; background: var(--brand-color); color: white; display: flex; align-items: center; gap: 8px; }
 
-        /* Empty State */
         .empty-state {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 60px 0; text-align: center;
         }
         .mailbox-img { width: 120px; margin-bottom: 25px; filter: grayscale(1) opacity(0.5); }
         .empty-state h2 { font-size: 22px; color: var(--text-main); margin-bottom: 10px; }
-        .empty-state p { color: #b2bec3; max-width: 400px; line-height: 1.6; font-size: 14px; }
 
         .message-table { width: 100%; border-collapse: collapse; }
         .message-table th { text-align: left; padding: 15px; border-bottom: 2px solid #f1f2f6; color: #b2bec3; font-size: 11px; text-transform: uppercase; }
         .message-table td { padding: 20px 15px; border-bottom: 1px solid #f1f2f6; font-size: 14px; }
+
+        .unread-dot {
+            height: 10px; width: 10px;
+            background-color: var(--brand-color);
+            border-radius: 50%; display: inline-block;
+        }
+
+        .star-btn {
+            background: none; border: none; cursor: pointer;
+            font-size: 18px; color: #b2bec3; margin-right: 10px;
+            transition: 0.3s;
+        }
+        .star-btn.active { color: #f1c40f; }
+        .star-btn:hover { transform: scale(1.2); }
+
+        .message-row[data-status*="read"] { opacity: 0.7; }
 
         .admin-profile { display: flex; align-items: center; gap: 12px; }
         .avatar-circle {
@@ -163,7 +154,6 @@
             font-weight: bold; font-size: 14px;
         }
 
-        /* Back Button */
         .back-container { display: flex; justify-content: flex-end; margin-top: 30px; }
         .btn-back {
             display: flex; align-items: center; gap: 8px; padding: 12px 25px;
@@ -200,22 +190,22 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div>
-                <div class="stat-val"><%= totalCount %></div>
+                <div class="stat-val" id="total-count"><%= totalCount %></div>
                 <div class="stat-label">Total Messages</div>
             </div>
             <div class="stat-icon-mini"><i class="fas fa-inbox"></i></div>
         </div>
         <div class="stat-card">
             <div>
-                <div class="stat-val"><%= unreadCount %></div>
+                <div class="stat-val" id="unread-count"><%= unreadCount %></div>
                 <div class="stat-label">Unread</div>
             </div>
             <div class="stat-icon-mini"><i class="fas fa-envelope-open"></i></div>
         </div>
         <div class="stat-card">
             <div>
-                <div class="stat-val"><%= repliedCount %></div>
-                <div class="stat-label">Replied</div>
+                <div class="stat-val" id="read-count"><%= repliedCount %></div>
+                <div class="stat-label">Read</div>
             </div>
             <div class="stat-icon-mini"><i class="fas fa-check-double"></i></div>
         </div>
@@ -225,8 +215,8 @@
         <div class="tab-bar">
             <button class="tab-btn active">All</button>
             <button class="tab-btn">Unread</button>
+            <button class="tab-btn">Read</button>
             <button class="tab-btn">Important</button>
-            <button class="tab-btn">Archived</button>
             <button onclick="location.reload()" class="tab-btn btn-refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
         </div>
 
@@ -234,12 +224,13 @@
         <div class="empty-state">
             <img src="https://cdn-icons-png.flaticon.com/512/6591/6591000.png" class="mailbox-img" alt="Empty">
             <h2>No messages found</h2>
-            <p>Form submissions from your contact page will appear here. Check back later or refresh to see new messages.</p>
+            <p>Form submissions will appear here.</p>
         </div>
         <% } else { %>
         <table class="message-table" id="msgTable">
             <thead>
             <tr>
+                <th style="width: 40px;">Status</th>
                 <th>Sender</th>
                 <th>Subject</th>
                 <th>Message Snippet</th>
@@ -248,41 +239,33 @@
             </thead>
             <tbody>
             <%
-                if (allMessages != null && !allMessages.isEmpty()) {
-                    for (Message m : allMessages) {
-                        // 1. Logic to determine status for filtering
-                        String status = "all";
-                        // These methods must exist in Message.java to avoid the red errors
-                        if (m.isRead()) status += " read"; else status += " unread";
-                        if (m.isImportant()) status += " important";
-                        if (m.isArchived()) status += " archived";
+                for (Message m : allMessages) {
+                    String status = "all " + (m.isRead() ? "read" : "unread");
+                    if (m.isImportant()) status += " important";
             %>
-            <%-- Add class and data-status to the row --%>
-            <tr class="message-row" data-status="<%= status %>">
+            <tr class="message-row" data-status="<%= status %>" id="msg-row-<%= m.getId() %>">
+                <td style="text-align: center;">
+                    <% if(!m.isRead()) { %>
+                    <span class="unread-dot"></span>
+                    <% } %>
+                </td>
                 <td>
-                    <div style="font-weight: 700; color: var(--text-main);"><%= m.getName() %></div>
+                    <div style="font-weight: 700;"><%= m.getName() %></div>
                     <div style="font-size: 12px; color: var(--brand-color);"><%= m.getEmail() %></div>
                 </td>
-                <td style="font-weight: 600; color: var(--text-main);"><%= m.getSubject() %></td>
-                <td style="color: #b2bec3; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <td><%= m.getSubject() %></td>
+                <td style="color: #b2bec3; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                     <%= m.getMessage() %>
                 </td>
-                <td style="text-align: right;">
-                    <%-- Standardized View Button matching your monochrome theme --%>
+                <td style="text-align: right; white-space: nowrap;">
+                    <button class="star-btn <%= m.isImportant() ? "active" : "" %>"
+                            onclick="toggleFavorite(<%= m.getId() %>, this)">
+                        <i class="<%= m.isImportant() ? "fas" : "far" %> fa-star"></i>
+                    </button>
                     <button class="tab-btn" style="background: var(--brand-light); color: var(--brand-color);"
-                            onclick="alert('<%= m.getMessage().replace("'", "\\'") %>')">
+                            onclick="viewMessage('<%= m.getMessage().replace("'", "\\'") %>', <%= m.getId() %>)">
                         View
                     </button>
-                </td>
-            </tr>
-            <%
-                }
-            } else {
-            %>
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 60px; color: #b2bec3;">
-                    <i class="fas fa-envelope-open" style="font-size: 40px; display: block; margin-bottom: 15px;"></i>
-                    No messages found.
                 </td>
             </tr>
             <% } %>
@@ -290,7 +273,6 @@
         </table>
         <% } %>
 
-        <%-- Standardized Back Button --%>
         <div class="back-container">
             <button onclick="window.history.back()" class="btn-back">
                 <i class="fas fa-arrow-left"></i> Go Back
@@ -300,46 +282,94 @@
 </div>
 
 <script>
+    // Handles Tab Filtering
     document.addEventListener('DOMContentLoaded', function() {
         const tabs = document.querySelectorAll('.tab-btn');
         const rows = document.querySelectorAll('.message-row');
 
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
-                // Remove active class from all tabs and add to clicked one
+                if(this.classList.contains('btn-refresh')) return;
+
                 tabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
 
-                const filter = this.innerText.toLowerCase();
+                const filter = this.innerText.trim().toLowerCase();
 
                 rows.forEach(row => {
                     const rowStatus = row.getAttribute('data-status').toLowerCase();
 
                     if (filter === 'all') {
                         row.style.display = '';
-                    } else if (rowStatus.includes(filter)) {
-                        row.style.display = '';
                     } else {
-                        row.style.display = 'none';
+                        // Strict check using split to prevent "read" matching "unread"
+                        const statusArray = rowStatus.split(' ');
+                        row.style.display = statusArray.includes(filter) ? '' : 'none';
                     }
                 });
             });
         });
     });
+
     function searchTable() {
-        var input, filter, table, tr, td, i;
-        input = document.getElementById("msgInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("msgTable");
-        if(!table) return;
-        tr = table.getElementsByTagName("tr");
-        for (i = 1; i < tr.length; i++) {
-            var rowText = tr[i].innerText.toUpperCase();
-            tr[i].style.display = rowText.indexOf(filter) > -1 ? "" : "none";
+        var input = document.getElementById("msgInput");
+        var filter = input.value.toUpperCase();
+        var rows = document.querySelectorAll("#msgTable tbody tr");
+        rows.forEach(row => {
+            row.style.display = row.innerText.toUpperCase().includes(filter) ? "" : "none";
+        });
+    }
+
+    function viewMessage(content, msgId) {
+        alert(content);
+        const row = document.getElementById('msg-row-' + msgId);
+
+        if (row && row.getAttribute('data-status').includes('unread')) {
+            // Update visual state instantly
+            row.setAttribute('data-status', 'all read');
+            const dot = row.querySelector('.unread-dot');
+            if (dot) dot.remove();
+
+            // Recalculate card numbers instantly
+            updateStatsVisually();
+
+            // Update database in background
+            fetch('UpdateMessageStatusServlet?id=' + msgId + '&action=read');
         }
     }
 
-</script>
+    function toggleFavorite(msgId, btn) {
+        const icon = btn.querySelector('i');
+        btn.classList.toggle('active');
+        if (btn.classList.contains('active')) {
+            icon.classList.replace('far', 'fas');
+            fetch('UpdateMessageStatusServlet?id=' + msgId + '&action=favorite');
+        } else {
+            icon.classList.replace('fas', 'far');
+            fetch('UpdateMessageStatusServlet?id=' + msgId + '&action=unfavorite');
+        }
+    }
 
+    // Recalculates stats cards without page refresh
+    function updateStatsVisually() {
+        const allRows = document.querySelectorAll('.message-row');
+        let unread = 0;
+        let read = 0;
+
+        allRows.forEach(row => {
+            const rowStatus = row.getAttribute('data-status').toLowerCase();
+            const statusArray = rowStatus.split(' ');
+            if (statusArray.includes('unread')) {
+                unread++;
+            } else if (statusArray.includes('read')) {
+                read++;
+            }
+        });
+
+        document.getElementById('unread-count').innerText = unread;
+        document.getElementById('read-count').innerText = read;
+        document.getElementById('total-count').innerText = allRows.length;
+    }
+</script>
 </body>
 </html>

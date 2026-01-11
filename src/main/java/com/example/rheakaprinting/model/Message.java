@@ -13,7 +13,10 @@ public class Message {
     private boolean archived;
 
     // Getters and Setters
-    public int getId() { return id; }
+    // Check this in your Message.java model
+    public int getId() {
+        return id; // Ensure this is not a hardcoded value
+    }
     public void setId(int id) { this.id = id; }
 
     public String getName() { return name; }
