@@ -26,12 +26,15 @@
         animation: linkFadeIn 0.4s ease-out forwards;
     }
 
+    /* Adjusted staggered delays for 7 items + Logout */
     .sidebar.animate-in .nav-item:nth-child(1) { animation-delay: 0.3s; }
     .sidebar.animate-in .nav-item:nth-child(2) { animation-delay: 0.4s; }
     .sidebar.animate-in .nav-item:nth-child(3) { animation-delay: 0.5s; }
     .sidebar.animate-in .nav-item:nth-child(4) { animation-delay: 0.6s; }
     .sidebar.animate-in .nav-item:nth-child(5) { animation-delay: 0.7s; }
     .sidebar.animate-in .nav-item:nth-child(6) { animation-delay: 0.8s; }
+    .sidebar.animate-in .nav-item:nth-child(7) { animation-delay: 0.9s; }
+    .sidebar.animate-in .nav-item:nth-child(8) { animation-delay: 1.0s; }
 
     @keyframes linkFadeIn {
         from { opacity: 0; transform: translateX(-15px); }
@@ -77,6 +80,10 @@
         <li class="nav-item"><a href="admin-orders.jsp" class="nav-link"><i class="fas fa-box nav-icon"></i><span>Orders</span></a></li>
         <li class="nav-item"><a href="admin-products.jsp" class="nav-link"><i class="fas fa-tags nav-icon"></i><span>Products</span></a></li>
         <li class="nav-item"><a href="admin-users.jsp" class="nav-link"><i class="fas fa-users nav-icon"></i><span>Users</span></a></li>
+
+        <%-- ADDED: Quote Requests Link --%>
+        <li class="nav-item"><a href="admin-quotes.jsp" class="nav-link"><i class="fas fa-file-invoice-dollar nav-icon"></i><span>Quote Requests</span></a></li>
+
         <li class="nav-item"><a href="admin-contact-messages.jsp" class="nav-link"><i class="fas fa-envelope nav-icon"></i><span>Messages</span></a></li>
         <li class="nav-item"><a href="admin-settings.jsp" class="nav-link"><i class="fas fa-cog nav-icon"></i><span>Settings</span></a></li>
         <li class="nav-item">
